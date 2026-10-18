@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Kitchen OS · Gourmet Donuts</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Figtree:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: maroon brand bar (their site header) with phase switcher + screen tabs; each screen is a touch-first workspace below */
+:root{
+  --bg:#FFF8EC; --surface:#FFFDF8; --surface-2:#F8EBD3; --fg:#3A0A16; --muted:#7A4A3A; --line:#EFD9B4;
+  --accent:#C8101C; --accent-ink:#FFF8EC; --brand:#5B001B; --brand-2:#74102E; --brand-ink:#FFF8EC; --gold:#FBB03B; --gold-ink:#3A0A16;
+  --done:#1F7A45; --done-soft:#E1F1E6; --warn:#9A5B00; --warn-soft:#FCEBC8; --bad:#C8101C; --bad-soft:#FDE7E3;
+  --display:"DM Serif Display", Georgia, "Times New Roman", serif;
+  --body:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#1A0609; --surface:#260B12; --surface-2:#33121B; --fg:#FBEFE6; --muted:#C7A698; --line:#4A2029;
+  --accent:#F25560; --accent-ink:#1A0609; --brand:#3D0012; --brand-2:#5B001B; --brand-ink:#FBEFE6; --gold:#FBB03B; --gold-ink:#1A0609;
+  --done:#4FD08A; --done-soft:#123521; --warn:#F2B84B; --warn-soft:#3A2A10; --bad:#FF6B6B; --bad-soft:#3A1216; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#1A0609; --surface:#260B12; --surface-2:#33121B; --fg:#FBEFE6; --muted:#C7A698; --line:#4A2029;
+  --accent:#F25560; --accent-ink:#1A0609; --brand:#3D0012; --brand-2:#5B001B; --brand-ink:#FBEFE6; --gold:#FBB03B; --gold-ink:#1A0609;
+  --done:#4FD08A; --done-soft:#123521; --warn:#F2B84B; --warn-soft:#3A2A10; --bad:#FF6B6B; --bad-soft:#3A1216; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.4}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--brand)}
+.wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));max-width:1320px;margin:0 auto}
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--brand);color:var(--brand-ink);box-shadow:0 2px 0 var(--accent)}
+.bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding-block:12px 10px}
+.brand{font-family:var(--display);font-size:26px;line-height:1;display:flex;align-items:center;gap:10px;margin-right:auto}
+.brand small{font-family:var(--body);font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+.brand .date{font-family:var(--body);font-size:13px;font-weight:500;opacity:.8}
+.phases{display:flex;gap:6px;flex-wrap:wrap}
+.ph{border:1px solid rgba(255,248,236,.25);background:transparent;color:var(--brand-ink);font:700 13px var(--body);padding:8px 12px;border-radius:999px;cursor:pointer;letter-spacing:.02em}
+.ph b{color:var(--gold);margin-right:4px}
+.ph[aria-pressed="true"]{background:var(--gold);color:var(--gold-ink);border-color:var(--gold)}
+.ph[aria-pressed="true"] b{color:var(--gold-ink)}
+.lang{display:flex;border:1px solid rgba(255,248,236,.3);border-radius:12px;overflow:hidden}
+.lang button{border:0;background:transparent;color:var(--brand-ink);opacity:.75;font:700 14px var(--body);padding:8px 12px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--brand-ink);color:var(--brand);opacity:1}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-block:0 12px;scrollbar-width:none}
+.tab{flex:none;border:0;background:var(--brand-2);color:var(--brand-ink);font:600 15px var(--body);padding:11px 16px;border-radius:12px;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--bg);color:var(--fg)}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+main{padding-block:22px 56px}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(28px,4vw,40px);margin:0;line-height:1.1;text-wrap:balance}
+h2{font-family:var(--display);font-weight:400;font-size:24px;margin:0 0 10px}
+.sub{color:var(--muted);margin:6px 0 0;max-width:68ch}
+.head{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px 14px;margin-bottom:18px}
+.head > div:first-child{margin-right:auto;min-width:0;flex:1 1 320px}
+.preview{display:flex;gap:10px;align-items:center;background:var(--warn-soft);color:var(--warn);border-radius:12px;padding:10px 14px;font-weight:700;font-size:14px;margin-bottom:16px}
+.btn{border:1px solid var(--line);background:var(--surface);color:var(--fg);font:600 15px var(--body);padding:11px 16px;border-radius:12px;cursor:pointer}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.go{background:var(--done);color:var(--bg);border-color:var(--done)}
+.btn.sm{padding:7px 12px;font-size:14px}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.pill{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:12px;padding:5px 10px;border-radius:999px;background:var(--surface-2);color:var(--muted);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
+.pill.ok{background:var(--done-soft);color:var(--done)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+.pill.bad{background:var(--bad-soft);color:var(--bad)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-bottom:16px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 16px;min-width:0}
+.stat b{display:block;font-family:var(--display);font-weight:400;font-size:34px;line-height:1.05;font-variant-numeric:tabular-nums}
+.stat span{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700}
+.stat em{display:block;font-style:normal;font-size:13px;color:var(--muted);margin-top:4px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px;min-width:0}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px}
+.dn{--g:#c98a4b;width:30px;height:30px;border-radius:50%;flex:none;background:radial-gradient(circle at 50% 50%,var(--hole,var(--bg)) 0 22%,var(--g) 23% 62%,#E8C07D 63% 100%);box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
+.dn.lg{width:52px;height:52px}
+.scroll{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:16px}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+.grid-t{min-width:1100px}
+th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:center}
+thead th{font-size:12px;font-weight:700;color:var(--muted);vertical-align:bottom;background:var(--surface);text-transform:uppercase;letter-spacing:.04em}
+thead th .fl{display:flex;flex-direction:column;align-items:center;gap:6px;text-transform:none;letter-spacing:0;font-size:12px}
+tbody th{text-align:left;font-weight:600;white-space:nowrap;position:sticky;left:0;background:var(--surface);z-index:1}
+td input,.field input,.field select{font:600 16px var(--body);border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--fg);font-variant-numeric:tabular-nums}
+td input{width:62px;padding:8px 4px;text-align:center}
+td input:disabled{opacity:.6}
+td.tot,th.tot{font-weight:800;background:var(--surface-2)}
+tfoot td,tfoot th{font-weight:800;background:var(--surface-2);border-bottom:0}
+.lt th,.lt td{text-align:left}
+.lt td.n,.lt th.n{text-align:right}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.pc{display:flex;align-items:center;gap:14px;background:var(--surface);border:2px solid var(--line);border-radius:18px;padding:16px;cursor:pointer;text-align:left;color:var(--fg);font:inherit;width:100%;--hole:var(--surface)}
+.pc .nm{font-weight:700;font-size:17px;line-height:1.2}
+.pc .qty{font-family:var(--display);font-size:46px;line-height:1;margin-left:auto;font-variant-numeric:tabular-nums}
+.pc .st{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-top:4px}
+.pc.ok{border-color:var(--done);background:var(--done-soft);--hole:var(--done-soft)}
+.pc.ok .st,.pc.ok .qty{color:var(--done)}
+.band{background:var(--surface);border:1px dashed var(--line);border-radius:16px;padding:14px 16px;display:flex;flex-wrap:wrap;gap:8px 28px;align-items:baseline;margin-bottom:16px}
+.band b{font-family:var(--display);font-weight:400;font-size:32px}
+.stores{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;align-items:start}
+.sc{background:var(--surface);border:2px solid var(--line);border-radius:18px;overflow:hidden;--hole:var(--surface)}
+.sc.done{border-color:var(--done);opacity:.8}
+.sc .sh{display:flex;align-items:center;gap:10px;padding:14px 16px;background:var(--surface-2)}
+.sc.done .sh{background:var(--done-soft)}
+.sc .code{font-family:var(--display);font-size:26px;line-height:1}
+.sc .snm{font-weight:600;font-size:14px;color:var(--muted)}
+.sc .prog{margin-left:auto;font-weight:800;font-variant-numeric:tabular-nums}
+.it{display:flex;align-items:center;gap:12px;padding:12px 16px;border:0;border-top:1px solid var(--line);background:transparent;color:var(--fg);font:inherit;text-align:left;cursor:pointer;width:100%}
+.it .nm{font-weight:600}
+.it .q{margin-left:auto;font-family:var(--display);font-size:28px;font-variant-numeric:tabular-nums}
+.chk{width:30px;height:30px;border-radius:8px;border:2px solid var(--line);flex:none;display:grid;place-items:center;font-weight:800;color:transparent}
+.it.ok{background:var(--done-soft)}
+.it.ok .chk{background:var(--done);border-color:var(--done);color:var(--bg)}
+.it.ok .q,.it.ok .nm{color:var(--done)}
+.foot{padding:12px 16px;border-top:1px solid var(--line)}
+.foot .btn{width:100%;font-size:18px;padding:14px;font-weight:800}
+.foot .when{font-size:14px;color:var(--done);font-weight:700;text-align:center}
+.empty{padding:28px;text-align:center;color:var(--muted);background:var(--surface);border:1px dashed var(--line);border-radius:16px}
+.note{font-size:13px;color:var(--muted);margin-top:14px}
+.bars{display:flex;flex-direction:column;gap:8px}
+.br{display:grid;grid-template-columns:minmax(0,170px) 1fr 44px;gap:10px;align-items:center;font-size:14px}
+.br span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.br i{display:block;height:14px;border-radius:7px;background:var(--accent);min-width:2px}
+.br .tr{background:var(--surface-2);border-radius:7px}
+.br b{text-align:right;font-variant-numeric:tabular-nums}
+.alerts{display:flex;flex-direction:column;gap:8px;list-style:none;margin:0;padding:0}
+.alerts li{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:12px;background:var(--surface-2);font-size:15px}
+.alerts li.bad{background:var(--bad-soft)}
+.alerts li.warn{background:var(--warn-soft)}
+.alerts li strong{white-space:nowrap}
+.route{display:flex;flex-direction:column;gap:10px}
+.stop{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 16px}
+.stop .num{font-family:var(--display);font-size:28px;width:40px;text-align:center;color:var(--muted)}
+.stop .nm{font-weight:700;font-size:17px;flex:1 1 180px;min-width:0}
+.stop .nm small{display:block;font-weight:500;font-size:13px;color:var(--muted)}
+.stop .btn{min-width:170px}
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;align-items:end}
+.field{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:700;color:var(--muted);min-width:0}
+.field input,.field select{padding:11px 12px;width:100%}
+.req{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 16px;--hole:var(--surface)}
+.req .txt{flex:1 1 240px;min-width:0}
+.req .txt b{font-size:17px}
+.req .txt small{display:block;color:var(--muted);font-size:14px}
+.req .q{font-family:var(--display);font-size:30px}
+.pos{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.pos .panel{display:flex;flex-direction:column;gap:10px}
+.pos .panel h2{margin:0}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-weight:700;font-size:14px;margin-top:18px}
+.flow span{background:var(--surface-2);padding:8px 12px;border-radius:999px}
+.flow i{font-style:normal;color:var(--accent)}
+.meter{height:10px;border-radius:5px;background:var(--surface-2);overflow:hidden;min-width:60px}
+.meter i{display:block;height:100%;background:var(--done)}
+.up{color:var(--done);font-weight:800}.down{color:var(--bad);font-weight:800}.same{color:var(--muted);font-weight:700}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:12px 18px;border-radius:12px;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.25);z-index:20;max-width:calc(100% - 32px)}
+.credit{font-size:13px;color:var(--muted);padding-block:0 32px}
+@media (max-width:600px){.tab{padding:10px 12px;font-size:14px}.pc .qty{font-size:38px}.brand{font-size:22px}}
+@media (prefers-reduced-motion:no-preference){.pc,.it,.sc,.tab{transition:background .15s,border-color .15s}}
+/* Kitchen TV: fixed dark look in both themes, 16:9, sized in container units */
+:root{--tv-bg:#1E0710;--tv-card:#33111D;--tv-fg:#FFF8EC;--tv-muted:#B99A8E;--tv-ok:#3CCF7D;--tv-ok-bg:#12351F;--tv-warn:#FBB03B}
+.tv{container-type:inline-size;aspect-ratio:16/9;width:100%;max-width:100%;background:var(--tv-bg);color:var(--tv-fg);border-radius:14px;overflow:hidden;box-shadow:0 0 0 10px #0B0205,0 18px 40px rgba(0,0,0,.25);margin:10px 0 18px}
+.tv:fullscreen{width:100vw;height:100vh;aspect-ratio:auto;border-radius:0;margin:0;box-shadow:none}
+.tv-in{height:100%;padding:1.6cqw;display:grid;grid-template-columns:minmax(0,1fr) 23cqw;grid-template-rows:auto minmax(0,1fr);gap:1.2cqw;grid-template-areas:"top top" "grid side"}
+.tv-top{grid-area:top;display:flex;align-items:center;gap:2cqw}
+.tv-brand{font-family:var(--display);font-size:2cqw}
+.tv-title{font-weight:800;font-size:2.4cqw;letter-spacing:.06em;margin-inline:auto}
+.tv-title span{color:var(--tv-muted)}
+.tv-clock{font-weight:800;font-size:2.4cqw;font-variant-numeric:tabular-nums}
+.tv-grid{grid-area:grid;display:grid;grid-auto-rows:minmax(0,1fr);gap:1cqw;min-height:0}
+.tv-card{--hole:var(--tv-card);background:var(--tv-card);border:.25cqw solid transparent;border-radius:1.2cqw;padding:1.2cqw;display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:auto 1fr auto;column-gap:1cqw;min-height:0;overflow:hidden}
+.tv-card .dn{width:4cqw;height:4cqw}
+.tv-nm{font-weight:700;font-size:1.55cqw;line-height:1.15}
+.tv-nm span{display:block;font-weight:500;color:var(--tv-muted);font-size:1.2cqw}
+.tv-q{grid-column:1/-1;font-family:var(--display);font-size:7cqw;line-height:1;align-self:center;font-variant-numeric:tabular-nums}
+.tv-st{grid-column:1/-1;font-weight:800;font-size:1.05cqw;letter-spacing:.08em;color:var(--tv-warn)}
+.tv-card.ok{--hole:var(--tv-ok-bg);background:var(--tv-ok-bg);border-color:var(--tv-ok)}
+.tv-card.ok .tv-q,.tv-card.ok .tv-st{color:var(--tv-ok)}
+.tv-empty{grid-column:1/-1;grid-row:1/3;display:grid;place-items:center;font-size:2.4cqw;color:var(--tv-muted)}
+.tv-side{grid-area:side;display:flex;flex-direction:column;gap:1cqw;min-height:0}
+.tv-box{background:var(--tv-card);border-radius:1.2cqw;padding:1.1cqw 1.3cqw}
+.tv-lbl{font-size:1cqw;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--tv-muted)}
+.tv-big{font-family:var(--display);font-size:4.2cqw;line-height:1.05;font-variant-numeric:tabular-nums}
+.tv-big small{font-size:2.2cqw;color:var(--tv-muted)}
+.tv-small{font-size:1.1cqw;color:var(--tv-muted)}
+.tv-bar{height:.9cqw;border-radius:1cqw;background:var(--tv-bg);margin-top:.6cqw;overflow:hidden}
+.tv-bar i{display:block;height:100%;background:var(--tv-ok)}
+.tv-stores{flex:1;display:flex;flex-direction:column;min-height:0}
+.tv-sg{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:minmax(0,1fr);gap:.5cqw;margin-top:.7cqw;flex:1;min-height:0}
+.tv-s{display:flex;align-items:center;gap:.6cqw;border-radius:.7cqw;padding:0 .7cqw;font-size:1cqw;background:var(--tv-bg);min-width:0}
+.tv-s b{font-size:1.1cqw}
+.tv-s span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--tv-muted)}
+.tv-s i,.tv-legend i{width:.8cqw;height:.8cqw;border-radius:50%;background:var(--tv-muted);flex:none;display:inline-block}
+.tv-s.ready{background:var(--tv-ok-bg)}
+.tv-s.ready b{color:var(--tv-ok)}
+.tv-s.ready i,.tv-legend .ready i{background:var(--tv-ok)}
+.tv-s.packing b{color:var(--tv-warn)}
+.tv-s.packing i,.tv-legend .packing i{background:var(--tv-warn)}
+.tv-legend{display:flex;flex-wrap:wrap;gap:.4cqw 1.2cqw;font-size:.9cqw;color:var(--tv-muted);margin-top:.6cqw}
+.tv-legend span{display:flex;align-items:center;gap:.4cqw}
+.tv-grid.d2{gap:.7cqw}
+.d2 .tv-card{padding:.8cqw;column-gap:.7cqw;border-radius:.9cqw;border-width:.2cqw}
+.d2 .tv-card .dn{width:2.6cqw;height:2.6cqw}
+.d2 .tv-nm{font-size:1.15cqw}
+.d2 .tv-nm span{font-size:.9cqw}
+.d2 .tv-q{font-size:4.2cqw}
+.d2 .tv-st{font-size:.8cqw}
+</style>
+
+<div class="topbar">
+  <div class="wrap">
+    <div class="bar">
+      <div class="brand">Gourmet Donuts <small>Kitchen OS</small> <span class="date" id="dateLbl"></span></div>
+      <div class="phases" id="phases"></div>
+      <div class="lang" role="group" aria-label="Language"><button data-l="en">EN</button><button data-l="es">ES</button></div>
+    </div>
+    <nav class="tabs" role="tablist" id="tabs"></nav>
+  </div>
+</div>
+<main class="wrap" id="main"></main>
+<p class="wrap credit" id="credit"></p>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+/* ---------- data (stores and items from gourmetdonuts.com; numbers are examples) ---------- */
+const STORES=[["S01","Worcester",1.4],["S02","Leominster · Main St",1.2],["S03","Leominster · N Main",1.0],["S04","Fitchburg",1.1],["S05","Littleton",0.8],["S06","Townsend",0.7],["S07","Winchendon",0.7],["S08","West Boylston",0.8],["S09","Hudson",1.0],["S10","Rindge, NH",0.8],["S11","[Store 11]",0.8],["S12","[Store 12]",0.8]].map(([id,name,f])=>({id,name,f}));
+const ITEMS=[
+ {id:"bos",en:"Boston Cream",es:"Crema Boston",g:"#6B3A22",base:24,price:2.29,cost:.62},
+ {id:"old",en:"Old Fashion",es:"Tradicional",g:"#D9A46C",base:18,price:1.99,cost:.45},
+ {id:"pbj",en:"PB & Jelly",es:"Maní y jalea",g:"#B5523B",base:12,price:2.49,cost:.70},
+ {id:"hol",en:"Donut Holes",es:"Bolitas",g:"#E8C07D",base:48,price:.35,cost:.08},
+ {id:"cru",en:"Crullers",es:"Crullers",g:"#F0C987",base:12,price:2.29,cost:.55},
+ {id:"blu",en:"Blueberry Muffin",es:"Muffin de arándano",g:"#5B5FB5",base:12,price:2.99,cost:.85},
+ {id:"mou",en:"Choc. Mousse Muffin",es:"Muffin de chocolate",g:"#4A2414",base:6,price:3.29,cost:1.05},
+ {id:"cro",en:"Croissant",es:"Croissant",g:"#E3B06A",base:12,price:3.49,cost:1.10},
+ {id:"bag",en:"Bagel",es:"Bagel",g:"#C9935A",base:24,price:1.79,cost:.40}
+];
+const INGR=[
+ {id:"flour",en:"Flour",es:"Harina",u:"lb",stock:420,r:{bos:.09,old:.09,pbj:.09,hol:.02,cru:.07,blu:.12,mou:.11,cro:.10,bag:.25}},
+ {id:"sugar",en:"Sugar",es:"Azúcar",u:"lb",stock:95,r:{bos:.03,old:.03,pbj:.03,hol:.008,cru:.03,blu:.06,mou:.07,cro:.02,bag:.01}},
+ {id:"eggs",en:"Eggs",es:"Huevos",u:"ea",stock:600,r:{bos:.15,old:.2,pbj:.15,hol:.03,cru:.3,blu:.25,mou:.25,cro:.1}},
+ {id:"fat",en:"Butter & shortening",es:"Mantequilla y grasa",u:"lb",stock:90,r:{bos:.02,old:.03,pbj:.02,hol:.005,cru:.04,blu:.04,mou:.05,cro:.12,bag:.01}},
+ {id:"fill",en:"Fillings",es:"Rellenos",u:"lb",stock:26,r:{bos:.06,pbj:.05,mou:.05}},
+ {id:"glaze",en:"Glazes & icing",es:"Glaseados",u:"lb",stock:30,r:{bos:.03,old:.02,cru:.03}}
+];
+const T={
+en:{p1:"Operations",p2:"Control",p3:"Intelligence",p4:"Integration",ph:"Phase",
+ v_orders:"Orders",v_prod:"Production",v_pack:"Packing",v_tv:"Kitchen TV",v_owner:"Owner",v_closing:"Closing report",v_delivery:"Deliveries",v_suggest:"Suggested orders",v_ingred:"Ingredients",v_margin:"Margins",v_requests:"Store requests",v_catering:"Catering",v_pos:"Registers",
+ preview:"Phase {n} preview. Example data, to show how it works.",
+ ordersH:"Today’s orders",ordersS:"Type how many of each item every store needs. Totals add up on their own.",store:"Store",total:"Total",
+ copy:"Copy yesterday",clear:"Clear",send:"Send to kitchen",unlock:"Edit orders",draft:"Draft",locked:"Sent to kitchen",
+ items:"Items",stores:"Stores",packedN:"Stores packed",madeN:"Items made",
+ prodH:"To make today",prodS:"Tap an item when the batch is finished.",toMake:"To make",made:"Made",
+ bandH:"Today",units:"units",trays:"trays of 24",
+ packH:"Packing by store",packS:"Tap each item as it goes in the box. Then tap DONE.",doneBtn:"DONE",packedAt:"Packed at",undo:"Undo",
+ noOrder:"No orders yet. Fill the Orders screen and tap “Send to kitchen”.",
+ tvH:"Kitchen TV (55″)",tvS:"Full-screen view for the kitchen wall. Both languages at once, no buttons. Updates live.",fs:"Full screen",
+ ownerH:"Good morning",ownerS:"Everything that matters today, in one place. Built for the phone.",
+ kMade:"Made today",kDeliv:"Stores delivered",kLeft:"Leftovers yesterday",kSold:"Sold-outs yesterday",kOf:"of",kMost:"Most at",
+ alerts:"Alerts",leftBy:"Leftovers by store, yesterday",aSold:"sold out of",aAt:"at",aStock:"Low stock",aReq:"store requests waiting",noAlerts:"No alerts. All good.",
+ closingH:"Closing report",closingS:"At closing, each store says what was left and what sold out. It takes a minute and feeds the owner’s dashboard.",
+ sent:"Sent",left:"Left over",soldOut:"Sold out",save:"Save report",saved:"Report saved",
+ delH:"Deliveries",delS:"The driver taps each step on the phone. The office sees it live.",
+ st_wait:"Not packed yet",st_packed:"Packed",st_out:"On the way",st_deliv:"Delivered",markOut:"Leave with it",markDeliv:"Mark delivered",
+ sugH:"Suggested orders for tomorrow",sugS:"Based on what sold, what was left and what sold out on the same weekday, last 4 weeks.",
+ avg:"Avg sold",avgLeft:"Avg left",soldDays:"Sold out",days:"days",today:"Today",suggest:"Suggested",
+ apply:"Use as tomorrow’s orders",applied:"Suggestions copied to Orders. Review and send.",chain:"Change for the whole chain",
+ why_up:"Sold out, more",why_down:"Leftovers, less",why_keep:"Keep",
+ ingH:"Ingredients for today’s orders",ingS:"Calculated from the orders and the recipe of each item.",ing:"Ingredient",need:"Needed",stock:"In stock",status:"Status",ok:"OK",order:"Order",
+ ingNote:"Example recipes and stock. They are replaced by yours.",
+ marH:"Margin by item",marS:"What each item brings in today, at example prices.",price:"Price",cost:"Cost",unitsT:"Units",revenue:"Revenue",profit:"Profit",marginPct:"Margin",
+ marNote:"Example prices and costs. They are replaced by yours.",
+ reqH:"Store requests",reqS:"Stores ask for extra. The office approves, and it goes straight into today’s orders.",
+ approve:"Approve",decline:"Decline",approved:"Approved and added to orders",declined:"Declined",pending:"Waiting",
+ catH:"Catering and events",catS:"Big orders go into production and packing like one more store.",
+ customer:"Customer",date:"Date",item:"Item",qty:"Quantity",add:"Add order",catEmpty:"No catering orders yet.",catAdded:"Catering order added",
+ posH:"Store registers",posS:"Connect the stores’ point of sale, and sales come in on their own. Nobody types leftovers again.",
+ connect:"Connect (demo)",connected:"Connected (demo)",disconnect:"Disconnect",lastSync:"Sales sync every 15 min",
+ flow1:"Register sales",flow2:"Kitchen OS",flow3:"Leftovers and suggestions",
+ note:"Prototype: data stays on this screen. The live version syncs every device in real time.",
+ credit:"Prototype by BI Insights · Leticia Vale da Rosa. Stores and items from gourmetdonuts.com; quantities, prices and recipes are examples."},
+es:{p1:"Operación",p2:"Control",p3:"Inteligencia",p4:"Integración",ph:"Fase",
+ v_orders:"Pedidos",v_prod:"Producción",v_pack:"Empaque",v_tv:"TV cocina",v_owner:"Dueño",v_closing:"Cierre de tienda",v_delivery:"Entregas",v_suggest:"Pedidos sugeridos",v_ingred:"Insumos",v_margin:"Márgenes",v_requests:"Solicitudes",v_catering:"Catering",v_pos:"Cajas",
+ preview:"Vista previa de la fase {n}. Datos de ejemplo, para mostrar cómo funciona.",
+ ordersH:"Pedidos de hoy",ordersS:"Escribe cuántos de cada producto necesita cada tienda. Los totales se suman solos.",store:"Tienda",total:"Total",
+ copy:"Copiar ayer",clear:"Borrar",send:"Enviar a cocina",unlock:"Editar pedidos",draft:"Borrador",locked:"Enviado a cocina",
+ items:"Productos",stores:"Tiendas",packedN:"Tiendas listas",madeN:"Productos hechos",
+ prodH:"Para hacer hoy",prodS:"Toca un producto cuando termines el lote.",toMake:"Por hacer",made:"Hecho",
+ bandH:"Hoy",units:"unidades",trays:"bandejas de 24",
+ packH:"Empaque por tienda",packS:"Toca cada producto al ponerlo en la caja. Luego toca LISTO.",doneBtn:"LISTO",packedAt:"Listo a las",undo:"Deshacer",
+ noOrder:"Aún no hay pedidos. Llena la pantalla de Pedidos y toca “Enviar a cocina”.",
+ tvH:"TV de cocina (55″)",tvS:"Pantalla completa para la pared de la cocina. Ambos idiomas a la vez, sin botones. Se actualiza en vivo.",fs:"Pantalla completa",
+ ownerH:"Buenos días",ownerS:"Todo lo importante de hoy, en un solo lugar. Hecho para el celular.",
+ kMade:"Hecho hoy",kDeliv:"Tiendas entregadas",kLeft:"Sobras de ayer",kSold:"Agotados ayer",kOf:"de",kMost:"Más en",
+ alerts:"Alertas",leftBy:"Sobras por tienda, ayer",aSold:"se quedó sin",aAt:"a las",aStock:"Inventario bajo",aReq:"solicitudes de tiendas esperando",noAlerts:"Sin alertas. Todo bien.",
+ closingH:"Cierre de tienda",closingS:"Al cerrar, cada tienda indica lo que sobró y lo que se agotó. Toma un minuto y alimenta el panel del dueño.",
+ sent:"Enviado",left:"Sobró",soldOut:"Agotado",save:"Guardar cierre",saved:"Cierre guardado",
+ delH:"Entregas",delS:"El chofer toca cada paso en el celular. La oficina lo ve en vivo.",
+ st_wait:"Aún sin empacar",st_packed:"Empacado",st_out:"En camino",st_deliv:"Entregado",markOut:"Salir con el pedido",markDeliv:"Marcar entregado",
+ sugH:"Pedidos sugeridos para mañana",sugS:"Según lo vendido, lo que sobró y lo que se agotó el mismo día de la semana, últimas 4 semanas.",
+ avg:"Prom. vendido",avgLeft:"Prom. sobra",soldDays:"Agotado",days:"días",today:"Hoy",suggest:"Sugerido",
+ apply:"Usar como pedidos de mañana",applied:"Sugerencias copiadas a Pedidos. Revisa y envía.",chain:"Cambio en toda la cadena",
+ why_up:"Se agotó, más",why_down:"Sobró, menos",why_keep:"Igual",
+ ingH:"Insumos para los pedidos de hoy",ingS:"Calculados con los pedidos y la receta de cada producto.",ing:"Insumo",need:"Necesario",stock:"En inventario",status:"Estado",ok:"OK",order:"Pedir",
+ ingNote:"Recetas e inventario de ejemplo. Se reemplazan por los suyos.",
+ marH:"Margen por producto",marS:"Lo que deja cada producto hoy, con precios de ejemplo.",price:"Precio",cost:"Costo",unitsT:"Unidades",revenue:"Ventas",profit:"Ganancia",marginPct:"Margen",
+ marNote:"Precios y costos de ejemplo. Se reemplazan por los suyos.",
+ reqH:"Solicitudes de tiendas",reqS:"Las tiendas piden extra. La oficina aprueba y entra directo a los pedidos de hoy.",
+ approve:"Aprobar",decline:"Rechazar",approved:"Aprobado y sumado a los pedidos",declined:"Rechazado",pending:"Esperando",
+ catH:"Catering y eventos",catS:"Los pedidos grandes entran a producción y empaque como una tienda más.",
+ customer:"Cliente",date:"Fecha",item:"Producto",qty:"Cantidad",add:"Agregar pedido",catEmpty:"Aún no hay pedidos de catering.",catAdded:"Pedido de catering agregado",
+ posH:"Cajas de las tiendas",posS:"Conecta las cajas de las tiendas y las ventas entran solas. Nadie vuelve a escribir sobras.",
+ connect:"Conectar (demo)",connected:"Conectado (demo)",disconnect:"Desconectar",lastSync:"Ventas sincronizadas cada 15 min",
+ flow1:"Ventas de caja",flow2:"Kitchen OS",flow3:"Sobras y sugerencias",
+ note:"Prototipo: los datos quedan en esta pantalla. La versión real sincroniza todos los equipos al instante.",
+ credit:"Prototipo de BI Insights · Leticia Vale da Rosa. Tiendas y productos de gourmetdonuts.com; cantidades, precios y recetas son de ejemplo."}
+};
+const PHASES={1:["orders","prod","pack","tv"],2:["owner","closing","delivery"],3:["suggest","ingred","margin"],4:["requests","catering","pos"]};
+
+/* ---------- state ---------- */
+let lang="en", view="orders", locked=true;
+const r6=v=>Math.max(0,Math.round(v/6)*6);
+const orders={}, produced={}, packed={}, storeDone={}, delivery={}, closing={}, hist={};
+const todayISO=new Date().toISOString().slice(0,10);
+let requests=[
+ {id:1,s:"S09",i:"bos",q:12,en:"Football game tonight",es:"Partido de fútbol esta noche",st:"pending"},
+ {id:2,s:"S01",i:"hol",q:96,en:"School breakfast order",es:"Desayuno de una escuela",st:"pending"},
+ {id:3,s:"S10",i:"cro",q:6,en:"Ran out early yesterday",es:"Se acabaron temprano ayer",st:"pending"}];
+let catering=[{id:1,c:"Fitchburg office meeting",d:todayISO,i:"hol",q:60}];
+const pos={Square:false,Toast:false,Clover:false};
+function sample(seed){STORES.forEach((s,si)=>{orders[s.id]={};ITEMS.forEach((it,ii)=>{orders[s.id][it.id]=r6(it.base*s.f*(0.9+((si*7+ii*5+seed)%5)*0.05))})})}
+sample(0);
+STORES.forEach((s,si)=>{hist[s.id]={};closing[s.id]={};ITEMS.forEach((it,ii)=>{
+  const o=orders[s.id][it.id], sold=Math.round(o*(0.82+((si*3+ii*7)%5)*0.05)), so=(si+ii)%7===0?2:((si*ii)%11===5?1:0);
+  const avgSold=so?o:sold; hist[s.id][it.id]={sold:avgSold,left:Math.max(0,o-avgSold),so};
+  closing[s.id][it.id]={left:so?0:Math.max(0,o-sold),so:so>0,at:so?["9:15 AM","10:40 AM","11:05 AM"][(si+ii)%3]:""};
+})});
+produced.cro=true;produced.bag=true;
+["S01","S02","S03"].forEach(s=>{packed[s]={};ITEMS.forEach(i=>packed[s][i.id]=true);storeDone[s]="7:42 AM"});
+packed.S04={bos:true,old:true,pbj:true};
+delivery.S01={st:"deliv",at:"7:58 AM"};delivery.S02={st:"out",at:"8:05 AM"};
+
+/* ---------- helpers ---------- */
+const t=k=>T[lang][k]??k;
+const nm=x=>x[lang];
+const fmt=n=>Math.round(n).toLocaleString("en-US");
+const money=n=>"$"+n.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+const now=()=>new Date().toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit"});
+const item=id=>ITEMS.find(i=>i.id===id);
+const store=id=>id==="CAT"?{id:"CAT",name:"Catering"}:STORES.find(s=>s.id===id);
+const catToday=()=>catering.filter(c=>c.d===todayISO);
+const allStores=()=>catToday().length?[...STORES,{id:"CAT",name:"Catering"}]:STORES;
+const q=(s,i)=>s==="CAT"?catToday().filter(c=>c.i===i).reduce((a,c)=>a+c.q,0):+(orders[s]?.[i]||0);
+const itemTotal=i=>allStores().reduce((a,s)=>a+q(s.id,i),0);
+const storeTotal=s=>ITEMS.reduce((a,i)=>a+q(s,i.id),0);
+const grand=()=>allStores().reduce((a,s)=>a+storeTotal(s.id),0);
+const dn=(f,lg)=>`<span class="dn${lg?" lg":""}" style="--g:${f.g}"></span>`;
+const itemsOf=s=>ITEMS.filter(i=>q(s,i.id)>0);
+const isPacked=(s,i)=>!!packed[s]?.[i];
+const doneCount=()=>allStores().filter(s=>storeDone[s.id]).length;
+const madeUnits=()=>ITEMS.filter(i=>produced[i.id]).reduce((a,i)=>a+itemTotal(i.id),0);
+function toast(msg){const el=document.getElementById("toast");el.textContent=msg;el.hidden=false;clearTimeout(toast.h);toast.h=setTimeout(()=>el.hidden=true,2600)}
+const phaseOf=v=>+Object.keys(PHASES).find(p=>PHASES[p].includes(v));
+const prev=()=>{const p=phaseOf(view);return p>1?`<div class="preview">★ ${t("preview").replace("{n}",p)}</div>`:""};
+const head=(h,s,right="")=>`${prev()}<div class="head"><div><h1>${h}</h1>${s?`<p class="sub">${s}</p>`:""}</div>${right}</div>`;
+const suggestion=(s,i)=>{const h=hist[s][i];const up=h.so>=1, down=!up&&h.left>=Math.max(4,h.sold*.12);
+  const v=up?r6(h.sold*1.15+3):down?r6(h.sold+2):r6(h.sold+Math.min(h.left,4));return {v,why:up?"up":down?"down":"keep"}};
+const ingNeed=g=>ITEMS.reduce((a,i)=>a+(g.r[i.id]||0)*itemTotal(i.id),0);
+const lowStock=()=>INGR.filter(g=>g.stock<ingNeed(g)*1.15);
+
+/* ---------- views ---------- */
+const V={};
+V.orders=el=>{
+  const rows=allStores();
+  el.innerHTML=head(t("ordersH"),t("ordersS"),`<span class="pill ${locked?"ok":"warn"}">${locked?t("locked"):t("draft")}</span>
+   ${locked?`<button class="btn" id="unlock">${t("unlock")}</button>`:`<button class="btn" id="copy">${t("copy")}</button><button class="btn" id="clear">${t("clear")}</button><button class="btn primary" id="send">${t("send")}</button>`}`)+`
+  <div class="stats">
+   <div class="stat"><b>${fmt(grand())}</b><span>${t("items")}</span></div>
+   <div class="stat"><b>${STORES.length}</b><span>${t("stores")}</span></div>
+   <div class="stat"><b>${ITEMS.filter(i=>produced[i.id]&&itemTotal(i.id)).length}/${ITEMS.filter(i=>itemTotal(i.id)).length}</b><span>${t("madeN")}</span></div>
+   <div class="stat"><b>${doneCount()}/${rows.length}</b><span>${t("packedN")}</span></div>
+  </div>
+  <div class="scroll"><table class="grid-t">
+   <thead><tr><th style="text-align:left">${t("store")}</th>${ITEMS.map(i=>`<th><div class="fl">${dn(i)}${nm(i)}</div></th>`).join("")}<th class="tot">${t("total")}</th></tr></thead>
+   <tbody>${rows.map(s=>`<tr><th>${s.id} · ${s.name}</th>${ITEMS.map(i=>`<td><input id="o-${s.id}-${i.id}" type="number" min="0" step="6" inputmode="numeric" value="${q(s.id,i.id)||""}" ${locked||s.id==="CAT"?"disabled":""} data-s="${s.id}" data-i="${i.id}" aria-label="${s.name} ${nm(i)}"></td>`).join("")}<td class="tot" id="st-${s.id}">${fmt(storeTotal(s.id))}</td></tr>`).join("")}</tbody>
+   <tfoot><tr><th style="text-align:left">${t("total")}</th>${ITEMS.map(i=>`<td id="ft-${i.id}">${fmt(itemTotal(i.id))}</td>`).join("")}<td id="gt">${fmt(grand())}</td></tr></tfoot>
+  </table></div><p class="note">${t("note")}</p>`;
+  el.querySelectorAll("input").forEach(x=>x.addEventListener("input",e=>{const {s,i}=e.target.dataset;orders[s][i]=Math.max(0,parseInt(e.target.value)||0);
+    document.getElementById("st-"+s).textContent=fmt(storeTotal(s));document.getElementById("ft-"+i).textContent=fmt(itemTotal(i));document.getElementById("gt").textContent=fmt(grand())}));
+  on("unlock",()=>{locked=false;render()});
+  on("copy",()=>{sample(3);render()});
+  on("clear",()=>{STORES.forEach(s=>ITEMS.forEach(i=>orders[s.id][i.id]=0));render()});
+  on("send",()=>{locked=true;[produced,packed,storeDone,delivery].forEach(o=>Object.keys(o).forEach(k=>delete o[k]));render()});
+};
+V.prod=el=>{
+  const list=ITEMS.filter(i=>itemTotal(i.id)>0);
+  if(!locked||!list.length){el.innerHTML=head(t("prodH"))+`<div class="empty">${t("noOrder")}</div>`;return}
+  const g=grand();
+  el.innerHTML=head(t("prodH"),t("prodS"),`<span class="pill">${list.filter(i=>produced[i.id]).length}/${list.length} ${t("made")}</span>`)+`
+  <div class="band"><h2 style="margin:0">${t("bandH")}</h2><span><b>${fmt(g)}</b> ${t("units")}</span><span><b>${Math.ceil(g/24)}</b> ${t("trays")}</span></div>
+  <div class="cards">${list.map(i=>`<button class="pc ${produced[i.id]?"ok":""}" data-i="${i.id}">${dn(i,1)}<div><div class="nm">${nm(i)}</div><div class="st">${produced[i.id]?"✓ "+t("made"):t("toMake")}</div></div><div class="qty">${fmt(itemTotal(i.id))}</div></button>`).join("")}</div>`;
+  el.querySelectorAll(".pc").forEach(b=>b.onclick=()=>{produced[b.dataset.i]=!produced[b.dataset.i];render()});
+};
+V.pack=el=>{
+  if(!locked||!grand()){el.innerHTML=head(t("packH"))+`<div class="empty">${t("noOrder")}</div>`;return}
+  const rows=[...allStores()].sort((a,b)=>(!!storeDone[a.id])-(!!storeDone[b.id]));
+  el.innerHTML=head(t("packH"),t("packS"),`<span class="pill ${doneCount()===allStores().length?"ok":""}">${doneCount()}/${allStores().length} ${t("packedN")}</span>`)+`
+  <div class="stores">${rows.map(s=>{const its=itemsOf(s.id),n=its.filter(i=>isPacked(s.id,i.id)).length,all=n===its.length,d=storeDone[s.id];
+   return `<article class="sc ${d?"done":""}"><div class="sh"><div><div class="code">${s.id==="CAT"?"Catering":s.id}</div><div class="snm">${s.name}</div></div><div class="prog">${n}/${its.length}</div></div>
+    ${d?"":its.map(i=>`<button class="it ${isPacked(s.id,i.id)?"ok":""}" data-s="${s.id}" data-i="${i.id}"><span class="chk">✓</span>${dn(i)}<span class="nm">${nm(i)}</span><span class="q">${q(s.id,i.id)}</span></button>`).join("")}
+    <div class="foot">${d?`<div class="when">✓ ${t("packedAt")} ${d} · <button class="btn sm" data-undo="${s.id}">${t("undo")}</button></div>`:`<button class="btn go" data-done="${s.id}" ${all?"":"disabled"}>${t("doneBtn")}</button>`}</div></article>`}).join("")}</div>`;
+  el.querySelectorAll(".it").forEach(b=>b.onclick=()=>{const {s,i}=b.dataset;packed[s]=packed[s]||{};packed[s][i]=!packed[s][i];render()});
+  el.querySelectorAll("[data-done]").forEach(b=>b.onclick=()=>{storeDone[b.dataset.done]=now();render()});
+  el.querySelectorAll("[data-undo]").forEach(b=>b.onclick=()=>{delete storeDone[b.dataset.undo];render()});
+};
+V.tv=el=>{
+  const list=locked?ITEMS.filter(i=>itemTotal(i.id)>0):[];
+  const made=list.filter(i=>produced[i.id]).length, g=locked?grand():0;
+  const st=s=>storeDone[s.id]?"ready":(packed[s.id]&&Object.values(packed[s.id]).some(Boolean)?"packing":"pending");
+  list.sort((a,b)=>(!!produced[a.id])-(!!produced[b.id]));
+  const n=list.length, cols=n<=8?4:5, dens=n<=10?"":"d2";
+  el.innerHTML=head(t("tvH"),t("tvS"),`<button class="btn" id="fs">${t("fs")}</button>`)+`
+  <div class="tv" id="tvScreen"><div class="tv-in">
+   <div class="tv-top"><div class="tv-brand">Gourmet Donuts</div><div class="tv-title">TO MAKE <span>· POR HACER</span></div><div class="tv-clock" id="tvClock">${now()}</div></div>
+   <div class="tv-grid ${dens}" style="grid-template-columns:repeat(${cols},minmax(0,1fr))">${n?list.map(i=>`<div class="tv-card ${produced[i.id]?"ok":""}">${dn(i)}<div class="tv-nm">${i.en}<span>${i.es}</span></div><div class="tv-q">${fmt(itemTotal(i.id))}</div><div class="tv-st">${produced[i.id]?"✓ DONE · HECHO":"TO MAKE · POR HACER"}</div></div>`).join(""):`<div class="tv-empty">Waiting for orders · Esperando pedidos</div>`}</div>
+   <aside class="tv-side">
+    <div class="tv-box"><div class="tv-lbl">Today · Hoy</div><div class="tv-big">${fmt(g)}</div><div class="tv-small">units · unidades | ${Math.ceil(g/24)} trays · bandejas</div></div>
+    <div class="tv-box"><div class="tv-lbl">Made · Hecho</div><div class="tv-big">${made}<small>/${n}</small></div><div class="tv-bar"><i style="width:${n?made/n*100:0}%"></i></div></div>
+    <div class="tv-box tv-stores"><div class="tv-lbl">Stores · Tiendas ${doneCount()}/${allStores().length}</div>
+     <div class="tv-sg">${allStores().map(s=>`<div class="tv-s ${st(s)}"><i></i><b>${s.id==="CAT"?"CAT":s.id}</b><span>${s.name}</span></div>`).join("")}</div>
+     <div class="tv-legend"><span class="ready"><i></i>Ready · Lista</span><span class="packing"><i></i>Packing · Empacando</span><span><i></i>Waiting · Espera</span></div></div>
+   </aside></div></div><p class="note">${t("note")}</p>`;
+  on("fs",()=>{try{const p=document.getElementById("tvScreen").requestFullscreen?.();p&&p.catch(()=>{})}catch(e){}});
+};
+V.owner=el=>{
+  let left=0,sold=[],byStore=STORES.map(s=>{const l=ITEMS.reduce((a,i)=>a+closing[s.id][i.id].left,0);left+=l;
+    ITEMS.forEach(i=>{const c=closing[s.id][i.id];if(c.so)sold.push({s,i,at:c.at})});return {s,l}}).sort((a,b)=>b.l-a.l);
+  const max=Math.max(...byStore.map(x=>x.l),1), deliv=STORES.filter(s=>delivery[s.id]?.st==="deliv").length, g=grand(), m=madeUnits();
+  const pend=requests.filter(r=>r.st==="pending").length, low=lowStock();
+  const al=[...sold.slice(0,4).map(x=>`<li class="bad"><strong>${x.s.name}</strong><span>${t("aSold")} ${nm(x.i)} ${t("aAt")} ${x.at}</span></li>`),
+    ...low.map(gr=>`<li class="warn"><strong>${t("aStock")}</strong><span>${nm(gr)}</span></li>`),
+    ...(pend?[`<li><strong>${pend}</strong><span>${t("aReq")}</span></li>`]:[])];
+  el.innerHTML=head(t("ownerH"),t("ownerS"))+`
+  <div class="stats">
+   <div class="stat"><b>${fmt(m)}</b><span>${t("kMade")}</span><em>${t("kOf")} ${fmt(g)}</em></div>
+   <div class="stat"><b>${deliv}/${STORES.length}</b><span>${t("kDeliv")}</span></div>
+   <div class="stat"><b>${fmt(left)}</b><span>${t("kLeft")}</span><em>${t("kMost")} ${byStore[0].s.name}</em></div>
+   <div class="stat"><b>${sold.length}</b><span>${t("kSold")}</span></div>
+  </div>
+  <div class="cols">
+   <div class="panel"><h2>${t("alerts")}</h2>${al.length?`<ul class="alerts">${al.join("")}</ul>`:`<p class="sub">${t("noAlerts")}</p>`}</div>
+   <div class="panel"><h2>${t("leftBy")}</h2><div class="bars">${byStore.map(x=>`<div class="br"><span>${x.s.name}</span><div class="tr"><i style="width:${x.l/max*100}%"></i></div><b>${x.l}</b></div>`).join("")}</div></div>
+  </div>`;
+};
+let closingStore="S09";
+V.closing=el=>{
+  const c=closing[closingStore];
+  el.innerHTML=head(t("closingH"),t("closingS"))+`
+  <div class="panel" style="max-width:760px">
+   <div class="form" style="margin-bottom:14px"><label class="field" for="cs">${t("store")}<select id="cs">${STORES.map(s=>`<option value="${s.id}" ${s.id===closingStore?"selected":""}>${s.id} · ${s.name}</option>`).join("")}</select></label></div>
+   <div class="scroll" style="border:0"><table class="lt"><thead><tr><th>${t("item")}</th><th class="n">${t("sent")}</th><th class="n">${t("left")}</th><th>${t("soldOut")}</th></tr></thead>
+   <tbody>${ITEMS.map(i=>`<tr><td><span style="display:flex;gap:10px;align-items:center">${dn(i)}${nm(i)}</span></td><td class="n">${q(closingStore,i.id)}</td>
+    <td class="n"><input id="cl-${i.id}" type="number" min="0" inputmode="numeric" value="${c[i.id].left}" data-i="${i.id}" aria-label="${t("left")} ${nm(i)}"></td>
+    <td><label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="so-${i.id}" data-so="${i.id}" ${c[i.id].so?"checked":""} style="width:22px;height:22px">${c[i.id].so&&c[i.id].at?`<span class="pill bad">${c[i.id].at}</span>`:""}</label></td></tr>`).join("")}</tbody></table></div>
+   <div style="margin-top:14px"><button class="btn primary" id="saveCl">${t("save")}</button></div>
+  </div>`;
+  document.getElementById("cs").onchange=e=>{closingStore=e.target.value;render()};
+  on("saveCl",()=>{ITEMS.forEach(i=>{const l=parseInt(document.getElementById("cl-"+i.id).value)||0,so=document.getElementById("so-"+i.id).checked;
+    closing[closingStore][i.id]={left:l,so,at:so?(closing[closingStore][i.id].at||now()):""}});toast(t("saved"));render()});
+};
+V.delivery=el=>{
+  el.innerHTML=head(t("delH"),t("delS"))+`<div class="route">${STORES.map((s,k)=>{const d=delivery[s.id],p=storeDone[s.id];
+   const st=d?.st==="deliv"?["ok",t("st_deliv")+" · "+d.at]:d?.st==="out"?["warn",t("st_out")+" · "+d.at]:p?["",t("st_packed")]:["",t("st_wait")];
+   const btn=d?.st==="deliv"?"":d?.st==="out"?`<button class="btn go" data-dl="${s.id}">${t("markDeliv")}</button>`:p?`<button class="btn primary" data-out="${s.id}">${t("markOut")}</button>`:`<button class="btn" disabled>${t("markOut")}</button>`;
+   return `<div class="stop"><span class="num">${k+1}</span><div class="nm">${s.name}<small>${s.id}</small></div><span class="pill ${st[0]}">${st[1]}</span>${btn}</div>`}).join("")}</div>`;
+  el.querySelectorAll("[data-out]").forEach(b=>b.onclick=()=>{delivery[b.dataset.out]={st:"out",at:now()};render()});
+  el.querySelectorAll("[data-dl]").forEach(b=>b.onclick=()=>{delivery[b.dataset.dl]={st:"deliv",at:now()};render()});
+};
+let sugStore="S09";
+V.suggest=el=>{
+  let chainNow=0,chainSug=0;STORES.forEach(s=>ITEMS.forEach(i=>{chainNow+=q(s.id,i.id);chainSug+=suggestion(s.id,i.id).v}));
+  const d=chainSug-chainNow;
+  el.innerHTML=head(t("sugH"),t("sugS"),`<button class="btn primary" id="apply">${t("apply")}</button>`)+`
+  <div class="stats"><div class="stat"><b class="${d>0?"up":d<0?"down":"same"}">${d>0?"+":""}${fmt(d)}</b><span>${t("chain")}</span><em>${fmt(chainNow)} → ${fmt(chainSug)}</em></div></div>
+  <div class="panel">
+   <div class="form" style="margin-bottom:14px;max-width:420px"><label class="field" for="ss">${t("store")}<select id="ss">${STORES.map(s=>`<option value="${s.id}" ${s.id===sugStore?"selected":""}>${s.id} · ${s.name}</option>`).join("")}</select></label></div>
+   <div class="scroll" style="border:0"><table class="lt"><thead><tr><th>${t("item")}</th><th class="n">${t("avg")}</th><th class="n">${t("avgLeft")}</th><th class="n">${t("soldDays")}</th><th class="n">${t("today")}</th><th class="n">${t("suggest")}</th><th></th></tr></thead>
+   <tbody>${ITEMS.map(i=>{const h=hist[sugStore][i.id],sg=suggestion(sugStore,i.id),cur=q(sugStore,i.id);
+    return `<tr><td><span style="display:flex;gap:10px;align-items:center">${dn(i)}${nm(i)}</span></td><td class="n">${h.sold}</td><td class="n">${h.left}</td><td class="n">${h.so?`<span class="pill bad">${h.so} ${t("days")}</span>`:"0"}</td><td class="n">${cur}</td><td class="n"><b class="${sg.v>cur?"up":sg.v<cur?"down":"same"}">${sg.v}</b></td><td><span class="pill ${sg.why==="up"?"bad":sg.why==="down"?"warn":""}">${t("why_"+sg.why)}</span></td></tr>`}).join("")}</tbody></table></div>
+  </div>`;
+  document.getElementById("ss").onchange=e=>{sugStore=e.target.value;render()};
+  on("apply",()=>{STORES.forEach(s=>ITEMS.forEach(i=>orders[s.id][i.id]=suggestion(s.id,i.id).v));locked=false;view="orders";toast(t("applied"));render()});
+};
+V.ingred=el=>{
+  el.innerHTML=head(t("ingH"),t("ingS"))+`<div class="scroll"><table class="lt"><thead><tr><th>${t("ing")}</th><th class="n">${t("need")}</th><th class="n">${t("stock")}</th><th>${t("status")}</th></tr></thead>
+  <tbody>${INGR.map(g=>{const n=ingNeed(g),low=g.stock<n*1.15;return `<tr><td><b>${nm(g)}</b></td><td class="n">${fmt(n)} ${g.u}</td><td class="n">${fmt(g.stock)} ${g.u}</td><td>${low?`<span class="pill bad">${t("order")} ${fmt(Math.ceil(n*1.3-g.stock))} ${g.u}</span>`:`<span class="pill ok">${t("ok")}</span>`}</td></tr>`}).join("")}</tbody></table></div>
+  <p class="note">${t("ingNote")}</p>`;
+};
+V.margin=el=>{
+  const rows=ITEMS.map(i=>{const u=itemTotal(i.id),rev=u*i.price,pr=u*(i.price-i.cost);return {i,u,rev,pr,pct:(i.price-i.cost)/i.price}}).sort((a,b)=>b.pr-a.pr);
+  const tr=rows.reduce((a,x)=>a+x.rev,0),tp=rows.reduce((a,x)=>a+x.pr,0);
+  el.innerHTML=head(t("marH"),t("marS"))+`
+  <div class="stats"><div class="stat"><b>${money(tr)}</b><span>${t("revenue")}</span></div><div class="stat"><b>${money(tp)}</b><span>${t("profit")}</span></div><div class="stat"><b>${Math.round(tp/tr*100)}%</b><span>${t("marginPct")}</span></div></div>
+  <div class="scroll"><table class="lt"><thead><tr><th>${t("item")}</th><th class="n">${t("price")}</th><th class="n">${t("cost")}</th><th class="n">${t("unitsT")}</th><th class="n">${t("revenue")}</th><th class="n">${t("profit")}</th><th>${t("marginPct")}</th></tr></thead>
+  <tbody>${rows.map(x=>`<tr><td><span style="display:flex;gap:10px;align-items:center">${dn(x.i)}${nm(x.i)}</span></td><td class="n">${money(x.i.price)}</td><td class="n">${money(x.i.cost)}</td><td class="n">${fmt(x.u)}</td><td class="n">${money(x.rev)}</td><td class="n"><b>${money(x.pr)}</b></td><td><span style="display:flex;gap:8px;align-items:center"><span class="meter" style="flex:1"><i style="width:${x.pct*100}%"></i></span>${Math.round(x.pct*100)}%</span></td></tr>`).join("")}</tbody></table></div>
+  <p class="note">${t("marNote")}</p>`;
+};
+V.requests=el=>{
+  el.innerHTML=head(t("reqH"),t("reqS"))+`<div class="route">${requests.map(r=>{const s=store(r.s),i=item(r.i);
+   return `<div class="req">${dn(i,1)}<div class="txt"><b>${s.name}</b><small>${nm(i)} · “${r[lang]}”</small></div><span class="q">+${r.q}</span>
+    ${r.st==="pending"?`<button class="btn go" data-ap="${r.id}">${t("approve")}</button><button class="btn" data-de="${r.id}">${t("decline")}</button>`:`<span class="pill ${r.st==="approved"?"ok":""}">${r.st==="approved"?t("approved"):t("declined")}</span>`}</div>`}).join("")}</div>`;
+  el.querySelectorAll("[data-ap]").forEach(b=>b.onclick=()=>{const r=requests.find(x=>x.id==b.dataset.ap);r.st="approved";orders[r.s][r.i]+=r.q;toast(t("approved"));render()});
+  el.querySelectorAll("[data-de]").forEach(b=>b.onclick=()=>{requests.find(x=>x.id==b.dataset.de).st="declined";render()});
+};
+V.catering=el=>{
+  el.innerHTML=head(t("catH"),t("catS"))+`
+  <div class="panel" style="margin-bottom:14px"><form class="form" id="catForm">
+   <label class="field" for="cc">${t("customer")}<input id="cc" required placeholder="Hudson High School"></label>
+   <label class="field" for="cd">${t("date")}<input id="cd" type="date" value="${todayISO}" required></label>
+   <label class="field" for="ci">${t("item")}<select id="ci">${ITEMS.map(i=>`<option value="${i.id}">${nm(i)}</option>`).join("")}</select></label>
+   <label class="field" for="cq">${t("qty")}<input id="cq" type="number" min="1" value="48" required></label>
+   <button class="btn primary" type="submit">${t("add")}</button></form></div>
+  ${catering.length?`<div class="route">${catering.map(c=>{const i=item(c.i);return `<div class="req">${dn(i,1)}<div class="txt"><b>${c.c}</b><small>${nm(i)} · ${c.d}</small></div><span class="q">${c.q}</span></div>`}).join("")}</div>`:`<div class="empty">${t("catEmpty")}</div>`}`;
+  document.getElementById("catForm").addEventListener("submit",e=>{e.preventDefault();
+    catering.push({id:Date.now(),c:document.getElementById("cc").value.trim()||"—",d:document.getElementById("cd").value,i:document.getElementById("ci").value,q:Math.max(1,parseInt(document.getElementById("cq").value)||1)});toast(t("catAdded"));render()});
+};
+V.pos=el=>{
+  el.innerHTML=head(t("posH"),t("posS"))+`<div class="pos">${Object.keys(pos).map(k=>`<div class="panel"><h2>${k}</h2>
+   <span class="pill ${pos[k]?"ok":""}">${pos[k]?t("connected"):"—"}</span>${pos[k]?`<p class="sub" style="margin:0">${t("lastSync")}</p>`:""}
+   <button class="btn ${pos[k]?"":"primary"}" data-pos="${k}">${pos[k]?t("disconnect"):t("connect")}</button></div>`).join("")}</div>
+   <div class="flow"><span>${t("flow1")}</span><i>→</i><span>${t("flow2")}</span><i>→</i><span>${t("flow3")}</span></div>`;
+  el.querySelectorAll("[data-pos]").forEach(b=>b.onclick=()=>{pos[b.dataset.pos]=!pos[b.dataset.pos];render()});
+};
+
+/* ---------- shell ---------- */
+function on(id,fn){const b=document.getElementById(id);if(b)b.onclick=fn}
+function render(){
+  const p=phaseOf(view);
+  document.getElementById("phases").innerHTML=[1,2,3,4].map(n=>`<button class="ph" data-p="${n}" aria-pressed="${n===p}"><b>${n}</b>${t("p"+n)}</button>`).join("");
+  document.getElementById("tabs").innerHTML=PHASES[p].map(v=>`<button class="tab" role="tab" data-v="${v}" aria-selected="${v===view}">${t("v_"+v)}</button>`).join("");
+  document.querySelectorAll(".ph").forEach(b=>b.onclick=()=>{view=PHASES[b.dataset.p][0];render();window.scrollTo(0,0)});
+  document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{view=b.dataset.v;render()});
+  document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.l===lang));
+  document.getElementById("dateLbl").textContent=new Date().toLocaleDateString(lang==="en"?"en-US":"es-US",{weekday:"short",month:"2-digit",day:"2-digit"});
+  document.getElementById("credit").textContent=t("credit");
+  document.documentElement.lang=lang;
+  const m=document.getElementById("main");V[view](m);
+}
+document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>{lang=b.dataset.l;render()});
+setInterval(()=>{const c=document.getElementById("tvClock");if(c)c.textContent=now()},15000);
+render();
+</script>
+
+</body>
+
+</html>
