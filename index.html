@@ -217,6 +217,45 @@ tfoot td,tfoot th{font-weight:800;background:var(--surface-2);border-bottom:0}
 .tvmode main{padding:0;max-width:none}
 .tvmode .tv{border-radius:0;margin:0;box-shadow:none;height:100vh;aspect-ratio:auto}
 .tvmode body::before{display:none}
+/* v3: weekly grid + mid-day changes + manager links + EN/PT/ES */
+.paste{display:flex;flex-direction:column;gap:12px;margin-bottom:16px}
+.paste textarea{width:100%;min-height:84px;resize:vertical;font:500 16px var(--body);padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--fg)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:13px;color:var(--muted)}
+.chip{border:1px dashed var(--muted);background:var(--bg);color:var(--fg);font:500 13px var(--body);padding:7px 12px;border-radius:999px;cursor:pointer;text-align:left}
+.draft{border:2px solid var(--gold);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:12px;background:var(--surface);--hole:var(--surface)}
+.draft .form select{font:600 15px var(--body);padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--fg);width:100%}
+.pl{display:grid;grid-template-columns:30px minmax(0,1.6fr) minmax(0,1fr) 84px minmax(0,1.2fr) 36px;gap:8px;align-items:center}
+.pl select,.pl input{font:600 15px var(--body);padding:9px 10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--fg);width:100%;min-width:0}
+.pl .fx{font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pl .fx b{color:var(--fg);font-size:16px}
+@media (max-width:640px){.pl{grid-template-columns:26px minmax(0,1fr) 90px 70px 32px}.pl .fx{grid-column:2/-1}}
+td.chg{background:var(--warn-soft);color:var(--warn);font-weight:800}
+th.today,td.today{background:var(--warn-soft)}
+.split{display:grid;grid-template-columns:minmax(0,2fr) minmax(280px,1fr);gap:14px;margin-bottom:16px;align-items:start}
+@media (max-width:900px){.split{grid-template-columns:1fr}}
+.log{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;max-height:520px;overflow:auto}
+.log li{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:12px;background:var(--surface-2);font-size:14px;--hole:var(--surface-2)}
+.log li .tx{flex:1;min-width:0}
+.log li small{display:block;color:var(--muted);margin-top:2px}
+.log .dl{font-family:var(--display);font-size:22px;white-space:nowrap}
+.it.adj{background:var(--warn-soft)}
+.it.adj .q{color:var(--warn)}
+.it .tag{font-size:12px;font-weight:800;color:var(--warn);text-transform:uppercase;letter-spacing:.06em}
+.phone{max-width:360px;background:var(--brand);border-radius:32px;padding:12px;margin-inline:auto}
+.phone-in{background:var(--bg);border-radius:22px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.stepper{display:flex;align-items:center;justify-content:center;gap:10px}
+.stepper button{width:52px;height:52px;border-radius:14px;border:1px solid var(--line);background:var(--surface);font:800 24px var(--body);color:var(--fg);cursor:pointer}
+.stepper b{font-family:var(--display);font-weight:400;font-size:38px;min-width:80px;text-align:center;font-variant-numeric:tabular-nums}
+.hol{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}
+.hol .txt{flex:1 1 220px;min-width:0}
+.hol .txt small{display:block;color:var(--muted)}
+.tv-card.ex{--hole:#3B2410;background:#3B2410;border-color:var(--tv-warn)}
+.tv-card.ex .tv-q,.tv-card.ex .tv-st{color:var(--tv-warn)}
+@media (prefers-reduced-motion:no-preference){.tv-card.ex{animation:gdpulse 1.6s ease-in-out infinite}@keyframes gdpulse{50%{box-shadow:0 0 0 .5cqw rgba(251,176,59,.35)}}}
+.tv-chg{display:block;width:100%;text-align:left;border:0;border-radius:.7cqw;background:var(--tv-bg);color:var(--tv-fg);font:600 1.05cqw var(--body);padding:.5cqw .7cqw;margin-top:.5cqw;cursor:pointer}
+.tv-chg.new{background:#3B2410;color:var(--tv-warn)}
+.tv-chg small{display:block;font-weight:500;font-size:.85cqw;color:var(--tv-muted)}
+@media print{.topbar,.credit,.noprint,.toast{display:none!important}body::before{display:none}main{padding:0}.scroll{overflow:visible;border:0}td input{border:0!important;background:transparent!important}}
 </style>
 
 <div class="topbar">
@@ -225,7 +264,7 @@ tfoot td,tfoot th{font-weight:800;background:var(--surface-2);border-bottom:0}
       <div class="brand">Gourmet Donuts <small>Kitchen OS</small> <span class="date" id="dateLbl"></span></div>
       <div class="phases" id="phases"></div>
       <button class="demo-btn" id="demoBtn"></button>
-      <div class="lang" role="group" aria-label="Language"><button data-l="en">EN</button><button data-l="es">ES</button></div>
+      <div class="lang" role="group" aria-label="Language"><button data-l="en">EN</button><button data-l="pt">PT</button><button data-l="es">ES</button></div>
     </div>
     <nav class="tabs" role="tablist" id="tabs"></nav>
   </div>
@@ -257,43 +296,55 @@ const MENU=[
  ["bpl","Plain Bagel","Bagel natural","bagel","#D2A06A",12,0],["bev","Everything Bagel","Bagel con todo","bagel","#8A6A4A",12,0],["bcr","Cinnamon Raisin Bagel","Bagel de canela y pasas","bagel","#9A6A3A",6,0],["bse","Sesame Bagel","Bagel de ajonjolí","bagel","#D9B57A",6,0],
  ["cro","Butter Croissant","Croissant de mantequilla","pastry","#E3B06A",12,0],["dan","Cream Cheese Danish","Danés de queso crema","pastry","#F0D9A0",6,0],["bow","Glazed Bowtie","Moño glaseado","pastry","#E9B55B",6,0],["cof","Coffee Roll","Rollo de café","pastry","#B8732F",6,0],["cir","Baked Cinnamon Roll","Rollo de canela","pastry","#C68A3E",6,0]
 ];
-const CATS={donut:{en:"Donuts",es:"Donas"},filled:{en:"Filled donuts",es:"Donas rellenas"},cruller:{en:"Sticks & crullers",es:"Palitos y crullers"},holes:{en:"Donut holes",es:"Bolitas"},muffin:{en:"Muffins",es:"Muffins"},bagel:{en:"Bagels",es:"Bagels"},pastry:{en:"Danish, croissants & rolls",es:"Daneses, croissants y rollos"}};
+/* words managers use for each item (EN/PT/ES); the live version reads any wording with AI */
+const ALIAS={hon:["glazed","glaze","honey dip","honey","glaseada","glaseado","glaceado"],bos:["boston"],chf:["choc frost","chocolate frost","choc frosted","cobertura de chocolate"],
+ old:["old fashion","old fashioned","plain","tradicional"],jel:["jelly","geleia","mermelada"],coc:["coconut","coco"],pow:["powdered","polvilhado","en polvo"],cin:["cinnamon","canela"],
+ rai:["rainbow","colorido"],chs:["choc sprinkles","chocolate sprinkles","granulado"],blu:["blueberry","mirtilo","arandano"],lem:["lemon","limao","limon"],
+ pbj:["pb&j","pbj","pb and j","peanut butter"],gcr:["cruller"],bav:["bavarian","bavaro"],van:["vanilla","baunilha","vainilla"],but:["butternut"],sug:["sugar raised","sugar","acucar","azucarada"],
+ app:["apple","maca"],cof:["coffee roll"],chd:["chocolate honey"],ecl:["eclair"],cro:["croissant"],mbl:["blueberry muffin"],dch:["double chocolate","doble chocolate"]};
+const CATS={donut:{en:"Donuts",pt:"Donuts",es:"Donas"},filled:{en:"Filled donuts",pt:"Donuts recheados",es:"Donas rellenas"},cruller:{en:"Sticks & crullers",pt:"Palitos e crullers",es:"Palitos y crullers"},holes:{en:"Donut holes",pt:"Bolinhas",es:"Bolitas"},muffin:{en:"Muffins",pt:"Muffins",es:"Muffins"},bagel:{en:"Bagels",pt:"Bagels",es:"Bagels"},pastry:{en:"Danish, croissants & rolls",pt:"Folhados, croissants e rolinhos",es:"Daneses, croissants y rollos"}};
 const PRICE={donut:[1.79,.45],filled:[2.19,.62],cruller:[2.09,.55],holes:[.35,.08],muffin:[2.99,.85],bagel:[1.89,.40],pastry:[3.29,1.05]};
 const RECIPE={
  donut:{flour:.09,sugar:.03,eggs:.15,fat:.02,glaze:.02},filled:{flour:.09,sugar:.03,eggs:.15,fat:.02,fill:.06,glaze:.02},
  cruller:{flour:.07,sugar:.03,eggs:.3,fat:.04,glaze:.03},holes:{flour:.02,sugar:.008,eggs:.03,fat:.005,glaze:.006},
  muffin:{flour:.12,sugar:.06,eggs:.25,fat:.04},bagel:{flour:.25,sugar:.01,fat:.01},pastry:{flour:.10,sugar:.03,eggs:.1,fat:.12,fill:.02,glaze:.01}};
-const INGR=[{id:"flour",en:"Flour",es:"Harina",u:"lb",stock:420},{id:"sugar",en:"Sugar",es:"Azúcar",u:"lb",stock:95},{id:"eggs",en:"Eggs",es:"Huevos",u:"ea",stock:700},
- {id:"fat",en:"Butter & shortening",es:"Mantequilla y grasa",u:"lb",stock:90},{id:"fill",en:"Fillings",es:"Rellenos",u:"lb",stock:55},{id:"glaze",en:"Glazes & icing",es:"Glaseados",u:"lb",stock:80}];
+const INGR=[{id:"flour",en:"Flour",pt:"Farinha",es:"Harina",u:"lb",stock:420},{id:"sugar",en:"Sugar",pt:"Açúcar",es:"Azúcar",u:"lb",stock:95},{id:"eggs",en:"Eggs",pt:"Ovos",es:"Huevos",u:"ea",stock:700},
+ {id:"fat",en:"Butter & shortening",pt:"Manteiga e gordura",es:"Mantequilla y grasa",u:"lb",stock:90},{id:"fill",en:"Fillings",pt:"Recheios",es:"Rellenos",u:"lb",stock:55},{id:"glaze",en:"Glazes & icing",pt:"Coberturas",es:"Glaseados",u:"lb",stock:80}];
 const STORE_SEED=[["Worcester",1.4],["Leominster · Main St",1.2],["Leominster · N Main",1.0],["Fitchburg",1.1],["Littleton",0.8],["Townsend",0.7],["Winchendon",0.7],["West Boylston",0.8],["Hudson",1.0],["Rindge, NH",0.8],["[Store 11]",0.8],["[Store 12]",0.8]];
 
 const T={
 en:{p1:"Operations",p2:"Control",p3:"Intelligence",p4:"Integration",demo:"▶ Try the demo",
- v_orders:"Orders",v_kitchen:"Kitchen",v_pack:"Packing",v_owner:"Owner",v_closing:"Closing report",v_delivery:"Deliveries",v_suggest:"Suggested orders",v_ingred:"Ingredients",v_margin:"Margins",v_requests:"Store requests",v_catering:"Catering",v_pos:"Registers",
+ v_orders:"Orders",v_kitchen:"Kitchen",v_pack:"Packing",v_owner:"Owner",v_requests:"Manager links",v_closing:"Closing report",v_delivery:"Deliveries",v_suggest:"Suggested orders",v_ingred:"Ingredients",v_margin:"Margins",v_catering:"Catering",v_pos:"Registers",
  preview:"Phase {n} preview. Example data, to show how it works.",
- ordersH:"Today’s orders",ordersS:"Type how many of each item every store needs. Totals add up on their own.",store:"Store",total:"Total",
- copy:"Copy yesterday",clear:"Clear",send:"Send to kitchen",unlock:"Edit orders",draft:"Draft",locked:"Sent to kitchen",
- items:"Items",stores:"Stores",packedN:"Stores packed",madeN:"Items made",activeN:"on today’s menu",
- kitchenH:"Kitchen",kitchenS:"What to make today, on the tablet and the kitchen TV. Tap an item when the batch is done.",fs:"Full screen",tvLink:"On the TV, open this same link with #tv at the end.",
- packH:"Packing by store",packS:"Tap each item as it goes in the box. Then tap DONE.",doneBtn:"DONE",packedAt:"Packed at",undo:"Undo",
- noOrder:"No orders yet. Fill the Orders screen and tap “Send to kitchen”.",
+ ordersH:"Orders",ordersS:"Each store has its weekly grid, like the sheet on the wall. When a manager texts a change, paste it here and confirm.",store:"Store",total:"Total",
+ items:"Items today",stores:"Stores",packedN:"Stores packed",madeN:"Items made",activeN:"on the menu",changesN:"Changes for today",
+ pasteH:"Paste a manager’s message",pasteS:"Copy the WhatsApp message and paste it here. Kitchen OS finds the store, the day and the items.",pastePh:"Hi Josy, tomorrow send 6 more glazed and 2 less coconut",
+ read:"Read message",tryEx:"Try:",storeNF:"No store name in the message. Pick the store.",forDay:"Day",kind:"Change",once:"Only that day",wd:"Every {d}, from now on",allDays:"Every day, from now on",
+ m_add:"more",m_less:"less",m_set:"total",addLine:"+ Add line",confirm:"Confirm change",cancel:"Cancel",nothing:"No items found. Add a line or rewrite the message.",confirmed:"Change saved. Kitchen and packing are updated.",
+ aiNote:"Prototype reader with simple rules. The live version uses AI to understand any wording, in English, Portuguese or Spanish.",
+ todayH:"Today, all stores",todayS:"Highlighted cells changed today.",logH:"Changes",logEmpty:"No changes yet.",seen:"Seen by kitchen",notSeen:"Not seen by kitchen yet",every:"Every {d}",everyDay:"Every day",
+ gridH:"Weekly grid",gridS:"The standing order of the store. A number changed here applies every week.",print:"Print sheet",dayToday:"Today",dayTomorrow:"Tomorrow",office:"Office",
+ kitchenH:"Kitchen",kitchenS:"What to make today, on the tablet and the kitchen TV. Tap an item when the batch is done. Changes during the day show up in gold, with a sound.",fs:"Full screen",tvLink:"On the TV, open this same link with #tv at the end.",
+ packH:"Packing by store",packS:"Tap each item as it goes in the box, then tap DONE. If a store changes its order, its card reopens.",doneBtn:"DONE",packedAt:"Packed at",undo:"Undo",adjust:"Adjust",reopened:"Order changed",noOrder:"No orders for today.",
  ownerH:"Good morning",ownerS:"Everything that matters today, in one place. Built for the phone.",
  kMade:"Made today",kDeliv:"Stores delivered",kLeft:"Leftovers yesterday",kSold:"Sold-outs yesterday",kOf:"of",kMost:"Most at",
- alerts:"Alerts",leftBy:"Leftovers by store, yesterday",aSold:"sold out of",aAt:"at",aStock:"Low stock",aReq:"store requests waiting",noAlerts:"No alerts. All good.",
+ alerts:"Alerts",leftBy:"Leftovers by store, yesterday",aSold:"sold out of",aAt:"at",aStock:"Low stock",aReq:"manager requests waiting",noAlerts:"No alerts. All good.",
  closingH:"Closing report",closingS:"At closing, each store says what was left and what sold out. It takes a minute and feeds the owner’s dashboard.",
  item:"Item",sent:"Sent",left:"Left over",soldOut:"Sold out",save:"Save report",saved:"Report saved",
  delH:"Deliveries",delS:"The driver taps each step on the phone. The office sees it live.",
  st_wait:"Not packed yet",st_packed:"Packed",st_out:"On the way",st_deliv:"Delivered",markOut:"Leave with it",markDeliv:"Mark delivered",
  sugH:"Suggested orders for tomorrow",sugS:"Based on what sold, what was left and what sold out on the same weekday, last 4 weeks.",
- avg:"Avg sold",avgLeft:"Avg left",soldDays:"Sold out",days:"days",today:"Today",suggest:"Suggested",
- apply:"Use as tomorrow’s orders",applied:"Suggestions copied to Orders. Review and send.",chain:"Change for the whole chain",
+ avg:"Avg sold",avgLeft:"Avg left",soldDays:"Sold out",days:"days",tomorrow:"Tomorrow",suggest:"Suggested",
+ apply:"Use for tomorrow",applied:"Suggestions saved as changes for tomorrow.",chain:"Change for the whole chain",
  why_up:"Sold out, more",why_down:"Leftovers, less",why_keep:"Keep",
+ holH:"Holiday plans",holS:"Peak days planned in advance for every store, saved as changes for that day.",hol_hal:"Halloween",hol_thx:"Day before Thanksgiving",hol_xms:"Christmas Eve",holApply:"Apply",holDone:"Holiday plan applied",holOn:"Applied",
  ingH:"Ingredients for today’s orders",ingS:"Calculated from the orders and the recipe of each item.",ing:"Ingredient",need:"Needed",stock:"In stock",status:"Status",ok:"OK",order:"Order",
  ingNote:"Example recipes and stock. They are replaced by yours.",
  marH:"Margin by item",marS:"What each item brings in today, at example prices.",price:"Price",cost:"Cost",unitsT:"Units",revenue:"Revenue",profit:"Profit",marginPct:"Margin",
  marNote:"Example prices and costs. They are replaced by yours.",
- reqH:"Store requests",reqS:"Stores ask for extra. The office approves, and it goes straight into today’s orders.",
- approve:"Approve",decline:"Decline",approved:"Approved and added to orders",declined:"Declined",
+ reqH:"Manager links",reqS:"Each store manager gets their own link. Requests land here, Josy approves, and the kitchen sees it at once.",
+ mgrS:"Opened from the store’s link. No app, no password.",note2:"Note",sendReq:"Send request",reqSent:"Request sent to the office",copyLink:"Copy store link",linkCopied:"Store link copied (demo)",manager:"Manager",linkOf:"Link of",
+ approve:"Approve",decline:"Decline",approved:"Approved and added to today",declined:"Declined",
  catH:"Catering and events",catS:"Big orders go into the kitchen and packing like one more store.",
  customer:"Customer",date:"Date",qty:"Quantity",add:"Add order",catEmpty:"No catering orders yet.",catAdded:"Catering order added",
  posH:"Store registers",posS:"Connect the stores’ point of sale, and sales come in on their own. Nobody types leftovers again.",
@@ -301,38 +352,89 @@ en:{p1:"Operations",p2:"Control",p3:"Intelligence",p4:"Integration",demo:"▶ Tr
  flow1:"Register sales",flow2:"Kitchen OS",flow3:"Leftovers and suggestions",
  demoH:"Try it yourself",demoS:"Change anything here and see it everywhere: orders, kitchen, TV and packing.",
  demoTip:"Tip: open this page in a second window, or on the TV with #tv at the end. Changes show up on both at the same time.",
- play:"▶ Play the morning",stop:"■ Stop",reset:"Reset demo",newDay:"New day (fresh orders)",resetDone:"Demo reset",newDayDone:"New day started",
- menuH:"Menu",menuS:"Check what you make today and rename anything. The number is per store, before store size.",
+ play:"▶ Play the morning",stop:"■ Stop",reset:"Reset demo",newDay:"New day",resetDone:"Demo reset",newDayDone:"New day started",
+ menuH:"Menu",menuS:"Check what you make and rename anything. The number is the base per store, before store size.",
  perStore:"Per store",addItem:"Add item",nameEn:"English",nameEs:"Spanish",category:"Category",itemAdded:"Item added",
  storesH:"Stores",storesS:"Rename, add or remove stores.",addStore:"Add store",remove:"Remove",newStore:"New store",
  note:"Prototype: data stays in this browser. The live version syncs every device in real time.",
  credit:"Prototype by BI Insights · Leticia Vale da Rosa. Stores and menu from gourmetdonuts.com; quantities, prices and recipes are examples."},
+pt:{p1:"Operação",p2:"Controle",p3:"Inteligência",p4:"Integração",demo:"▶ Testar a demo",
+ v_orders:"Pedidos",v_kitchen:"Cozinha",v_pack:"Separação",v_owner:"Dono",v_requests:"Links dos gerentes",v_closing:"Fechamento da loja",v_delivery:"Entregas",v_suggest:"Pedidos sugeridos",v_ingred:"Insumos",v_margin:"Margens",v_catering:"Catering",v_pos:"Caixas",
+ preview:"Prévia da fase {n}. Dados de exemplo, para mostrar como funciona.",
+ ordersH:"Pedidos",ordersS:"Cada loja tem sua grade semanal, como a folha da parede. Quando um gerente manda uma mudança, cole a mensagem aqui e confirme.",store:"Loja",total:"Total",
+ items:"Itens hoje",stores:"Lojas",packedN:"Lojas separadas",madeN:"Itens feitos",activeN:"no cardápio",changesN:"Mudanças para hoje",
+ pasteH:"Cole a mensagem do gerente",pasteS:"Copie a mensagem do WhatsApp e cole aqui. O Kitchen OS encontra a loja, o dia e os itens.",pastePh:"Oi Josy, amanhã manda mais 6 glazed e menos 2 coconut",
+ read:"Ler mensagem",tryEx:"Teste:",storeNF:"A mensagem não diz a loja. Escolha a loja.",forDay:"Dia",kind:"Mudança",once:"Só nesse dia",wd:"Toda semana · {d}, daqui pra frente",allDays:"Todos os dias, daqui pra frente",
+ m_add:"a mais",m_less:"a menos",m_set:"no total",addLine:"+ Adicionar linha",confirm:"Confirmar mudança",cancel:"Cancelar",nothing:"Nenhum item encontrado. Adicione uma linha ou reescreva a mensagem.",confirmed:"Mudança salva. Cozinha e separação atualizadas.",
+ aiNote:"Leitor do protótipo, com regras simples. A versão real usa IA para entender qualquer jeito de escrever, em inglês, português ou espanhol.",
+ todayH:"Hoje, todas as lojas",todayS:"As células destacadas mudaram hoje.",logH:"Mudanças",logEmpty:"Nenhuma mudança ainda.",seen:"Visto pela cozinha",notSeen:"A cozinha ainda não viu",every:"Toda semana · {d}",everyDay:"Todos os dias",
+ gridH:"Grade semanal",gridS:"O pedido fixo da loja. Um número alterado aqui vale para todas as semanas.",print:"Imprimir folha",dayToday:"Hoje",dayTomorrow:"Amanhã",office:"Escritório",
+ kitchenH:"Cozinha",kitchenS:"O que fazer hoje, no tablet e na TV da cozinha. Toque no item quando o lote ficar pronto. Mudanças durante o dia aparecem em dourado, com aviso sonoro.",fs:"Tela cheia",tvLink:"Na TV, abra este mesmo link com #tv no final.",
+ packH:"Separação por loja",packS:"Toque em cada item ao colocar na caixa e depois em PRONTO. Se a loja mudar o pedido, o card dela reabre.",doneBtn:"PRONTO",packedAt:"Pronto às",undo:"Desfazer",adjust:"Ajustar",reopened:"Pedido mudou",noOrder:"Nenhum pedido para hoje.",
+ ownerH:"Bom dia",ownerS:"Tudo o que importa hoje, em um só lugar. Feito para o celular.",
+ kMade:"Feito hoje",kDeliv:"Lojas entregues",kLeft:"Sobras de ontem",kSold:"Esgotados ontem",kOf:"de",kMost:"Mais em",
+ alerts:"Alertas",leftBy:"Sobras por loja, ontem",aSold:"esgotou",aAt:"às",aStock:"Estoque baixo",aReq:"pedidos de gerentes aguardando",noAlerts:"Sem alertas. Tudo certo.",
+ closingH:"Fechamento da loja",closingS:"No fechamento, cada loja informa o que sobrou e o que esgotou. Leva um minuto e alimenta o painel do dono.",
+ item:"Item",sent:"Enviado",left:"Sobrou",soldOut:"Esgotou",save:"Salvar fechamento",saved:"Fechamento salvo",
+ delH:"Entregas",delS:"O motorista toca cada etapa no celular. O escritório acompanha ao vivo.",
+ st_wait:"Ainda não separado",st_packed:"Separado",st_out:"A caminho",st_deliv:"Entregue",markOut:"Sair com o pedido",markDeliv:"Marcar entregue",
+ sugH:"Pedidos sugeridos para amanhã",sugS:"Com base no que vendeu, no que sobrou e no que esgotou no mesmo dia da semana, nas últimas 4 semanas.",
+ avg:"Média vendida",avgLeft:"Média de sobra",soldDays:"Esgotou",days:"dias",tomorrow:"Amanhã",suggest:"Sugerido",
+ apply:"Usar para amanhã",applied:"Sugestões salvas como mudanças para amanhã.",chain:"Mudança na rede toda",
+ why_up:"Esgotou, mais",why_down:"Sobrou, menos",why_keep:"Manter",
+ holH:"Planos de feriado",holS:"Dias de pico planejados com antecedência para todas as lojas, salvos como mudanças daquele dia.",hol_hal:"Halloween",hol_thx:"Véspera de Thanksgiving",hol_xms:"Véspera de Natal",holApply:"Aplicar",holDone:"Plano de feriado aplicado",holOn:"Aplicado",
+ ingH:"Insumos para os pedidos de hoje",ingS:"Calculados a partir dos pedidos e da receita de cada item.",ing:"Insumo",need:"Necessário",stock:"Em estoque",status:"Situação",ok:"OK",order:"Comprar",
+ ingNote:"Receitas e estoque de exemplo. Serão trocados pelos seus.",
+ marH:"Margem por item",marS:"Quanto cada item traz hoje, com preços de exemplo.",price:"Preço",cost:"Custo",unitsT:"Unidades",revenue:"Receita",profit:"Lucro",marginPct:"Margem",
+ marNote:"Preços e custos de exemplo. Serão trocados pelos seus.",
+ reqH:"Links dos gerentes",reqS:"Cada gerente de loja recebe um link próprio. Os pedidos chegam aqui, a Josy aprova e a cozinha vê na hora.",
+ mgrS:"Aberto pelo link da loja. Sem app, sem senha.",note2:"Observação",sendReq:"Enviar pedido",reqSent:"Pedido enviado ao escritório",copyLink:"Copiar link da loja",linkCopied:"Link da loja copiado (demo)",manager:"Gerente",linkOf:"Link da loja",
+ approve:"Aprovar",decline:"Recusar",approved:"Aprovado e somado ao dia de hoje",declined:"Recusado",
+ catH:"Catering e eventos",catS:"Pedidos grandes entram na cozinha e na separação como se fossem mais uma loja.",
+ customer:"Cliente",date:"Data",qty:"Quantidade",add:"Adicionar pedido",catEmpty:"Nenhum pedido de catering ainda.",catAdded:"Pedido de catering adicionado",
+ posH:"Caixas das lojas",posS:"Conecte o sistema de caixa das lojas e as vendas entram sozinhas. Ninguém mais digita sobras.",
+ connect:"Conectar (demo)",connected:"Conectado (demo)",disconnect:"Desconectar",lastSync:"Vendas sincronizadas a cada 15 min",
+ flow1:"Vendas do caixa",flow2:"Kitchen OS",flow3:"Sobras e sugestões",
+ demoH:"Teste você mesmo",demoS:"Mude o que quiser aqui e veja em todo lugar: pedidos, cozinha, TV e separação.",
+ demoTip:"Dica: abra esta página em outra janela, ou na TV com #tv no final. As mudanças aparecem nas duas ao mesmo tempo.",
+ play:"▶ Simular a manhã",stop:"■ Parar",reset:"Reiniciar demo",newDay:"Novo dia",resetDone:"Demo reiniciada",newDayDone:"Novo dia iniciado",
+ menuH:"Cardápio",menuS:"Marque o que é feito e renomeie o que quiser. O número é a base por loja, antes do tamanho da loja.",
+ perStore:"Por loja",addItem:"Adicionar item",nameEn:"Inglês",nameEs:"Espanhol",category:"Categoria",itemAdded:"Item adicionado",
+ storesH:"Lojas",storesS:"Renomeie, adicione ou remova lojas.",addStore:"Adicionar loja",remove:"Remover",newStore:"Loja nova",
+ note:"Protótipo: os dados ficam neste navegador. A versão real sincroniza todos os aparelhos na hora.",
+ credit:"Protótipo da BI Insights · Leticia Vale da Rosa. Lojas e cardápio de gourmetdonuts.com; quantidades, preços e receitas são de exemplo."},
 es:{p1:"Operación",p2:"Control",p3:"Inteligencia",p4:"Integración",demo:"▶ Probar el demo",
- v_orders:"Pedidos",v_kitchen:"Cocina",v_pack:"Empaque",v_owner:"Dueño",v_closing:"Cierre de tienda",v_delivery:"Entregas",v_suggest:"Pedidos sugeridos",v_ingred:"Insumos",v_margin:"Márgenes",v_requests:"Solicitudes",v_catering:"Catering",v_pos:"Cajas",
+ v_orders:"Pedidos",v_kitchen:"Cocina",v_pack:"Empaque",v_owner:"Dueño",v_requests:"Enlaces de gerentes",v_closing:"Cierre de tienda",v_delivery:"Entregas",v_suggest:"Pedidos sugeridos",v_ingred:"Insumos",v_margin:"Márgenes",v_catering:"Catering",v_pos:"Cajas",
  preview:"Vista previa de la fase {n}. Datos de ejemplo, para mostrar cómo funciona.",
- ordersH:"Pedidos de hoy",ordersS:"Escribe cuántos de cada producto necesita cada tienda. Los totales se suman solos.",store:"Tienda",total:"Total",
- copy:"Copiar ayer",clear:"Borrar",send:"Enviar a cocina",unlock:"Editar pedidos",draft:"Borrador",locked:"Enviado a cocina",
- items:"Productos",stores:"Tiendas",packedN:"Tiendas listas",madeN:"Productos hechos",activeN:"en el menú de hoy",
- kitchenH:"Cocina",kitchenS:"Lo que hay que hacer hoy, en la tableta y en la TV de la cocina. Toca un producto cuando termines el lote.",fs:"Pantalla completa",tvLink:"En la TV, abre este mismo enlace con #tv al final.",
- packH:"Empaque por tienda",packS:"Toca cada producto al ponerlo en la caja. Luego toca LISTO.",doneBtn:"LISTO",packedAt:"Listo a las",undo:"Deshacer",
- noOrder:"Aún no hay pedidos. Llena la pantalla de Pedidos y toca “Enviar a cocina”.",
+ ordersH:"Pedidos",ordersS:"Cada tienda tiene su tabla semanal, como la hoja de la pared. Cuando un gerente manda un cambio, pega el mensaje aquí y confirma.",store:"Tienda",total:"Total",
+ items:"Productos hoy",stores:"Tiendas",packedN:"Tiendas listas",madeN:"Productos hechos",activeN:"en el menú",changesN:"Cambios para hoy",
+ pasteH:"Pega el mensaje del gerente",pasteS:"Copia el mensaje de WhatsApp y pégalo aquí. Kitchen OS encuentra la tienda, el día y los productos.",pastePh:"Hola Josy, mañana manda 6 glazed más y 2 coconut menos",
+ read:"Leer mensaje",tryEx:"Prueba:",storeNF:"El mensaje no dice la tienda. Elige la tienda.",forDay:"Día",kind:"Cambio",once:"Solo ese día",wd:"Cada {d}, de ahora en adelante",allDays:"Todos los días, de ahora en adelante",
+ m_add:"más",m_less:"menos",m_set:"en total",addLine:"+ Agregar línea",confirm:"Confirmar cambio",cancel:"Cancelar",nothing:"No se encontraron productos. Agrega una línea o reescribe el mensaje.",confirmed:"Cambio guardado. Cocina y empaque actualizados.",
+ aiNote:"Lector del prototipo, con reglas simples. La versión real usa IA para entender cualquier forma de escribir, en inglés, portugués o español.",
+ todayH:"Hoy, todas las tiendas",todayS:"Las celdas resaltadas cambiaron hoy.",logH:"Cambios",logEmpty:"Aún no hay cambios.",seen:"Visto por cocina",notSeen:"Cocina aún no lo vio",every:"Cada {d}",everyDay:"Todos los días",
+ gridH:"Tabla semanal",gridS:"El pedido fijo de la tienda. Un número cambiado aquí vale para todas las semanas.",print:"Imprimir hoja",dayToday:"Hoy",dayTomorrow:"Mañana",office:"Oficina",
+ kitchenH:"Cocina",kitchenS:"Lo que hay que hacer hoy, en la tableta y en la TV de la cocina. Toca un producto cuando termines el lote. Los cambios del día aparecen en dorado, con sonido.",fs:"Pantalla completa",tvLink:"En la TV, abre este mismo enlace con #tv al final.",
+ packH:"Empaque por tienda",packS:"Toca cada producto al ponerlo en la caja y luego LISTO. Si una tienda cambia su pedido, su tarjeta se reabre.",doneBtn:"LISTO",packedAt:"Listo a las",undo:"Deshacer",adjust:"Ajustar",reopened:"Pedido cambió",noOrder:"No hay pedidos para hoy.",
  ownerH:"Buenos días",ownerS:"Todo lo importante de hoy, en un solo lugar. Hecho para el celular.",
  kMade:"Hecho hoy",kDeliv:"Tiendas entregadas",kLeft:"Sobras de ayer",kSold:"Agotados ayer",kOf:"de",kMost:"Más en",
- alerts:"Alertas",leftBy:"Sobras por tienda, ayer",aSold:"se quedó sin",aAt:"a las",aStock:"Inventario bajo",aReq:"solicitudes de tiendas esperando",noAlerts:"Sin alertas. Todo bien.",
+ alerts:"Alertas",leftBy:"Sobras por tienda, ayer",aSold:"se quedó sin",aAt:"a las",aStock:"Inventario bajo",aReq:"pedidos de gerentes esperando",noAlerts:"Sin alertas. Todo bien.",
  closingH:"Cierre de tienda",closingS:"Al cerrar, cada tienda indica lo que sobró y lo que se agotó. Toma un minuto y alimenta el panel del dueño.",
  item:"Producto",sent:"Enviado",left:"Sobró",soldOut:"Agotado",save:"Guardar cierre",saved:"Cierre guardado",
  delH:"Entregas",delS:"El chofer toca cada paso en el celular. La oficina lo ve en vivo.",
  st_wait:"Aún sin empacar",st_packed:"Empacado",st_out:"En camino",st_deliv:"Entregado",markOut:"Salir con el pedido",markDeliv:"Marcar entregado",
  sugH:"Pedidos sugeridos para mañana",sugS:"Según lo vendido, lo que sobró y lo que se agotó el mismo día de la semana, últimas 4 semanas.",
- avg:"Prom. vendido",avgLeft:"Prom. sobra",soldDays:"Agotado",days:"días",today:"Hoy",suggest:"Sugerido",
- apply:"Usar como pedidos de mañana",applied:"Sugerencias copiadas a Pedidos. Revisa y envía.",chain:"Cambio en toda la cadena",
+ avg:"Prom. vendido",avgLeft:"Prom. sobra",soldDays:"Agotado",days:"días",tomorrow:"Mañana",suggest:"Sugerido",
+ apply:"Usar para mañana",applied:"Sugerencias guardadas como cambios para mañana.",chain:"Cambio en toda la cadena",
  why_up:"Se agotó, más",why_down:"Sobró, menos",why_keep:"Igual",
+ holH:"Planes de feriados",holS:"Días pico planeados con anticipación para todas las tiendas, guardados como cambios de ese día.",hol_hal:"Halloween",hol_thx:"Víspera de Thanksgiving",hol_xms:"Nochebuena",holApply:"Aplicar",holDone:"Plan de feriado aplicado",holOn:"Aplicado",
  ingH:"Insumos para los pedidos de hoy",ingS:"Calculados con los pedidos y la receta de cada producto.",ing:"Insumo",need:"Necesario",stock:"En inventario",status:"Estado",ok:"OK",order:"Pedir",
  ingNote:"Recetas e inventario de ejemplo. Se reemplazan por los suyos.",
  marH:"Margen por producto",marS:"Lo que deja cada producto hoy, con precios de ejemplo.",price:"Precio",cost:"Costo",unitsT:"Unidades",revenue:"Ventas",profit:"Ganancia",marginPct:"Margen",
  marNote:"Precios y costos de ejemplo. Se reemplazan por los suyos.",
- reqH:"Solicitudes de tiendas",reqS:"Las tiendas piden extra. La oficina aprueba y entra directo a los pedidos de hoy.",
- approve:"Aprobar",decline:"Rechazar",approved:"Aprobado y sumado a los pedidos",declined:"Rechazado",
+ reqH:"Enlaces de gerentes",reqS:"Cada gerente de tienda recibe su propio enlace. Los pedidos llegan aquí, Josy aprueba y la cocina lo ve al instante.",
+ mgrS:"Abierto desde el enlace de la tienda. Sin app, sin contraseña.",note2:"Nota",sendReq:"Enviar pedido",reqSent:"Pedido enviado a la oficina",copyLink:"Copiar enlace de la tienda",linkCopied:"Enlace de la tienda copiado (demo)",manager:"Gerente",linkOf:"Enlace de",
+ approve:"Aprobar",decline:"Rechazar",approved:"Aprobado y sumado a hoy",declined:"Rechazado",
  catH:"Catering y eventos",catS:"Los pedidos grandes entran a la cocina y al empaque como una tienda más.",
  customer:"Cliente",date:"Fecha",qty:"Cantidad",add:"Agregar pedido",catEmpty:"Aún no hay pedidos de catering.",catAdded:"Pedido de catering agregado",
  posH:"Cajas de las tiendas",posS:"Conecta las cajas de las tiendas y las ventas entran solas. Nadie vuelve a escribir sobras.",
@@ -340,52 +442,33 @@ es:{p1:"Operación",p2:"Control",p3:"Inteligencia",p4:"Integración",demo:"▶ P
  flow1:"Ventas de caja",flow2:"Kitchen OS",flow3:"Sobras y sugerencias",
  demoH:"Pruébalo tú mismo",demoS:"Cambia lo que quieras aquí y míralo en todas partes: pedidos, cocina, TV y empaque.",
  demoTip:"Consejo: abre esta página en otra ventana, o en la TV con #tv al final. Los cambios aparecen en ambas al mismo tiempo.",
- play:"▶ Simular la mañana",stop:"■ Detener",reset:"Reiniciar demo",newDay:"Nuevo día (pedidos nuevos)",resetDone:"Demo reiniciado",newDayDone:"Nuevo día iniciado",
- menuH:"Menú",menuS:"Marca lo que se hace hoy y cambia cualquier nombre. El número es por tienda, antes del tamaño de la tienda.",
+ play:"▶ Simular la mañana",stop:"■ Detener",reset:"Reiniciar demo",newDay:"Nuevo día",resetDone:"Demo reiniciado",newDayDone:"Nuevo día iniciado",
+ menuH:"Menú",menuS:"Marca lo que se hace y cambia cualquier nombre. El número es la base por tienda, antes del tamaño de la tienda.",
  perStore:"Por tienda",addItem:"Agregar producto",nameEn:"Inglés",nameEs:"Español",category:"Categoría",itemAdded:"Producto agregado",
  storesH:"Tiendas",storesS:"Cambia el nombre, agrega o quita tiendas.",addStore:"Agregar tienda",remove:"Quitar",newStore:"Tienda nueva",
  note:"Prototipo: los datos quedan en este navegador. La versión real sincroniza todos los equipos al instante.",
  credit:"Prototipo de BI Insights · Leticia Vale da Rosa. Tiendas y menú de gourmetdonuts.com; cantidades, precios y recetas son de ejemplo."}
 };
-const PHASES={1:["orders","kitchen","pack"],2:["owner","closing","delivery"],3:["suggest","ingred","margin"],4:["requests","catering","pos"]};
+const PHASES={1:["orders","kitchen","pack"],2:["owner","requests","closing","delivery"],3:["suggest","ingred","margin"],4:["catering","pos"]};
+const LOC={en:"en-US",pt:"pt-BR",es:"es-US"};
 
-/* ---------- state (kept in this browser and shared between open windows) ---------- */
-const KEY="gd-kitchen-os-v2";
-const todayISO=new Date().toISOString().slice(0,10);
+/* ---------- dates and state (kept in this browser and shared between open windows) ---------- */
+const KEY="gd-kitchen-os-v3";
+const pad=n=>String(n).padStart(2,"0");
+const isoOf=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const todayISO=isoOf(new Date());
+const addDays=(iso,n)=>{const d=new Date(iso+"T12:00:00");d.setDate(d.getDate()+n);return isoOf(d)};
+const dowOf=iso=>(new Date(iso+"T12:00:00").getDay()+6)%7; /* 0 = Monday */
+const nextDow=w=>{let d=todayISO;while(dowOf(d)!==w)d=addDays(d,1);return d};
 const r6=v=>Math.max(0,Math.round(v/6)*6);
-let lang="en", view="orders", S, simTimer=null;
+const DAYF=[1,1,1,1,1.1,1.5,1.3];
+const week=(base,f,k)=>DAYF.map((m,d)=>r6(base*f*m*(0.9+((k+d)%5)*0.05)));
+let lang="en";try{const l=localStorage.getItem("gd-lang");if(T[l])lang=l}catch(e){}
+let view="orders", S, simTimer=null, draft=null, pasteText="", gridStore="S10", mgr={s:"S10",i:"bos",q:6,note:""}, lastLog;
 const tvMode=location.hash==="#tv";
-function genFor(s,si,it,ii,sd){
-  const o=r6(it.base*s.f*(0.9+((si*7+ii*5+(sd||0))%5)*0.05));
-  const sold=Math.round(o*(0.82+((si*3+ii*7)%5)*0.05)), so=(si+ii)%7===0?2:((si*ii)%11===5?1:0), avg=so?o:sold;
-  S.orders[s.id][it.id]=o; S.hist[s.id][it.id]={sold:avg,left:Math.max(0,o-avg),so};
-  S.closing[s.id][it.id]={left:so?0:Math.max(0,o-sold),so:so>0,at:so?["9:15 AM","10:40 AM","11:05 AM"][(si+ii)%3]:""};
-}
-function seed(){
-  S={locked:true,catalog:MENU.map(([id,en,es,c,g,base,on])=>({id,en,es,c,g,base,on:!!on})),
-   stores:STORE_SEED.map(([name,f],i)=>({id:"S"+String(i+1).padStart(2,"0"),name,f})),
-   orders:{},hist:{},closing:{},produced:{},packed:{},storeDone:{},delivery:{},
-   requests:[{id:1,s:"S09",i:"bos",q:12,en:"Football game tonight",es:"Partido de fútbol esta noche",st:"pending"},
-    {id:2,s:"S01",i:"hon",q:24,en:"School breakfast order",es:"Desayuno de una escuela",st:"pending"},
-    {id:3,s:"S10",i:"jel",q:6,en:"Ran out early yesterday",es:"Se acabaron temprano ayer",st:"pending"}],
-   catering:[{id:1,c:"Fitchburg office meeting",d:todayISO,i:"hon",q:36}],pos:{Square:false,Toast:false,Clover:false},nextId:13};
-  S.stores.forEach((s,si)=>{S.orders[s.id]={};S.hist[s.id]={};S.closing[s.id]={};S.catalog.forEach((it,ii)=>genFor(s,si,it,ii))});
-  ["chf","cin","gcr"].forEach(k=>S.produced[k]=true);
-  ["S01","S02","S03"].forEach(s=>{S.packed[s]={};S.catalog.forEach(i=>S.packed[s][i.id]=true);S.storeDone[s]="6:42 AM"});
-  S.packed.S04={bos:true,hon:true,old:true};
-  S.delivery.S01={st:"deliv",at:"7:05 AM"};S.delivery.S02={st:"out",at:"7:12 AM"};
-}
-function ensureStore(s,si){S.orders[s.id]=S.orders[s.id]||{};S.hist[s.id]=S.hist[s.id]||{};S.closing[s.id]=S.closing[s.id]||{};
-  S.catalog.forEach((it,ii)=>{if(S.orders[s.id][it.id]==null)genFor(s,si,it,ii)})}
-let chan=null;try{chan=new BroadcastChannel("gd-kitchen-os")}catch(e){}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){} try{chan&&chan.postMessage("sync")}catch(e){}}
-function load(){try{const raw=localStorage.getItem(KEY);if(raw){const x=JSON.parse(raw);if(x&&x.catalog&&x.stores){S=x;return true}}}catch(e){}return false}
-if(!load())seed();
-if(chan)chan.onmessage=()=>{if(load())render(true)};
-window.addEventListener("storage",e=>{if(e.key===KEY&&load())render(true)});
 
 /* ---------- helpers ---------- */
-const t=k=>T[lang][k]??k;
+const t=k=>T[lang][k]??T.en[k]??k;
 const nm=x=>x[lang]||x.en;
 const fmt=n=>Math.round(n).toLocaleString("en-US");
 const money=n=>"$"+n.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
@@ -396,84 +479,253 @@ const item=id=>S.catalog.find(i=>i.id===id);
 const store=id=>id==="CAT"?{id:"CAT",name:"Catering"}:S.stores.find(s=>s.id===id);
 const catToday=()=>S.catering.filter(c=>c.d===todayISO&&item(c.i)?.on);
 const allStores=()=>catToday().length?[...S.stores,{id:"CAT",name:"Catering"}]:S.stores;
-const q=(s,i)=>s==="CAT"?catToday().filter(c=>c.i===i).reduce((a,c)=>a+c.q,0):+(S.orders[s]?.[i]||0);
+const eff=(s,i,d=todayISO)=>{const x=S.exc[d]?.[s]?.[i];return x!=null?x:(S.grid[s]?.[i]?.[dowOf(d)]||0)};
+const q=(s,i)=>s==="CAT"?catToday().filter(c=>c.i===i).reduce((a,c)=>a+c.q,0):eff(s,i);
 const itemTotal=i=>allStores().reduce((a,s)=>a+q(s.id,i),0);
 const storeTotal=s=>ITEMS().reduce((a,i)=>a+q(s,i.id),0);
 const grand=()=>allStores().reduce((a,s)=>a+storeTotal(s.id),0);
 const dn=(f,lg)=>`<span class="dn${lg?" lg":""}" style="--g:${f.g}"></span>`;
-const itemsOf=s=>ITEMS().filter(i=>q(s,i.id)>0);
-const isPacked=(s,i)=>!!S.packed[s]?.[i];
+const madeQ=i=>{const v=S.produced[i];return v===true?itemTotal(i):+(v||0)};
+const pq=(s,i)=>{const v=S.packed[s]?.[i];return v===true?q(s,i):+(v||0)};
+const itemsOf=s=>ITEMS().filter(i=>q(s,i.id)>0||pq(s,i.id)>0);
 const doneCount=()=>allStores().filter(s=>S.storeDone[s.id]).length;
-const madeUnits=()=>ITEMS().filter(i=>S.produced[i.id]).reduce((a,i)=>a+itemTotal(i.id),0);
+const madeUnits=()=>ITEMS().reduce((a,i)=>a+Math.min(madeQ(i.id),itemTotal(i.id)),0);
 const H=(s,i)=>S.hist[s]?.[i]||{sold:0,left:0,so:0};
 const C=(s,i)=>S.closing[s]?.[i]||{left:0,so:false,at:""};
+const calcL=(l,c)=>Math.max(0,l.mode==="set"?l.n:l.mode==="add"?c+l.n:c-l.n);
+const dayFull=w=>new Date(nextDow(w)+"T12:00:00").toLocaleDateString(LOC[lang],{weekday:"long"});
+const dayShort=w=>new Date(nextDow(w)+"T12:00:00").toLocaleDateString(LOC[lang],{weekday:"short"});
+const dayLabel=iso=>iso===todayISO?t("dayToday"):iso===addDays(todayISO,1)?t("dayTomorrow"):new Date(iso+"T12:00:00").toLocaleDateString(LOC[lang],{weekday:"short",month:"short",day:"numeric"});
+const affToday=e=>e.day===todayISO&&(e.kind==="once"?e.date===todayISO:(e.every||dowOf(e.date)===dowOf(todayISO)));
+const todaysLog=()=>S.log.filter(affToday);
+const targetLbl=e=>e.kind==="once"?dayLabel(e.date):e.every?t("everyDay"):t("every").replace("{d}",dayFull(dowOf(e.date)));
+function kList(){return ITEMS().map(i=>{const tot=itemTotal(i.id),made=madeQ(i.id);return {i,tot,made,st:made===0?"todo":made<tot?"extra":"done"}}).filter(x=>x.tot>0||x.made>0)}
+
+/* ---------- changes: one day, or the weekly grid from now on ---------- */
+function applyDraft(d){
+  const at=now(), dows=d.kind==="always"?(d.every?[0,1,2,3,4,5,6]:[dowOf(d.date)]):null;
+  d.lines.forEach(l=>{
+    const it=item(l.i);if(!it||!(l.n>=0))return;
+    if(!it.on){it.on=true;S.stores.forEach(ensureStore)}
+    const g=(S.grid[d.s]=S.grid[d.s]||{});if(!g[l.i])g[l.i]=[0,0,0,0,0,0,0];
+    let from,to;
+    if(dows){from=g[l.i][dowOf(d.date)]||0;to=calcL(l,from);dows.forEach(w=>g[l.i][w]=calcL(l,g[l.i][w]||0));
+      Object.keys(S.exc).forEach(dt=>{if(dt>=todayISO&&dows.includes(dowOf(dt))&&S.exc[dt]?.[d.s])delete S.exc[dt][d.s][l.i]})}
+    else{from=eff(d.s,l.i,d.date);to=calcL(l,from);((S.exc[d.date]??={})[d.s]??={})[l.i]=to}
+    if(from===to)return;
+    S.log.unshift({id:S.nextId++,at,day:todayISO,s:d.s,i:l.i,from,to,date:d.date,kind:d.kind,every:!!d.every,who:d.who||"WhatsApp",src:d.src||"",seen:false});
+  });
+  const today=dows?dows.includes(dowOf(todayISO)):d.date===todayISO;
+  if(today&&S.storeDone[d.s]){delete S.storeDone[d.s];S.reopen[d.s]=true}
+  if(S.log.length>200)S.log.length=200;
+}
+
+/* ---------- prototype message reader (EN / PT / ES) ---------- */
+const norm=s=>String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"");
+const WD={monday:0,tuesday:1,wednesday:2,thursday:3,friday:4,saturday:5,sunday:6,segunda:0,terca:1,quarta:2,quinta:3,sexta:4,sabado:5,domingo:6,lunes:0,martes:1,miercoles:2,jueves:3,viernes:4};
+function findItem(g){
+  const x=" "+g.replace(/\s+/g," ")+" ";let best=null,len=0;
+  S.catalog.forEach(i=>[i.en,i.es,...(ALIAS[i.id]||[])].map(norm).forEach(n=>{
+    n=n.replace(/\s*\/.*$/,"").trim();if(n.length<3)return;
+    if((x.includes(" "+n)||x.includes(" "+n.replace(/s$/,"")+" "))&&n.length>len){best=i.id;len=n.length}}));
+  return best;
+}
+function parseMsg(txt){
+  const x=" "+norm(txt).replace(/[!?.()"“”:]/g," ")+" ";
+  let s=null,best=0;
+  S.stores.forEach(st=>{const full=norm(st.name).replace(/[·,]/g," ").replace(/\s+/g," ").trim(),k=norm(st.name).split(/[·,(]/)[0].trim();
+    [full,k].forEach(c=>{if(c&&c.length>best&&x.includes(c)){best=c.length;s=st.id}})});
+  let date=todayISO;
+  if(/\b(tomorrow|amanha|manana)\b/.test(x))date=addDays(todayISO,1);
+  for(const w in WD){if(new RegExp("\\b"+w).test(x)){let d=addDays(todayISO,1);while(dowOf(d)!==WD[w])d=addDays(d,1);date=d;break}}
+  const always=/(from now on|every|starting|a partir|daqui pra frente|toda |todo |todas |todos |sempre|siempre|cada )/.test(x);
+  const everyDay=/(every day|everyday|todo dia|todos os dias|todos los dias|diario)/.test(x);
+  const lines=[];
+  x.split(/,|;|\n|\band\b|\be\b|\by\b|\bplus\b/).forEach(g=>{
+    const it=findItem(g);if(!it)return;
+    let n=null;const m=g.match(/(\d+)/);
+    if(m)n=+m[1];else if(/half (a )?dozen|meia duzia|media docena/.test(g))n=6;else if(/dozen|duzia|docena/.test(g))n=12;
+    if(n==null)return;
+    const minus=/\b(less|fewer|minus|remove|take off|menos|tira|tirar|quita|quitar|sin)\b|−\s*\d|(^|\s)-\s*\d/.test(g);
+    const plus=/\b(more|extra|add|another|mais|mas)\b|\+\s*\d/.test(g);
+    lines.push({i:it,mode:minus?"less":plus?"add":"set",n});
+  });
+  return {s:s||S.stores[0].id,found:!!s,date,kind:always?"always":"once",every:everyDay,lines,src:txt.trim()};
+}
+
+/* ---------- seed and storage ---------- */
+function genFor(s,si,it,ii){
+  S.grid[s.id][it.id]=week(it.base,s.f,si*7+ii*5);
+  const o=S.grid[s.id][it.id][dowOf(todayISO)];
+  const sold=Math.round(o*(0.82+((si*3+ii*7)%5)*0.05)), so=(si+ii)%7===0?2:((si*ii)%11===5?1:0), avg=so?o:sold;
+  S.hist[s.id][it.id]={sold:avg,left:Math.max(0,o-avg),so};
+  S.closing[s.id][it.id]={left:so?0:Math.max(0,o-sold),so:so>0,at:so?["9:15 AM","10:40 AM","11:05 AM"][(si+ii)%3]:""};
+}
+function ensureStore(s,si){S.grid[s.id]=S.grid[s.id]||{};S.hist[s.id]=S.hist[s.id]||{};S.closing[s.id]=S.closing[s.id]||{};
+  S.catalog.forEach((it,ii)=>{if(!S.grid[s.id][it.id])genFor(s,si,it,ii)})}
+function seed(){
+  S={catalog:MENU.map(([id,en,es,c,g,base,on])=>({id,en,es,c,g,base,on:!!on})),
+   stores:STORE_SEED.map(([name,f],i)=>({id:"S"+String(i+1).padStart(2,"0"),name,f})),
+   grid:{},exc:{},log:[],hist:{},closing:{},produced:{},packed:{},storeDone:{},reopen:{},delivery:{},hol:{},
+   requests:[{id:1,s:"S09",i:"bos",q:12,en:"Football game tonight",pt:"Jogo de futebol hoje à noite",es:"Partido de fútbol esta noche",st:"pending",at:"9:40 AM"},
+    {id:2,s:"S01",i:"hon",q:24,en:"School breakfast order",pt:"Café da manhã de uma escola",es:"Desayuno de una escuela",st:"pending",at:"10:05 AM"},
+    {id:3,s:"S10",i:"jel",q:6,en:"Ran out early yesterday",pt:"Acabou cedo ontem",es:"Se acabaron temprano ayer",st:"pending",at:"10:31 AM"}],
+   catering:[{id:1,c:"Fitchburg office meeting",d:todayISO,i:"hon",q:36}],pos:{Square:false,Toast:false,Clover:false},nextId:100};
+  S.stores.forEach((s,si)=>{S.grid[s.id]={};S.hist[s.id]={};S.closing[s.id]={};S.catalog.forEach((it,ii)=>genFor(s,si,it,ii))});
+  ["chf","cin","gcr"].forEach(k=>S.produced[k]=itemTotal(k));
+  ["S01","S02","S03"].forEach(s=>{S.packed[s]={};itemsOf(s).forEach(i=>S.packed[s][i.id]=q(s,i.id));S.storeDone[s]="6:42 AM"});
+  S.packed.S04={};["bos","hon","old"].forEach(i=>S.packed.S04[i]=q("S04",i));
+  applyDraft({s:"S10",date:todayISO,kind:"once",lines:[{i:"hon",mode:"add",n:6}],who:"WhatsApp",src:"Josy, Rindge here: 6 more honey dip today please"});
+  applyDraft({s:"S04",date:todayISO,kind:"once",lines:[{i:"chf",mode:"add",n:12}],who:"WhatsApp",src:"Oi Josy, Fitchburg precisa de mais 12 chocolate frosted hoje"});
+  S.log[1].at="10:52 AM";S.log[1].seen=true;S.log[0].at="11:05 AM";
+  S.delivery.S01={st:"deliv",at:"7:05 AM"};S.delivery.S02={st:"out",at:"7:12 AM"};
+}
+let chan=null;try{chan=new BroadcastChannel("gd-kitchen-os")}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){} try{chan&&chan.postMessage("sync")}catch(e){}}
+function load(){try{const raw=localStorage.getItem(KEY);if(raw){const x=JSON.parse(raw);if(x&&x.catalog&&x.stores&&x.grid){S=x;S.reopen=S.reopen||{};S.hol=S.hol||{};return true}}}catch(e){}return false}
+if(!load())seed();
+lastLog=S.log[0]?.id;
+if(chan)chan.onmessage=()=>{if(load())render(true)};
+window.addEventListener("storage",e=>{if(e.key===KEY&&load())render(true)});
+
+/* ---------- small UI helpers ---------- */
 function toast(msg){const el=document.getElementById("toast");el.textContent=msg;el.hidden=false;clearTimeout(toast.h);toast.h=setTimeout(()=>el.hidden=true,2600)}
 const phaseOf=v=>+(Object.keys(PHASES).find(p=>PHASES[p].includes(v))||0);
-const prev=()=>{const p=phaseOf(view);return p>1?`<div class="preview">★ ${t("preview").replace("{n}",p)}</div>`:""};
+const prev=()=>{const p=phaseOf(view);return p>1?`<div class="preview noprint">★ ${t("preview").replace("{n}",p)}</div>`:""};
 const head=(h,s,right="")=>`${prev()}<div class="head"><div><h1>${h}</h1>${s?`<p class="sub">${s}</p>`:""}</div>${right}</div>`;
 const suggestion=(s,i)=>{const h=H(s,i);const up=h.so>=1, down=!up&&h.left>=Math.max(4,h.sold*.12);
   return {v:up?r6(h.sold*1.15+3):down?r6(h.sold+2):r6(h.sold+Math.min(h.left,4)),why:up?"up":down?"down":"keep"}};
 const ingNeed=g=>ITEMS().reduce((a,i)=>a+((RECIPE[i.c]||{})[g.id]||0)*itemTotal(i.id),0);
 const lowStock=()=>INGR.filter(g=>g.stock<ingNeed(g)*1.15);
 function on(id,fn){const b=document.getElementById(id);if(b)b.onclick=fn}
-function resetDay(){["produced","packed","storeDone","delivery"].forEach(k=>S[k]={})}
+function resetDay(){["produced","packed","storeDone","delivery","reopen"].forEach(k=>S[k]={})}
 const storeSelect=(id,cur)=>`<select id="${id}">${S.stores.map(s=>`<option value="${s.id}" ${s.id===cur?"selected":""}>${s.id} · ${esc(s.name)}</option>`).join("")}</select>`;
 const itemCell=i=>`<span style="display:flex;gap:10px;align-items:center">${dn(i)}${esc(nm(i))}</span>`;
+const signed=n=>(n>0?"+":n<0?"−":"")+Math.abs(n);
+function beep(){try{const A=window.AudioContext||window.webkitAudioContext;const c=beep.c||(beep.c=new A());
+  [0,.2].forEach(d=>{const o=c.createOscillator(),g=c.createGain();o.frequency.value=880;o.connect(g);g.connect(c.destination);
+   g.gain.setValueAtTime(.0001,c.currentTime+d);g.gain.exponentialRampToValueAtTime(.25,c.currentTime+d+.02);g.gain.exponentialRampToValueAtTime(.0001,c.currentTime+d+.16);o.start(c.currentTime+d);o.stop(c.currentTime+d+.18)})}catch(e){}}
+function logHTML(){
+  const L=S.log.slice(0,30);
+  if(!L.length)return `<p class="sub">${t("logEmpty")}</p>`;
+  return `<ul class="log">${L.map(e=>{const i=item(e.i),s=store(e.s);if(!i||!s)return "";const d=e.to-e.from;
+   return `<li>${dn(i)}<div class="tx"><b>${esc(s.name)} · ${esc(nm(i))}</b><small>${esc(targetLbl(e))} · ${e.from} → ${e.to} · ${esc(e.who)} · ${e.at}</small>${e.src?`<small>“${esc(e.src)}”</small>`:""}${affToday(e)?`<small style="font-weight:700;color:var(${e.seen?"--done":"--warn"})">${e.seen?"✓ "+t("seen"):t("notSeen")}</small>`:""}</div><span class="dl ${d>0?"up":"down"}">${signed(d)}</span></li>`}).join("")}</ul>`;
+}
+function draftHTML(){
+  const d=draft, opts=[...Array(8)].map((_,k)=>addDays(todayISO,k));if(!opts.includes(d.date))opts.push(d.date);
+  return `<div class="draft">
+   ${d.found?"":`<div class="preview" style="margin:0">${t("storeNF")}</div>`}
+   <div class="form">
+    <label class="field" for="dS">${t("store")}${storeSelect("dS",d.s)}</label>
+    <label class="field" for="dD">${t("forDay")}<select id="dD">${opts.map(x=>`<option value="${x}" ${x===d.date?"selected":""}>${esc(dayLabel(x))}</option>`).join("")}</select></label>
+    <label class="field" for="dK">${t("kind")}<select id="dK"><option value="once" ${d.kind==="once"?"selected":""}>${t("once")}</option><option value="wd" ${d.kind==="always"&&!d.every?"selected":""}>${esc(t("wd").replace("{d}",dayFull(dowOf(d.date))))}</option><option value="all" ${d.kind==="always"&&d.every?"selected":""}>${t("allDays")}</option></select></label>
+   </div>
+   ${d.lines.length?d.lines.map((l,k)=>{const it=item(l.i)||S.catalog[0];const from=d.kind==="once"?eff(d.s,it.id,d.date):(S.grid[d.s]?.[it.id]?.[dowOf(d.date)]||0);
+    return `<div class="pl">${dn(it)}<select data-li="${k}" aria-label="${t("item")}">${S.catalog.map(x=>`<option value="${x.id}" ${x.id===it.id?"selected":""}>${esc(nm(x))}</option>`).join("")}</select>
+     <select data-lm="${k}" aria-label="${t("kind")}">${["add","less","set"].map(m=>`<option value="${m}" ${l.mode===m?"selected":""}>${t("m_"+m)}</option>`).join("")}</select>
+     <input type="number" min="0" inputmode="numeric" data-ln="${k}" value="${l.n}" aria-label="${t("qty")}">
+     <span class="fx">${from} → <b>${calcL(l,from)}</b></span><button class="x" data-lx="${k}" aria-label="${t("remove")}">×</button></div>`}).join(""):`<p class="sub" style="margin:0">${t("nothing")}</p>`}
+   <div style="display:flex;flex-wrap:wrap;gap:10px"><button class="btn" id="addLine">${t("addLine")}</button><span style="flex:1"></span><button class="btn" id="cancelD">${t("cancel")}</button><button class="btn go" id="confirmD" ${d.lines.length?"":"disabled"}>${t("confirm")}</button></div>
+  </div>`;
+}
+const EXAMPLES=["Hi Josy, Rindge here. Tomorrow send 6 more glazed and 2 less coconut","Oi Josy! Fitchburg: hoje manda mais 12 boston cream, por favor","Josy, Hudson: a partir de ahora, cada sábado 24 jelly"];
+function nextDate(m,d){const y=+todayISO.slice(0,4);let iso=`${y}-${pad(m)}-${pad(d)}`;if(iso<todayISO)iso=`${y+1}-${pad(m)}-${pad(d)}`;return iso}
+function thxEve(){const f=y=>{const d=new Date(y,10,1,12);return isoOf(new Date(y,10,1+((4-d.getDay()+7)%7)+21,12))};const y=+todayISO.slice(0,4);let x=addDays(f(y),-1);if(x<todayISO)x=addDays(f(y+1),-1);return x}
+const HOL=[["hal",.2,()=>nextDate(10,31)],["thx",.25,thxEve],["xms",.3,()=>nextDate(12,24)]];
 
 /* ---------- views ---------- */
 const V={};
 V.orders=el=>{
-  const rows=allStores(), its=ITEMS();
-  el.innerHTML=head(t("ordersH"),t("ordersS"),`<span class="pill ${S.locked?"ok":"warn"}">${S.locked?t("locked"):t("draft")}</span>
-   ${S.locked?`<button class="btn" id="unlock">${t("unlock")}</button>`:`<button class="btn" id="copy">${t("copy")}</button><button class="btn" id="clear">${t("clear")}</button><button class="btn primary" id="send">${t("send")}</button>`}`)+`
-  <div class="stats">
+  const rows=allStores(), its=ITEMS(), chg=new Set(todaysLog().map(e=>e.s+"|"+e.i)), td=dowOf(todayISO);
+  if(!store(gridStore))gridStore=S.stores[0].id;
+  el.innerHTML=head(t("ordersH"),t("ordersS"))+`
+  <div class="stats noprint">
    <div class="stat"><b>${fmt(grand())}</b><span>${t("items")}</span><em>${its.length} ${t("activeN")}</em></div>
    <div class="stat"><b>${S.stores.length}</b><span>${t("stores")}</span></div>
-   <div class="stat"><b>${its.filter(i=>S.produced[i.id]&&itemTotal(i.id)).length}/${its.filter(i=>itemTotal(i.id)).length}</b><span>${t("madeN")}</span></div>
+   <div class="stat"><b>${todaysLog().length}</b><span>${t("changesN")}</span></div>
    <div class="stat"><b>${doneCount()}/${rows.length}</b><span>${t("packedN")}</span></div>
   </div>
-  <div class="scroll"><table style="min-width:${260+its.length*84}px">
-   <thead><tr><th style="text-align:left">${t("store")}</th>${its.map(i=>`<th><div class="fl">${dn(i)}${esc(nm(i))}</div></th>`).join("")}<th class="tot">${t("total")}</th></tr></thead>
-   <tbody>${rows.map(s=>`<tr><th>${s.id==="CAT"?"":s.id+" · "}${esc(s.name)}</th>${its.map(i=>`<td><input id="o-${s.id}-${i.id}" type="number" min="0" step="6" inputmode="numeric" value="${q(s.id,i.id)||""}" ${S.locked||s.id==="CAT"?"disabled":""} data-s="${s.id}" data-i="${i.id}" aria-label="${esc(s.name)} ${esc(nm(i))}"></td>`).join("")}<td class="tot">${fmt(storeTotal(s.id))}</td></tr>`).join("")}</tbody>
-   <tfoot><tr><th style="text-align:left">${t("total")}</th>${its.map(i=>`<td>${fmt(itemTotal(i.id))}</td>`).join("")}<td>${fmt(grand())}</td></tr></tfoot>
-  </table></div><p class="note">${t("note")}</p>`;
-  el.querySelectorAll("input").forEach(x=>x.addEventListener("change",e=>{const {s,i}=e.target.dataset;S.orders[s][i]=Math.max(0,parseInt(e.target.value)||0);render()}));
-  on("unlock",()=>{S.locked=false;render()});
-  on("copy",()=>{S.stores.forEach((s,si)=>S.catalog.forEach((it,ii)=>S.orders[s.id][it.id]=r6(it.base*s.f*(0.9+((si*7+ii*5+3)%5)*0.05))));render()});
-  on("clear",()=>{S.stores.forEach(s=>S.catalog.forEach(i=>S.orders[s.id][i.id]=0));render()});
-  on("send",()=>{S.locked=true;resetDay();render()});
+  <div class="panel paste noprint">
+   <h2 style="margin:0">${t("pasteH")}</h2><p class="sub" style="margin:0">${t("pasteS")}</p>
+   <textarea id="msg" aria-label="${t("pasteH")}" placeholder="${esc(t("pastePh"))}">${esc(pasteText)}</textarea>
+   <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center"><button class="btn primary" id="readMsg">${t("read")}</button>
+    <div class="chips"><span>${t("tryEx")}</span>${EXAMPLES.map((x,k)=>`<button class="chip" data-ex="${k}">${esc(x)}</button>`).join("")}</div></div>
+   ${draft?draftHTML():""}
+   <p class="note" style="margin:0">${t("aiNote")}</p>
+  </div>
+  <div class="split">
+   <div style="min-width:0"><h2>${t("todayH")}</h2><p class="sub" style="margin:-4px 0 10px">${t("todayS")}</p>
+    <div class="scroll"><table style="min-width:${260+its.length*84}px">
+     <thead><tr><th style="text-align:left">${t("store")}</th>${its.map(i=>`<th><div class="fl">${dn(i)}${esc(nm(i))}</div></th>`).join("")}<th class="tot">${t("total")}</th></tr></thead>
+     <tbody>${rows.map(s=>`<tr><th>${s.id==="CAT"?"":s.id+" · "}${esc(s.name)}</th>${its.map(i=>`<td class="${chg.has(s.id+"|"+i.id)?"chg":""}">${q(s.id,i.id)||""}</td>`).join("")}<td class="tot">${fmt(storeTotal(s.id))}</td></tr>`).join("")}</tbody>
+     <tfoot><tr><th style="text-align:left">${t("total")}</th>${its.map(i=>`<td>${fmt(itemTotal(i.id))}</td>`).join("")}<td>${fmt(grand())}</td></tr></tfoot>
+    </table></div></div>
+   <div class="panel noprint"><h2>${t("logH")}</h2>${logHTML()}</div>
+  </div>
+  <div class="panel">
+   <div class="head" style="margin-bottom:10px"><div><h2 style="margin:0">${t("gridH")} · ${esc(store(gridStore).name)}</h2><p class="sub">${t("gridS")}</p></div>
+    <label class="field noprint" for="gs">${t("store")}${storeSelect("gs",gridStore)}</label><button class="btn noprint" id="prt">${t("print")}</button></div>
+   <div class="scroll" style="border:0"><table class="lt">
+    <thead><tr><th>${t("item")}</th>${[0,1,2,3,4,5,6].map(k=>`<th class="${k===td?"today":""}" style="text-align:center">${esc(dayShort(k))}</th>`).join("")}</tr></thead>
+    <tbody>${its.map(i=>`<tr><td>${itemCell(i)}</td>${[0,1,2,3,4,5,6].map(k=>`<td class="${k===td?"today":""}" style="text-align:center"><input type="number" min="0" inputmode="numeric" data-g="${i.id}" data-d="${k}" value="${S.grid[gridStore]?.[i.id]?.[k]||0}" aria-label="${esc(nm(i))} ${esc(dayShort(k))}"></td>`).join("")}</tr>`).join("")}</tbody>
+   </table></div>
+  </div><p class="note noprint">${t("note")}</p>`;
+  const ta=document.getElementById("msg");ta.oninput=()=>{pasteText=ta.value};
+  on("readMsg",()=>{pasteText=ta.value;if(!pasteText.trim())return;draft=parseMsg(pasteText);render()});
+  el.querySelectorAll("[data-ex]").forEach(b=>b.onclick=()=>{pasteText=EXAMPLES[b.dataset.ex];draft=parseMsg(pasteText);render()});
+  if(draft){
+    document.getElementById("dS").onchange=e=>{draft.s=e.target.value;draft.found=true;render()};
+    document.getElementById("dD").onchange=e=>{draft.date=e.target.value;render()};
+    document.getElementById("dK").onchange=e=>{const v=e.target.value;draft.kind=v==="once"?"once":"always";draft.every=v==="all";render()};
+    el.querySelectorAll("[data-li]").forEach(x=>x.onchange=()=>{draft.lines[x.dataset.li].i=x.value;render()});
+    el.querySelectorAll("[data-lm]").forEach(x=>x.onchange=()=>{draft.lines[x.dataset.lm].mode=x.value;render()});
+    el.querySelectorAll("[data-ln]").forEach(x=>x.onchange=()=>{draft.lines[x.dataset.ln].n=Math.max(0,parseInt(x.value)||0);render()});
+    el.querySelectorAll("[data-lx]").forEach(x=>x.onclick=()=>{draft.lines.splice(+x.dataset.lx,1);render()});
+    on("addLine",()=>{draft.lines.push({i:ITEMS()[0].id,mode:"add",n:6});render()});
+    on("cancelD",()=>{draft=null;render()});
+    on("confirmD",()=>{draft.who="WhatsApp";applyDraft(draft);draft=null;pasteText="";toast(t("confirmed"));render()});
+  }
+  document.getElementById("gs").onchange=e=>{gridStore=e.target.value;render()};
+  on("prt",()=>window.print());
+  el.querySelectorAll("[data-g]").forEach(x=>x.onchange=()=>{const k=+x.dataset.d;
+    applyDraft({s:gridStore,date:nextDow(k),kind:"always",every:false,lines:[{i:x.dataset.g,mode:"set",n:Math.max(0,parseInt(x.value)||0)}],who:t("office")});render()});
 };
 V.kitchen=el=>{
-  const list=S.locked?ITEMS().filter(i=>itemTotal(i.id)>0):[];
-  const made=list.filter(i=>S.produced[i.id]).length, g=S.locked?grand():0;
-  const st=s=>S.storeDone[s.id]?"ready":(S.packed[s.id]&&Object.values(S.packed[s.id]).some(Boolean)?"packing":"pending");
-  list.sort((a,b)=>(!!S.produced[a.id])-(!!S.produced[b.id]));
-  const n=list.length, cols=n<=8?4:n<=20?5:6, dens=n<=10?"":n<=20?"d2":n<=24?"d3":"d4";
+  const list=kList(), ord={extra:0,todo:1,done:2};list.sort((a,b)=>ord[a.st]-ord[b.st]);
+  const made=list.filter(x=>x.st==="done").length, g=grand(), n=list.length, cols=n<=8?4:n<=20?5:6, dens=n<=10?"":n<=20?"d2":n<=24?"d3":"d4";
+  const st=s=>S.storeDone[s.id]?"ready":(Object.values(S.packed[s.id]||{}).some(Boolean)?"packing":"pending");
+  const ch=todaysLog().slice(0,2);
   el.innerHTML=head(t("kitchenH"),t("kitchenS")+" "+t("tvLink"),`<button class="btn gold" id="play2">${simTimer?t("stop"):t("play")}</button><button class="btn" id="fs">${t("fs")}</button>`)+`
   <div class="tv" id="tvScreen"><div class="tv-in">
    <div class="tv-top"><div class="tv-brand">Gourmet Donuts</div><div class="tv-title">TO MAKE <span>· POR HACER</span></div><div class="tv-clock" id="tvClock">${now()}</div></div>
-   <div class="tv-grid ${dens}" style="grid-template-columns:repeat(${cols},minmax(0,1fr))">${n?list.map(i=>`<button class="tv-card ${S.produced[i.id]?"ok":""}" data-i="${i.id}" aria-pressed="${!!S.produced[i.id]}">${dn(i)}<div class="tv-nm">${esc(i.en)}<span>${esc(i.es)}</span></div><div class="tv-q">${fmt(itemTotal(i.id))}</div><div class="tv-st">${S.produced[i.id]?"✓ DONE · HECHO":"TO MAKE · POR HACER"}</div></button>`).join(""):`<div class="tv-empty">Waiting for orders · Esperando pedidos</div>`}</div>
+   <div class="tv-grid ${dens}" style="grid-template-columns:repeat(${cols},minmax(0,1fr))">${n?list.map(x=>{const i=x.i,cls=x.st==="done"?"ok":x.st==="extra"?"ex":"";
+     const qv=x.st==="extra"?"+"+fmt(x.tot-x.made):fmt(x.tot);
+     const lab=x.st==="done"?(x.made>x.tot?`✓ DONE · ${x.made-x.tot} EXTRA · SOBRAN`:"✓ DONE · HECHO"):x.st==="extra"?"★ NEW · NUEVO":"TO MAKE · POR HACER";
+     return `<button class="tv-card ${cls}" data-i="${i.id}" aria-pressed="${x.st==="done"}">${dn(i)}<div class="tv-nm">${esc(i.en)}<span>${esc(i.es)}</span></div><div class="tv-q">${qv}</div><div class="tv-st">${lab}</div></button>`}).join(""):`<div class="tv-empty">Waiting for orders · Esperando pedidos</div>`}</div>
    <aside class="tv-side">
-    <div class="tv-box"><div class="tv-lbl">Today · Hoy</div><div class="tv-big">${fmt(g)}</div><div class="tv-small">units · unidades | ${Math.ceil(g/24)} trays · bandejas</div></div>
-    <div class="tv-box"><div class="tv-lbl">Made · Hecho</div><div class="tv-big">${made}<small>/${n}</small></div><div class="tv-bar"><i style="width:${n?made/n*100:0}%"></i></div></div>
+    <div class="tv-box"><div class="tv-lbl">Today · Hoy</div><div class="tv-big">${fmt(g)}</div><div class="tv-small">Made · Hecho ${made}/${n} | ${Math.ceil(g/24)} trays · bandejas</div><div class="tv-bar"><i style="width:${n?made/n*100:0}%"></i></div></div>
+    <div class="tv-box"><div class="tv-lbl">Changes · Cambios</div>${ch.length?ch.map(e=>{const i=item(e.i),s=store(e.s);if(!i||!s)return "";
+      return `<button class="tv-chg ${e.seen?"":"new"}" data-seen="${e.id}">${signed(e.to-e.from)} ${esc(i.en)} · ${esc(s.name)}<small>${e.at} · ${e.seen?"✓ Seen · Visto":"Tap to confirm · Toca para confirmar"}</small></button>`}).join(""):`<div class="tv-small" style="margin-top:.5cqw">None yet · Ninguno</div>`}</div>
     <div class="tv-box tv-stores"><div class="tv-lbl">Stores · Tiendas ${doneCount()}/${allStores().length}</div>
      <div class="tv-sg">${allStores().map(s=>`<div class="tv-s ${st(s)}"><i></i><span>${esc(s.name)}</span></div>`).join("")}</div>
      <div class="tv-legend"><span class="ready"><i></i>Ready · Lista</span><span class="packing"><i></i>Packing · Empacando</span><span><i></i>Waiting · Espera</span></div></div>
    </aside></div></div><p class="note">${t("note")}</p>`;
-  el.querySelectorAll(".tv-card").forEach(b=>b.onclick=()=>{S.produced[b.dataset.i]=!S.produced[b.dataset.i];render()});
+  el.querySelectorAll(".tv-card").forEach(b=>b.onclick=()=>{const x=list.find(y=>y.i.id===b.dataset.i);if(x){S.produced[x.i.id]=x.st==="done"?0:x.tot;render()}});
+  el.querySelectorAll("[data-seen]").forEach(b=>b.onclick=()=>{const e=S.log.find(y=>y.id==b.dataset.seen);if(e){e.seen=true;render()}});
   on("fs",()=>{try{const p=document.getElementById("tvScreen").requestFullscreen?.();p&&p.catch(()=>{})}catch(e){}});
   on("play2",togglePlay);
 };
 V.pack=el=>{
-  if(!S.locked||!grand()){el.innerHTML=head(t("packH"))+`<div class="empty">${t("noOrder")}</div>`;return}
+  if(!grand()){el.innerHTML=head(t("packH"))+`<div class="empty">${t("noOrder")}</div>`;return}
   const rows=[...allStores()].sort((a,b)=>(!!S.storeDone[a.id])-(!!S.storeDone[b.id]));
   el.innerHTML=head(t("packH"),t("packS"),`<span class="pill ${doneCount()===allStores().length?"ok":""}">${doneCount()}/${allStores().length} ${t("packedN")}</span>`)+`
-  <div class="stores">${rows.map(s=>{const its=itemsOf(s.id),n=its.filter(i=>isPacked(s.id,i.id)).length,all=n===its.length,d=S.storeDone[s.id];
-   return `<article class="sc ${d?"done":""}"><div class="sh"><div><div class="code">${s.id==="CAT"?"Catering":s.id}</div><div class="snm">${esc(s.name)}</div></div><div class="prog">${n}/${its.length}</div></div>
-    ${d?"":its.map(i=>`<button class="it ${isPacked(s.id,i.id)?"ok":""}" data-s="${s.id}" data-i="${i.id}"><span class="chk">✓</span>${dn(i)}<span class="nm">${esc(nm(i))}</span><span class="q">${q(s.id,i.id)}</span></button>`).join("")}
+  <div class="stores">${rows.map(s=>{const its=itemsOf(s.id),okc=its.filter(i=>pq(s.id,i.id)===q(s.id,i.id)).length,all=its.length>0&&okc===its.length,d=S.storeDone[s.id];
+   return `<article class="sc ${d?"done":""}"><div class="sh"><div><div class="code">${s.id==="CAT"?"Catering":s.id}</div><div class="snm">${esc(s.name)}</div></div>${S.reopen[s.id]&&!d?`<span class="pill warn">${t("reopened")}</span>`:""}<div class="prog">${okc}/${its.length}</div></div>
+    ${d?"":its.map(i=>{const a=pq(s.id,i.id),b=q(s.id,i.id),ok=a===b,adj=!ok&&a>0;
+      return `<button class="it ${ok?"ok":adj?"adj":""}" data-s="${s.id}" data-i="${i.id}"><span class="chk">✓</span>${dn(i)}<span class="nm">${esc(nm(i))}${adj?`<br><span class="tag">${t("adjust")} · ${a} → ${b}</span>`:""}</span><span class="q">${adj?signed(b-a):b}</span></button>`}).join("")}
     <div class="foot">${d?`<div class="when">✓ ${t("packedAt")} ${d} · <button class="btn sm" data-undo="${s.id}">${t("undo")}</button></div>`:`<button class="btn go" data-done="${s.id}" ${all?"":"disabled"}>${t("doneBtn")}</button>`}</div></article>`}).join("")}</div>`;
-  el.querySelectorAll(".it").forEach(b=>b.onclick=()=>{const {s,i}=b.dataset;S.packed[s]=S.packed[s]||{};S.packed[s][i]=!S.packed[s][i];render()});
-  el.querySelectorAll("[data-done]").forEach(b=>b.onclick=()=>{S.storeDone[b.dataset.done]=now();render()});
+  el.querySelectorAll(".it").forEach(b=>b.onclick=()=>{const {s,i}=b.dataset;S.packed[s]=S.packed[s]||{};S.packed[s][i]=pq(s,i)===q(s,i)?0:q(s,i);render()});
+  el.querySelectorAll("[data-done]").forEach(b=>b.onclick=()=>{S.storeDone[b.dataset.done]=now();delete S.reopen[b.dataset.done];render()});
   el.querySelectorAll("[data-undo]").forEach(b=>b.onclick=()=>{delete S.storeDone[b.dataset.undo];render()});
 };
 V.owner=el=>{
@@ -494,6 +746,33 @@ V.owner=el=>{
    <div class="panel"><h2>${t("alerts")}</h2>${al.length?`<ul class="alerts">${al.join("")}</ul>`:`<p class="sub">${t("noAlerts")}</p>`}</div>
    <div class="panel"><h2>${t("leftBy")}</h2><div class="bars">${byStore.map(x=>`<div class="br"><span>${esc(x.s.name)}</span><div class="tr"><i style="width:${x.l/max*100}%"></i></div><b>${x.l}</b></div>`).join("")}</div></div>
   </div>`;
+};
+V.requests=el=>{
+  if(!store(mgr.s))mgr.s=S.stores[0].id; if(!item(mgr.i)||!item(mgr.i).on)mgr.i=ITEMS()[0].id;
+  const rq=S.requests.filter(r=>store(r.s)&&item(r.i)).sort((a,b)=>b.id-a.id);
+  el.innerHTML=head(t("reqH"),t("reqS"))+`<div class="cols">
+   <div><div class="phone"><div class="phone-in">
+    <div><span class="pill">${t("manager")}</span><h2 style="margin:8px 0 0">${esc(store(mgr.s).name)}</h2><p class="sub" style="margin:2px 0 0;font-size:14px">${t("mgrS")}</p></div>
+    <label class="field" for="mS">${t("linkOf")}${storeSelect("mS",mgr.s)}</label>
+    <label class="field" for="mI">${t("item")}<select id="mI">${ITEMS().map(i=>`<option value="${i.id}" ${i.id===mgr.i?"selected":""}>${esc(nm(i))}</option>`).join("")}</select></label>
+    <div class="stepper"><button id="mMinus" aria-label="−6">−</button><b>${signed(mgr.q)||0}</b><button id="mPlus" aria-label="+6">+</button></div>
+    <label class="field" for="mN">${t("note2")}<input id="mN" value="${esc(mgr.note)}"></label>
+    <button class="btn primary" id="mSend" ${mgr.q?"":"disabled"}>${t("sendReq")}</button>
+   </div></div><div style="text-align:center;margin-top:10px"><button class="btn sm" id="mLink">${t("copyLink")}</button></div></div>
+   <div class="route">${rq.map(r=>{const s=store(r.s),i=item(r.i),txt=r.note!=null?r.note:(r[lang]||r.en);
+    return `<div class="req">${dn(i,1)}<div class="txt"><b>${esc(s.name)}</b><small>${esc(nm(i))}${txt?` · “${esc(txt)}”`:""}${r.at?` · ${r.at}`:""}</small></div><span class="q">${signed(r.q)}</span>
+     ${r.st==="pending"?`<button class="btn go" data-ap="${r.id}">${t("approve")}</button><button class="btn" data-de="${r.id}">${t("decline")}</button>`:`<span class="pill ${r.st==="approved"?"ok":""}">${r.st==="approved"?t("approved"):t("declined")}</span>`}</div>`}).join("")}</div>
+  </div>`;
+  document.getElementById("mS").onchange=e=>{mgr.s=e.target.value;render()};
+  document.getElementById("mI").onchange=e=>{mgr.i=e.target.value;render()};
+  document.getElementById("mN").oninput=e=>{mgr.note=e.target.value};
+  on("mPlus",()=>{mgr.q+=6;render()});
+  on("mMinus",()=>{mgr.q-=6;render()});
+  on("mSend",()=>{S.requests.push({id:S.nextId++,s:mgr.s,i:mgr.i,q:mgr.q,note:mgr.note||"",st:"pending",at:now()});mgr.q=6;mgr.note="";toast(t("reqSent"));render()});
+  on("mLink",()=>{try{navigator.clipboard?.writeText(location.href.split("#")[0].split("?")[0]+"?store="+mgr.s.toLowerCase())}catch(e){}toast(t("linkCopied"))});
+  el.querySelectorAll("[data-ap]").forEach(b=>b.onclick=()=>{const r=S.requests.find(x=>x.id==b.dataset.ap);r.st="approved";
+    applyDraft({s:r.s,date:todayISO,kind:"once",lines:[{i:r.i,mode:r.q<0?"less":"add",n:Math.abs(r.q)}],who:t("manager")+" · "+store(r.s).name,src:r.note!=null?r.note:(r[lang]||r.en)});toast(t("approved"));render()});
+  el.querySelectorAll("[data-de]").forEach(b=>b.onclick=()=>{S.requests.find(x=>x.id==b.dataset.de).st="declined";render()});
 };
 let closingStore="S09", sugStore="S09";
 V.closing=el=>{
@@ -521,17 +800,23 @@ V.delivery=el=>{
 };
 V.suggest=el=>{
   if(!store(sugStore))sugStore=S.stores[0].id;
-  let a=0,b=0;S.stores.forEach(s=>ITEMS().forEach(i=>{a+=q(s.id,i.id);b+=suggestion(s.id,i.id).v}));const d=b-a;
+  const tm=addDays(todayISO,1);
+  let a=0,b=0;S.stores.forEach(s=>ITEMS().forEach(i=>{a+=eff(s.id,i.id,tm);b+=suggestion(s.id,i.id).v}));const d=b-a;
   el.innerHTML=head(t("sugH"),t("sugS"),`<button class="btn primary" id="apply">${t("apply")}</button>`)+`
   <div class="stats"><div class="stat"><b class="${d>0?"up":d<0?"down":"same"}">${d>0?"+":""}${fmt(d)}</b><span>${t("chain")}</span><em>${fmt(a)} → ${fmt(b)}</em></div></div>
-  <div class="panel">
+  <div class="panel" style="margin-bottom:14px">
    <div class="form" style="margin-bottom:14px;max-width:420px"><label class="field" for="ss">${t("store")}${storeSelect("ss",sugStore)}</label></div>
-   <div class="scroll" style="border:0"><table class="lt"><thead><tr><th>${t("item")}</th><th class="n">${t("avg")}</th><th class="n">${t("avgLeft")}</th><th class="n">${t("soldDays")}</th><th class="n">${t("today")}</th><th class="n">${t("suggest")}</th><th></th></tr></thead>
-   <tbody>${ITEMS().map(i=>{const h=H(sugStore,i.id),sg=suggestion(sugStore,i.id),cur=q(sugStore,i.id);
+   <div class="scroll" style="border:0"><table class="lt"><thead><tr><th>${t("item")}</th><th class="n">${t("avg")}</th><th class="n">${t("avgLeft")}</th><th class="n">${t("soldDays")}</th><th class="n">${t("tomorrow")}</th><th class="n">${t("suggest")}</th><th></th></tr></thead>
+   <tbody>${ITEMS().map(i=>{const h=H(sugStore,i.id),sg=suggestion(sugStore,i.id),cur=eff(sugStore,i.id,tm);
     return `<tr><td>${itemCell(i)}</td><td class="n">${h.sold}</td><td class="n">${h.left}</td><td class="n">${h.so?`<span class="pill bad">${h.so} ${t("days")}</span>`:"0"}</td><td class="n">${cur}</td><td class="n"><b class="${sg.v>cur?"up":sg.v<cur?"down":"same"}">${sg.v}</b></td><td><span class="pill ${sg.why==="up"?"bad":sg.why==="down"?"warn":""}">${t("why_"+sg.why)}</span></td></tr>`}).join("")}</tbody></table></div>
+  </div>
+  <div class="panel"><h2>${t("holH")}</h2><p class="sub" style="margin:0 0 8px">${t("holS")}</p>
+   ${HOL.map(([k,p,f])=>{const dt=f(),done=S.hol[k+dt];return `<div class="hol"><div class="txt"><b>${t("hol_"+k)}</b><small>${new Date(dt+"T12:00:00").toLocaleDateString(LOC[lang],{weekday:"long",month:"long",day:"numeric"})}</small></div><span class="pill warn">+${Math.round(p*100)}%</span>${done?`<span class="pill ok">✓ ${t("holOn")}</span>`:`<button class="btn" data-hol="${k}">${t("holApply")}</button>`}</div>`}).join("")}
   </div>`;
   document.getElementById("ss").onchange=e=>{sugStore=e.target.value;render()};
-  on("apply",()=>{S.stores.forEach(s=>ITEMS().forEach(i=>S.orders[s.id][i.id]=suggestion(s.id,i.id).v));S.locked=false;view="orders";toast(t("applied"));render()});
+  on("apply",()=>{S.stores.forEach(s=>ITEMS().forEach(i=>{const v=suggestion(s.id,i.id).v;if(v!==eff(s.id,i.id,tm))((S.exc[tm]??={})[s.id]??={})[i.id]=v}));toast(t("applied"));render()});
+  el.querySelectorAll("[data-hol]").forEach(b=>b.onclick=()=>{const [k,p,f]=HOL.find(h=>h[0]===b.dataset.hol),dt=f();
+    S.stores.forEach(s=>ITEMS().forEach(i=>{const base=S.grid[s.id]?.[i.id]?.[dowOf(dt)]||0;if(base)((S.exc[dt]??={})[s.id]??={})[i.id]=r6(base*(1+p))}));S.hol[k+dt]=true;toast(t("holDone"));render()});
 };
 V.ingred=el=>{
   el.innerHTML=head(t("ingH"),t("ingS"))+`<div class="scroll"><table class="lt"><thead><tr><th>${t("ing")}</th><th class="n">${t("need")}</th><th class="n">${t("stock")}</th><th>${t("status")}</th></tr></thead>
@@ -546,14 +831,6 @@ V.margin=el=>{
   <div class="scroll"><table class="lt"><thead><tr><th>${t("item")}</th><th class="n">${t("price")}</th><th class="n">${t("cost")}</th><th class="n">${t("unitsT")}</th><th class="n">${t("revenue")}</th><th class="n">${t("profit")}</th><th>${t("marginPct")}</th></tr></thead>
   <tbody>${rows.map(x=>`<tr><td>${itemCell(x.i)}</td><td class="n">${money(x.p)}</td><td class="n">${money(x.c)}</td><td class="n">${fmt(x.u)}</td><td class="n">${money(x.rev)}</td><td class="n"><b>${money(x.pr)}</b></td><td><span style="display:flex;gap:8px;align-items:center"><span class="meter" style="flex:1"><i style="width:${x.pct*100}%"></i></span>${Math.round(x.pct*100)}%</span></td></tr>`).join("")}</tbody></table></div>
   <p class="note">${t("marNote")}</p>`;
-};
-V.requests=el=>{
-  const rq=S.requests.filter(r=>store(r.s)&&item(r.i));
-  el.innerHTML=head(t("reqH"),t("reqS"))+`<div class="route">${rq.map(r=>{const s=store(r.s),i=item(r.i);
-   return `<div class="req">${dn(i,1)}<div class="txt"><b>${esc(s.name)}</b><small>${esc(nm(i))} · “${esc(r[lang])}”</small></div><span class="q">+${r.q}</span>
-    ${r.st==="pending"?`<button class="btn go" data-ap="${r.id}">${t("approve")}</button><button class="btn" data-de="${r.id}">${t("decline")}</button>`:`<span class="pill ${r.st==="approved"?"ok":""}">${r.st==="approved"?t("approved"):t("declined")}</span>`}</div>`}).join("")}</div>`;
-  el.querySelectorAll("[data-ap]").forEach(b=>b.onclick=()=>{const r=S.requests.find(x=>x.id==b.dataset.ap);r.st="approved";S.orders[r.s][r.i]=(S.orders[r.s][r.i]||0)+r.q;item(r.i).on=true;toast(t("approved"));render()});
-  el.querySelectorAll("[data-de]").forEach(b=>b.onclick=()=>{S.requests.find(x=>x.id==b.dataset.de).st="declined";render()});
 };
 V.catering=el=>{
   el.innerHTML=head(t("catH"),t("catS"))+`
@@ -598,7 +875,7 @@ V.demo=el=>{
   el.querySelectorAll("[data-on]").forEach(x=>x.onchange=()=>{item(x.dataset.on).on=x.checked;S.stores.forEach(ensureStore);render()});
   el.querySelectorAll("[data-en]").forEach(x=>x.onchange=()=>{const i=item(x.dataset.en);i.en=x.value.trim()||i.en;render()});
   el.querySelectorAll("[data-es]").forEach(x=>x.onchange=()=>{const i=item(x.dataset.es);i.es=x.value.trim()||i.en;render()});
-  el.querySelectorAll("[data-base]").forEach(x=>x.onchange=()=>{const i=item(x.dataset.base);i.base=Math.max(0,parseInt(x.value)||0);S.stores.forEach(s=>{S.orders[s.id][i.id]=r6(i.base*s.f)});render()});
+  el.querySelectorAll("[data-base]").forEach(x=>x.onchange=()=>{const i=item(x.dataset.base);i.base=Math.max(0,parseInt(x.value)||0);S.stores.forEach((s,si)=>{S.grid[s.id][i.id]=week(i.base,s.f,si*7)});render()});
   el.querySelectorAll("[data-rm]").forEach(x=>x.onclick=()=>{S.catalog=S.catalog.filter(i=>i.id!==x.dataset.rm);render()});
   el.querySelectorAll("[data-sn]").forEach(x=>x.onchange=()=>{const s=store(x.dataset.sn);s.name=x.value.trim()||s.name;render()});
   el.querySelectorAll("[data-rs]").forEach(x=>x.onclick=()=>{S.stores=S.stores.filter(s=>s.id!==x.dataset.rs);render()});
@@ -607,17 +884,16 @@ V.demo=el=>{
     const c=document.getElementById("niC").value;
     S.catalog.push({id:"x"+(S.nextId++),en,es:document.getElementById("niEs").value.trim()||en,c,g:"#C8101C",base:c==="holes"?48:12,on:true});S.stores.forEach(ensureStore);toast(t("itemAdded"));render()});
   on("play",togglePlay);
-  on("newDay",()=>{const sd=Math.floor(Math.random()*5);S.stores.forEach((s,si)=>S.catalog.forEach((it,ii)=>S.orders[s.id][it.id]=r6(it.base*s.f*(0.9+((si*7+ii*5+sd)%5)*0.05))));S.locked=true;resetDay();toast(t("newDayDone"));render()});
-  on("reset",()=>{stopPlay();try{localStorage.removeItem(KEY)}catch(e){}seed();view="demo";toast(t("resetDone"));render()});
+  on("newDay",()=>{stopPlay();resetDay();toast(t("newDayDone"));render()});
+  on("reset",()=>{stopPlay();try{localStorage.removeItem(KEY)}catch(e){}seed();lastLog=S.log[0]?.id;draft=null;view="demo";toast(t("resetDone"));render()});
 };
 
 /* ---------- play the morning: makes items, packs stores, delivers ---------- */
 function step(){
-  S.locked=true;
-  const nextItem=ITEMS().find(i=>itemTotal(i.id)>0&&!S.produced[i.id]);
-  if(nextItem){S.produced[nextItem.id]=true;return true}
+  const x=kList().find(y=>y.st!=="done");
+  if(x){S.produced[x.i.id]=x.tot;return true}
   const nextStore=allStores().find(s=>!S.storeDone[s.id]);
-  if(nextStore){S.packed[nextStore.id]={};itemsOf(nextStore.id).forEach(i=>S.packed[nextStore.id][i.id]=true);S.storeDone[nextStore.id]=now();return true}
+  if(nextStore){S.packed[nextStore.id]={};itemsOf(nextStore.id).forEach(i=>S.packed[nextStore.id][i.id]=q(nextStore.id,i.id));S.storeDone[nextStore.id]=now();delete S.reopen[nextStore.id];return true}
   const out=S.stores.find(s=>S.delivery[s.id]?.st==="out");
   if(out){S.delivery[out.id]={st:"deliv",at:now()};return true}
   const toGo=S.stores.find(s=>!S.delivery[s.id]);
@@ -627,13 +903,16 @@ function step(){
 function stopPlay(){clearInterval(simTimer);simTimer=null}
 function togglePlay(){
   if(simTimer){stopPlay();render();return}
-  resetDay();S.locked=true;if(view==="demo"||view==="orders")view="kitchen";
+  resetDay();if(view==="demo"||view==="orders")view="kitchen";
   simTimer=setInterval(()=>{if(!step())stopPlay();render()},900);render();
 }
 
 /* ---------- shell ---------- */
 function render(remote){
   if(tvMode){document.documentElement.classList.add("tvmode");view="kitchen"}
+  const top=S.log[0];
+  if(top&&top.id!==lastLog&&affToday(top)&&(tvMode||view==="kitchen"))beep();
+  lastLog=top?.id;
   const p=phaseOf(view)||1;
   document.getElementById("phases").innerHTML=[1,2,3,4].map(n=>`<button class="ph" data-p="${n}" aria-pressed="${view!=="demo"&&n===p}"><b>${n}</b>${t("p"+n)}</button>`).join("");
   document.getElementById("tabs").innerHTML=view==="demo"?"":PHASES[p].map(v=>`<button class="tab" role="tab" data-v="${v}" aria-selected="${v===view}">${t("v_"+v)}</button>`).join("");
@@ -641,13 +920,13 @@ function render(remote){
   document.querySelectorAll(".ph").forEach(b=>b.onclick=()=>{view=PHASES[b.dataset.p][0];render();window.scrollTo(0,0)});
   document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{view=b.dataset.v;render()});
   document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.l===lang));
-  document.getElementById("dateLbl").textContent=new Date().toLocaleDateString(lang==="en"?"en-US":"es-US",{weekday:"short",month:"2-digit",day:"2-digit"});
+  document.getElementById("dateLbl").textContent=new Date().toLocaleDateString(LOC[lang],{weekday:"short",month:"2-digit",day:"2-digit"});
   document.getElementById("credit").textContent=t("credit");
   document.documentElement.lang=lang;
   const y=window.scrollY;V[view](document.getElementById("main"));window.scrollTo(0,y);
   if(!remote)save();
 }
-document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>{lang=b.dataset.l;render()});
+document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>{lang=b.dataset.l;try{localStorage.setItem("gd-lang",lang)}catch(e){}render()});
 setInterval(()=>{const c=document.getElementById("tvClock");if(c)c.textContent=now()},15000);
 render();
 </script>
