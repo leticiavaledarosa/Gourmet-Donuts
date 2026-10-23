@@ -256,6 +256,43 @@ th.today,td.today{background:var(--warn-soft)}
 .tv-chg.new{background:#3B2410;color:var(--tv-warn)}
 .tv-chg small{display:block;font-weight:500;font-size:.85cqw;color:var(--tv-muted)}
 @media print{.topbar,.credit,.noprint,.toast{display:none!important}body::before{display:none}main{padding:0}.scroll{overflow:visible;border:0}td input{border:0!important;background:transparent!important}}
+
+/* store sheets: the paper wall, live */
+.wall{background:radial-gradient(120% 80% at 50% 0%,#2A0A14,#14040A);color:#FFF8EC;border-radius:18px;padding:20px;box-shadow:0 0 0 10px #0B0205,0 18px 40px rgba(0,0,0,.25);margin:10px 0 18px}
+.wall:fullscreen{border-radius:0;margin:0;overflow:auto;box-shadow:none}
+.tvmode .wall{border-radius:0;margin:0;box-shadow:none;min-height:100vh}
+.wall-top{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px}
+.wall-brand{font-family:var(--display);font-size:28px}
+.wall-title{font-weight:800;font-size:20px;letter-spacing:.08em;margin-inline:auto}
+.wall-title span{color:#FBB03B}
+.wall-clock{font-weight:800;font-size:22px;font-variant-numeric:tabular-nums}
+.wall-legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:#D9BFB3;margin:10px 0 16px}
+.wall-legend span{display:flex;align-items:center;gap:6px}
+.wall-legend i{width:14px;height:14px;border-radius:4px;display:inline-block}
+.lg-td{background:#FDE3B4}.lg-chg{background:#FBB03B;box-shadow:0 0 0 2px #FFF8EC}.lg-ok{background:#1F7A45}
+.sheets{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:18px 14px}
+.sheet{position:relative;background:#FFFDF6;color:#3A0A16;border-radius:4px 4px 10px 10px;box-shadow:0 10px 24px rgba(0,0,0,.45);--hole:#FFFDF6;min-width:0}
+.sheet::before{content:"";position:absolute;top:-8px;left:50%;width:72px;height:18px;margin-left:-36px;background:rgba(255,248,236,.55);transform:rotate(-2deg);border-radius:2px}
+.sheet header{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#5B001B;color:#FFF8EC;border-radius:4px 4px 0 0}
+.sheet header span{flex:1;min-width:0}
+.sheet header b{display:block;font-family:var(--display);font-weight:400;font-size:19px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sheet header small{display:block;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#FBB03B;min-height:13px}
+.sheet header em{font-style:normal;font-family:var(--display);font-size:26px;font-variant-numeric:tabular-nums}
+.sheet.ready header{background:#1F7A45}.sheet.ready header small{color:#E1F1E6}
+.sheet.packing header{background:#8A4B00}
+.sheet table{width:100%;border-collapse:collapse;font-size:12.5px;table-layout:fixed}
+.sheet th,.sheet td{padding:2px 2px;border-bottom:1px solid #EFE3CC;text-align:center}
+.sheet thead th{font-size:11px;font-weight:800;color:#7A4A3A;text-transform:uppercase;padding:5px 2px;background:#FFFDF6;position:static;letter-spacing:0}
+.sheet thead th:first-child{width:44%;text-align:left;padding-left:10px}
+.sheet thead th.td{background:#C8101C;color:#FFF8EC}
+.sheet tbody th{position:static;background:transparent;font-weight:600;text-align:left;padding-left:8px;white-space:nowrap}
+.sheet .nmw{display:flex;align-items:center;gap:6px;min-width:0}
+.sheet .nmw span{overflow:hidden;text-overflow:ellipsis}
+.sheet .dn{width:14px;height:14px}
+.sheet td{font-variant-numeric:tabular-nums;color:#5C3A30}
+.sheet td.td{background:#FDE3B4;color:#3A0A16;font-weight:800;font-size:14px}
+.sheet td.chg{background:#FBB03B;color:#3A0A16;font-weight:900;box-shadow:inset 0 0 0 2px #C8101C}
+@media (prefers-reduced-motion:no-preference){.sheet td.chg{animation:chgpulse 1.4s ease-in-out infinite}@keyframes chgpulse{50%{background:#FFD27A}}}
 </style>
 
 <div class="topbar">
@@ -314,9 +351,10 @@ const STORE_SEED=[["Worcester",1.4],["Leominster · Main St",1.2],["Leominster �
 
 const T={
 en:{p1:"Operations",p2:"Control",p3:"Intelligence",p4:"Integration",demo:"▶ Try the demo",
+ v_grid:"Weekly grid",v_wall:"Store sheets",wallH:"Store sheets",wallS:"The 12 sheets from the kitchen wall, now live. Today’s column is highlighted and every change glows gold.",wallLink:"On the TV, open this link with #wall at the end.",
  v_orders:"Orders",v_kitchen:"Kitchen",v_pack:"Packing",v_owner:"Owner",v_requests:"Manager links",v_closing:"Closing report",v_delivery:"Deliveries",v_suggest:"Suggested orders",v_ingred:"Ingredients",v_margin:"Margins",v_catering:"Catering",v_pos:"Registers",
  preview:"Phase {n} preview. Example data, to show how it works.",
- ordersH:"Orders",ordersS:"Each store has its weekly grid, like the sheet on the wall. When a manager texts a change, paste it here and confirm.",store:"Store",total:"Total",
+ ordersH:"Orders",ordersS:"When a manager texts a change, paste the message here and confirm. The store sheets, the kitchen and packing update at once.",store:"Store",total:"Total",
  items:"Items today",stores:"Stores",packedN:"Stores packed",madeN:"Items made",activeN:"on the menu",changesN:"Changes for today",
  pasteH:"Paste a manager’s message",pasteS:"Copy the WhatsApp message and paste it here. Kitchen OS finds the store, the day and the items.",pastePh:"Hi Josy, tomorrow send 6 more glazed and 2 less coconut",
  read:"Read message",tryEx:"Try:",storeNF:"No store name in the message. Pick the store.",forDay:"Day",kind:"Change",once:"Only that day",wd:"Every {d}, from now on",allDays:"Every day, from now on",
@@ -359,9 +397,10 @@ en:{p1:"Operations",p2:"Control",p3:"Intelligence",p4:"Integration",demo:"▶ Tr
  note:"Prototype: data stays in this browser. The live version syncs every device in real time.",
  credit:"Prototype by BI Insights · Leticia Vale da Rosa. Stores and menu from gourmetdonuts.com; quantities, prices and recipes are examples."},
 pt:{p1:"Operação",p2:"Controle",p3:"Inteligência",p4:"Integração",demo:"▶ Testar a demo",
+ v_grid:"Grade semanal",v_wall:"Folhas das lojas",wallH:"Folhas das lojas",wallS:"As 12 folhas da parede da cozinha, agora ao vivo. A coluna de hoje fica destacada e cada mudança brilha em dourado.",wallLink:"Na TV, abra este link com #wall no final.",
  v_orders:"Pedidos",v_kitchen:"Cozinha",v_pack:"Separação",v_owner:"Dono",v_requests:"Links dos gerentes",v_closing:"Fechamento da loja",v_delivery:"Entregas",v_suggest:"Pedidos sugeridos",v_ingred:"Insumos",v_margin:"Margens",v_catering:"Catering",v_pos:"Caixas",
  preview:"Prévia da fase {n}. Dados de exemplo, para mostrar como funciona.",
- ordersH:"Pedidos",ordersS:"Cada loja tem sua grade semanal, como a folha da parede. Quando um gerente manda uma mudança, cole a mensagem aqui e confirme.",store:"Loja",total:"Total",
+ ordersH:"Pedidos",ordersS:"Quando um gerente mandar uma mudança, cole a mensagem aqui e confirme. As folhas das lojas, a cozinha e a separação atualizam na hora.",store:"Loja",total:"Total",
  items:"Itens hoje",stores:"Lojas",packedN:"Lojas separadas",madeN:"Itens feitos",activeN:"no cardápio",changesN:"Mudanças para hoje",
  pasteH:"Cole a mensagem do gerente",pasteS:"Copie a mensagem do WhatsApp e cole aqui. O Kitchen OS encontra a loja, o dia e os itens.",pastePh:"Oi Josy, amanhã manda mais 6 glazed e menos 2 coconut",
  read:"Ler mensagem",tryEx:"Teste:",storeNF:"A mensagem não diz a loja. Escolha a loja.",forDay:"Dia",kind:"Mudança",once:"Só nesse dia",wd:"Toda semana · {d}, daqui pra frente",allDays:"Todos os dias, daqui pra frente",
@@ -404,9 +443,10 @@ pt:{p1:"Operação",p2:"Controle",p3:"Inteligência",p4:"Integração",demo:"▶
  note:"Protótipo: os dados ficam neste navegador. A versão real sincroniza todos os aparelhos na hora.",
  credit:"Protótipo da BI Insights · Leticia Vale da Rosa. Lojas e cardápio de gourmetdonuts.com; quantidades, preços e receitas são de exemplo."},
 es:{p1:"Operación",p2:"Control",p3:"Inteligencia",p4:"Integración",demo:"▶ Probar el demo",
+ v_grid:"Tabla semanal",v_wall:"Hojas de tiendas",wallH:"Hojas de tiendas",wallS:"Las 12 hojas de la pared de la cocina, ahora en vivo. La columna de hoy está resaltada y cada cambio brilla en dorado.",wallLink:"En la TV, abre este enlace con #wall al final.",
  v_orders:"Pedidos",v_kitchen:"Cocina",v_pack:"Empaque",v_owner:"Dueño",v_requests:"Enlaces de gerentes",v_closing:"Cierre de tienda",v_delivery:"Entregas",v_suggest:"Pedidos sugeridos",v_ingred:"Insumos",v_margin:"Márgenes",v_catering:"Catering",v_pos:"Cajas",
  preview:"Vista previa de la fase {n}. Datos de ejemplo, para mostrar cómo funciona.",
- ordersH:"Pedidos",ordersS:"Cada tienda tiene su tabla semanal, como la hoja de la pared. Cuando un gerente manda un cambio, pega el mensaje aquí y confirma.",store:"Tienda",total:"Total",
+ ordersH:"Pedidos",ordersS:"Cuando un gerente mande un cambio, pega el mensaje aquí y confirma. Las hojas de tiendas, la cocina y el empaque se actualizan al instante.",store:"Tienda",total:"Total",
  items:"Productos hoy",stores:"Tiendas",packedN:"Tiendas listas",madeN:"Productos hechos",activeN:"en el menú",changesN:"Cambios para hoy",
  pasteH:"Pega el mensaje del gerente",pasteS:"Copia el mensaje de WhatsApp y pégalo aquí. Kitchen OS encuentra la tienda, el día y los productos.",pastePh:"Hola Josy, mañana manda 6 glazed más y 2 coconut menos",
  read:"Leer mensaje",tryEx:"Prueba:",storeNF:"El mensaje no dice la tienda. Elige la tienda.",forDay:"Día",kind:"Cambio",once:"Solo ese día",wd:"Cada {d}, de ahora en adelante",allDays:"Todos los días, de ahora en adelante",
@@ -449,7 +489,7 @@ es:{p1:"Operación",p2:"Control",p3:"Inteligencia",p4:"Integración",demo:"▶ P
  note:"Prototipo: los datos quedan en este navegador. La versión real sincroniza todos los equipos al instante.",
  credit:"Prototipo de BI Insights · Leticia Vale da Rosa. Tiendas y menú de gourmetdonuts.com; cantidades, precios y recetas son de ejemplo."}
 };
-const PHASES={1:["orders","kitchen","pack"],2:["owner","requests","closing","delivery"],3:["suggest","ingred","margin"],4:["catering","pos"]};
+const PHASES={1:["orders","wall","grid","kitchen","pack"],2:["owner","requests","closing","delivery"],3:["suggest","ingred","margin"],4:["catering","pos"]};
 const LOC={en:"en-US",pt:"pt-BR",es:"es-US"};
 
 /* ---------- dates and state (kept in this browser and shared between open windows) ---------- */
@@ -465,7 +505,7 @@ const DAYF=[1,1,1,1,1.1,1.5,1.3];
 const week=(base,f,k)=>DAYF.map((m,d)=>r6(base*f*m*(0.9+((k+d)%5)*0.05)));
 let lang="en";try{const l=localStorage.getItem("gd-lang");if(T[l])lang=l}catch(e){}
 let view="orders", S, simTimer=null, draft=null, pasteText="", gridStore="S10", mgr={s:"S10",i:"bos",q:6,note:""}, lastLog;
-const tvMode=location.hash==="#tv";
+const tvMode=location.hash==="#tv", wallMode=location.hash==="#wall";
 
 /* ---------- helpers ---------- */
 const t=k=>T[lang][k]??T.en[k]??k;
@@ -636,40 +676,25 @@ const HOL=[["hal",.2,()=>nextDate(10,31)],["thx",.25,thxEve],["xms",.3,()=>nextD
 /* ---------- views ---------- */
 const V={};
 V.orders=el=>{
-  const rows=allStores(), its=ITEMS(), chg=new Set(todaysLog().map(e=>e.s+"|"+e.i)), td=dowOf(todayISO);
-  if(!store(gridStore))gridStore=S.stores[0].id;
+  const rows=allStores(), its=ITEMS();
   el.innerHTML=head(t("ordersH"),t("ordersS"))+`
-  <div class="stats noprint">
+  <div class="stats">
    <div class="stat"><b>${fmt(grand())}</b><span>${t("items")}</span><em>${its.length} ${t("activeN")}</em></div>
    <div class="stat"><b>${S.stores.length}</b><span>${t("stores")}</span></div>
    <div class="stat"><b>${todaysLog().length}</b><span>${t("changesN")}</span></div>
    <div class="stat"><b>${doneCount()}/${rows.length}</b><span>${t("packedN")}</span></div>
   </div>
-  <div class="panel paste noprint">
-   <h2 style="margin:0">${t("pasteH")}</h2><p class="sub" style="margin:0">${t("pasteS")}</p>
-   <textarea id="msg" aria-label="${t("pasteH")}" placeholder="${esc(t("pastePh"))}">${esc(pasteText)}</textarea>
-   <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center"><button class="btn primary" id="readMsg">${t("read")}</button>
-    <div class="chips"><span>${t("tryEx")}</span>${EXAMPLES.map((x,k)=>`<button class="chip" data-ex="${k}">${esc(x)}</button>`).join("")}</div></div>
-   ${draft?draftHTML():""}
-   <p class="note" style="margin:0">${t("aiNote")}</p>
-  </div>
   <div class="split">
-   <div style="min-width:0"><h2>${t("todayH")}</h2><p class="sub" style="margin:-4px 0 10px">${t("todayS")}</p>
-    <div class="scroll"><table style="min-width:${260+its.length*84}px">
-     <thead><tr><th style="text-align:left">${t("store")}</th>${its.map(i=>`<th><div class="fl">${dn(i)}${esc(nm(i))}</div></th>`).join("")}<th class="tot">${t("total")}</th></tr></thead>
-     <tbody>${rows.map(s=>`<tr><th>${s.id==="CAT"?"":s.id+" · "}${esc(s.name)}</th>${its.map(i=>`<td class="${chg.has(s.id+"|"+i.id)?"chg":""}">${q(s.id,i.id)||""}</td>`).join("")}<td class="tot">${fmt(storeTotal(s.id))}</td></tr>`).join("")}</tbody>
-     <tfoot><tr><th style="text-align:left">${t("total")}</th>${its.map(i=>`<td>${fmt(itemTotal(i.id))}</td>`).join("")}<td>${fmt(grand())}</td></tr></tfoot>
-    </table></div></div>
-   <div class="panel noprint"><h2>${t("logH")}</h2>${logHTML()}</div>
-  </div>
-  <div class="panel">
-   <div class="head" style="margin-bottom:10px"><div><h2 style="margin:0">${t("gridH")} · ${esc(store(gridStore).name)}</h2><p class="sub">${t("gridS")}</p></div>
-    <label class="field noprint" for="gs">${t("store")}${storeSelect("gs",gridStore)}</label><button class="btn noprint" id="prt">${t("print")}</button></div>
-   <div class="scroll" style="border:0"><table class="lt">
-    <thead><tr><th>${t("item")}</th>${[0,1,2,3,4,5,6].map(k=>`<th class="${k===td?"today":""}" style="text-align:center">${esc(dayShort(k))}</th>`).join("")}</tr></thead>
-    <tbody>${its.map(i=>`<tr><td>${itemCell(i)}</td>${[0,1,2,3,4,5,6].map(k=>`<td class="${k===td?"today":""}" style="text-align:center"><input type="number" min="0" inputmode="numeric" data-g="${i.id}" data-d="${k}" value="${S.grid[gridStore]?.[i.id]?.[k]||0}" aria-label="${esc(nm(i))} ${esc(dayShort(k))}"></td>`).join("")}</tr>`).join("")}</tbody>
-   </table></div>
-  </div><p class="note noprint">${t("note")}</p>`;
+   <div class="panel paste" style="margin:0">
+    <h2 style="margin:0">${t("pasteH")}</h2><p class="sub" style="margin:0">${t("pasteS")}</p>
+    <textarea id="msg" aria-label="${t("pasteH")}" placeholder="${esc(t("pastePh"))}">${esc(pasteText)}</textarea>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center"><button class="btn primary" id="readMsg">${t("read")}</button>
+     <div class="chips"><span>${t("tryEx")}</span>${EXAMPLES.map((x,k)=>`<button class="chip" data-ex="${k}">${esc(x)}</button>`).join("")}</div></div>
+    ${draft?draftHTML():""}
+    <p class="note" style="margin:0">${t("aiNote")}</p>
+   </div>
+   <div class="panel"><h2>${t("logH")}</h2>${logHTML()}</div>
+  </div>`;
   const ta=document.getElementById("msg");ta.oninput=()=>{pasteText=ta.value};
   on("readMsg",()=>{pasteText=ta.value;if(!pasteText.trim())return;draft=parseMsg(pasteText);render()});
   el.querySelectorAll("[data-ex]").forEach(b=>b.onclick=()=>{pasteText=EXAMPLES[b.dataset.ex];draft=parseMsg(pasteText);render()});
@@ -683,12 +708,36 @@ V.orders=el=>{
     el.querySelectorAll("[data-lx]").forEach(x=>x.onclick=()=>{draft.lines.splice(+x.dataset.lx,1);render()});
     on("addLine",()=>{draft.lines.push({i:ITEMS()[0].id,mode:"add",n:6});render()});
     on("cancelD",()=>{draft=null;render()});
-    on("confirmD",()=>{draft.who="WhatsApp";applyDraft(draft);draft=null;pasteText="";toast(t("confirmed"));render()});
+    on("confirmD",()=>{draft.who="WhatsApp";applyDraft(draft);draft=null;pasteText="";toast(t("confirmed"));view="wall";render();window.scrollTo(0,0)});
   }
+};
+V.grid=el=>{
+  const its=ITEMS(), td=dowOf(todayISO);
+  if(!store(gridStore))gridStore=S.stores[0].id;
+  el.innerHTML=head(t("gridH")+" · "+esc(store(gridStore).name),t("gridS"),`<label class="field" for="gs">${t("store")}${storeSelect("gs",gridStore)}</label>`)+`
+  <div class="panel"><div class="scroll" style="border:0"><table class="lt">
+    <thead><tr><th>${t("item")}</th>${[0,1,2,3,4,5,6].map(k=>`<th class="${k===td?"today":""}" style="text-align:center">${esc(dayShort(k))}</th>`).join("")}</tr></thead>
+    <tbody>${its.map(i=>`<tr><td>${itemCell(i)}</td>${[0,1,2,3,4,5,6].map(k=>`<td class="${k===td?"today":""}" style="text-align:center"><input type="number" min="0" inputmode="numeric" data-g="${i.id}" data-d="${k}" value="${S.grid[gridStore]?.[i.id]?.[k]||0}" aria-label="${esc(nm(i))} ${esc(dayShort(k))}"></td>`).join("")}</tr>`).join("")}</tbody>
+  </table></div></div><p class="note">${t("note")}</p>`;
   document.getElementById("gs").onchange=e=>{gridStore=e.target.value;render()};
-  on("prt",()=>window.print());
   el.querySelectorAll("[data-g]").forEach(x=>x.onchange=()=>{const k=+x.dataset.d;
     applyDraft({s:gridStore,date:nextDow(k),kind:"always",every:false,lines:[{i:x.dataset.g,mode:"set",n:Math.max(0,parseInt(x.value)||0)}],who:t("office")});render()});
+};
+V.wall=el=>{
+  const its=ITEMS(), td=dowOf(todayISO), chg=new Set(todaysLog().map(e=>e.s+"|"+e.i));
+  const dates=[0,1,2,3,4,5,6].map(k=>nextDow(k));
+  const dl=dates.map(d=>new Date(d+"T12:00:00").toLocaleDateString("en-US",{weekday:"short"}));
+  const st=s=>S.storeDone[s.id]?"ready":(Object.values(S.packed[s.id]||{}).some(Boolean)?"packing":"");
+  const stLbl={ready:"✓ Ready · Lista",packing:"Packing · Empacando","":""};
+  el.innerHTML=head(t("wallH"),t("wallS")+" "+t("wallLink"),`<button class="btn" id="fsw">${t("fs")}</button>`)+`
+  <div class="wall" id="wallScreen">
+   <div class="wall-top"><div class="wall-brand">Gourmet Donuts</div><div class="wall-title">STORES · TIENDAS <span>· TODAY ${dl[td].toUpperCase()}</span></div><div class="wall-clock" id="tvClock">${now()}</div></div>
+   <div class="wall-legend"><span><i class="lg-td"></i>Today · Hoy</span><span><i class="lg-chg"></i>Changed · Cambió</span><span><i class="lg-ok"></i>Packed · Lista</span></div>
+   <div class="sheets">${S.stores.map(s=>{const x=st(s);return `<section class="sheet ${x}"><header><span><b>${esc(s.name)}</b><small>${stLbl[x]}</small></span><em>${fmt(storeTotal(s.id))}</em></header>
+     <table><thead><tr><th>Donuts</th>${dl.map((d,k)=>`<th class="${k===td?"td":""}">${d.slice(0,2)}</th>`).join("")}</tr></thead>
+     <tbody>${its.map(i=>`<tr><th><span class="nmw">${dn(i)}<span>${esc(i.en)}</span></span></th>${dates.map((d,k)=>{const v=eff(s.id,i.id,d);const c=k===td?chg.has(s.id+"|"+i.id):S.exc[d]?.[s.id]?.[i.id]!=null;return `<td class="${k===td?"td":""}${c?" chg":""}">${v||"·"}</td>`}).join("")}</tr>`).join("")}</tbody></table></section>`}).join("")}</div>
+  </div>`;
+  on("fsw",()=>{try{const p=document.getElementById("wallScreen").requestFullscreen?.();p&&p.catch(()=>{})}catch(e){}});
 };
 V.kitchen=el=>{
   const list=kList(), ord={extra:0,todo:1,done:2};list.sort((a,b)=>ord[a.st]-ord[b.st]);
@@ -910,8 +959,9 @@ function togglePlay(){
 /* ---------- shell ---------- */
 function render(remote){
   if(tvMode){document.documentElement.classList.add("tvmode");view="kitchen"}
+  if(wallMode){document.documentElement.classList.add("tvmode");view="wall"}
   const top=S.log[0];
-  if(top&&top.id!==lastLog&&affToday(top)&&(tvMode||view==="kitchen"))beep();
+  if(top&&top.id!==lastLog&&affToday(top)&&(tvMode||wallMode||view==="kitchen"||view==="wall"))beep();
   lastLog=top?.id;
   const p=phaseOf(view)||1;
   document.getElementById("phases").innerHTML=[1,2,3,4].map(n=>`<button class="ph" data-p="${n}" aria-pressed="${view!=="demo"&&n===p}"><b>${n}</b>${t("p"+n)}</button>`).join("");
