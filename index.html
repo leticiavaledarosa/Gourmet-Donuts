@@ -293,6 +293,18 @@ th.today,td.today{background:var(--warn-soft)}
 .sheet td.td{background:#FDE3B4;color:#3A0A16;font-weight:800;font-size:14px}
 .sheet td.chg{background:#FBB03B;color:#3A0A16;font-weight:900;box-shadow:inset 0 0 0 2px #C8101C}
 @media (prefers-reduced-motion:no-preference){.sheet td.chg{animation:chgpulse 1.4s ease-in-out infinite}@keyframes chgpulse{50%{background:#FFD27A}}}
+
+.seg{display:flex;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
+.seg button{border:0;background:transparent;color:var(--fg);font:700 14px var(--body);padding:11px 14px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--brand);color:var(--brand-ink)}
+.eq{display:grid;gap:14px}
+.tvmode .sheets{grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+.tvmode .sheet table{font-size:17px}
+.tvmode .sheet td.td{font-size:21px}
+.tvmode .sheet th,.tvmode .sheet td{padding:4px 3px}
+.tvmode .sheet .dn{width:18px;height:18px}
+.tvmode .sheet header b{font-size:26px}
+.tvmode .sheet header em{font-size:32px}
 </style>
 
 <div class="topbar">
@@ -351,6 +363,7 @@ const STORE_SEED=[["Worcester",1.4],["Leominster · Main St",1.2],["Leominster �
 
 const T={
 en:{p1:"Operations",p2:"Control",p3:"Intelligence",p4:"Integration",demo:"▶ Try the demo",
+ v_equip:"Equipment",eqH:"Equipment by phase",eqS:"What each phase needs in the kitchen and the stores. Phones people already have are reused.",eqWhere:"Where",eqWhat:"What",eqWho:"Who uses it",eqQty:"Qty",eqCost:"Estimate (USD)",eqTvH:"Why two TVs",eqTvS:"Bakers need totals per item, big enough to read from the fryer. Packing needs each store’s sheet. One screen for each job keeps both readable; with a single 65\" TV, the store sheets rotate 4 stores at a time.",eqNote:"Prices are rough US retail estimates, to be confirmed.",pmLbl:"Production mode",pmDay:"Today · fresh",pmWeek:"Week · batch",pmDayNote:"Fresh mode: the TV shows what to make today for all stores.",pmWeekNote:"Batch mode: the TV shows the next 7 days added up, for items made ahead (fillings, glazes, large orders).",
  v_grid:"Weekly grid",v_wall:"Store sheets",wallH:"Store sheets",wallS:"The 12 sheets from the kitchen wall, now live. Today’s column is highlighted and every change glows gold.",wallLink:"On the TV, open this link with #wall at the end.",
  v_orders:"Orders",v_kitchen:"Kitchen",v_pack:"Packing",v_owner:"Owner",v_requests:"Manager links",v_closing:"Closing report",v_delivery:"Deliveries",v_suggest:"Suggested orders",v_ingred:"Ingredients",v_margin:"Margins",v_catering:"Catering",v_pos:"Registers",
  preview:"Phase {n} preview. Example data, to show how it works.",
@@ -397,6 +410,7 @@ en:{p1:"Operations",p2:"Control",p3:"Intelligence",p4:"Integration",demo:"▶ Tr
  note:"Prototype: data stays in this browser. The live version syncs every device in real time.",
  credit:"Prototype by BI Insights · Leticia Vale da Rosa. Stores and menu from gourmetdonuts.com; quantities, prices and recipes are examples."},
 pt:{p1:"Operação",p2:"Controle",p3:"Inteligência",p4:"Integração",demo:"▶ Testar a demo",
+ v_equip:"Equipamentos",eqH:"Equipamentos por fase",eqS:"O que cada fase precisa na cozinha e nas lojas. Os celulares que as pessoas já têm são reaproveitados.",eqWhere:"Onde",eqWhat:"O quê",eqWho:"Quem usa",eqQty:"Qtd",eqCost:"Estimativa (USD)",eqTvH:"Por que duas TVs",eqTvS:"A produção precisa dos totais por item, grandes para ler da fritadeira. A separação precisa da folha de cada loja. Uma tela para cada função deixa as duas legíveis; com uma TV só de 65\", as folhas giram de 4 em 4 lojas.",eqNote:"Preços são estimativas aproximadas de varejo nos EUA, a confirmar.",pmLbl:"Modo de produção",pmDay:"Hoje · fresco",pmWeek:"Semana · lote",pmDayNote:"Modo fresco: a TV mostra o que fazer hoje para todas as lojas.",pmWeekNote:"Modo lote: a TV soma os próximos 7 dias, para itens feitos com antecedência (recheios, coberturas, pedidos grandes).",
  v_grid:"Grade semanal",v_wall:"Folhas das lojas",wallH:"Folhas das lojas",wallS:"As 12 folhas da parede da cozinha, agora ao vivo. A coluna de hoje fica destacada e cada mudança brilha em dourado.",wallLink:"Na TV, abra este link com #wall no final.",
  v_orders:"Pedidos",v_kitchen:"Cozinha",v_pack:"Separação",v_owner:"Dono",v_requests:"Links dos gerentes",v_closing:"Fechamento da loja",v_delivery:"Entregas",v_suggest:"Pedidos sugeridos",v_ingred:"Insumos",v_margin:"Margens",v_catering:"Catering",v_pos:"Caixas",
  preview:"Prévia da fase {n}. Dados de exemplo, para mostrar como funciona.",
@@ -443,6 +457,7 @@ pt:{p1:"Operação",p2:"Controle",p3:"Inteligência",p4:"Integração",demo:"▶
  note:"Protótipo: os dados ficam neste navegador. A versão real sincroniza todos os aparelhos na hora.",
  credit:"Protótipo da BI Insights · Leticia Vale da Rosa. Lojas e cardápio de gourmetdonuts.com; quantidades, preços e receitas são de exemplo."},
 es:{p1:"Operación",p2:"Control",p3:"Inteligencia",p4:"Integración",demo:"▶ Probar el demo",
+ v_equip:"Equipos",eqH:"Equipos por fase",eqS:"Lo que cada fase necesita en la cocina y las tiendas. Se reutilizan los celulares que ya tienen.",eqWhere:"Dónde",eqWhat:"Qué",eqWho:"Quién lo usa",eqQty:"Cant.",eqCost:"Estimado (USD)",eqTvH:"Por qué dos TVs",eqTvS:"Producción necesita totales por producto, grandes para leer desde la freidora. Empaque necesita la hoja de cada tienda. Una pantalla para cada tarea mantiene ambas legibles; con una sola TV de 65\", las hojas rotan de 4 en 4 tiendas.",eqNote:"Precios aproximados de venta en EE. UU., por confirmar.",pmLbl:"Modo de producción",pmDay:"Hoy · fresco",pmWeek:"Semana · lote",pmDayNote:"Modo fresco: la TV muestra lo que hay que hacer hoy para todas las tiendas.",pmWeekNote:"Modo lote: la TV suma los próximos 7 días, para productos hechos con anticipación (rellenos, glaseados, pedidos grandes).",
  v_grid:"Tabla semanal",v_wall:"Hojas de tiendas",wallH:"Hojas de tiendas",wallS:"Las 12 hojas de la pared de la cocina, ahora en vivo. La columna de hoy está resaltada y cada cambio brilla en dorado.",wallLink:"En la TV, abre este enlace con #wall al final.",
  v_orders:"Pedidos",v_kitchen:"Cocina",v_pack:"Empaque",v_owner:"Dueño",v_requests:"Enlaces de gerentes",v_closing:"Cierre de tienda",v_delivery:"Entregas",v_suggest:"Pedidos sugeridos",v_ingred:"Insumos",v_margin:"Márgenes",v_catering:"Catering",v_pos:"Cajas",
  preview:"Vista previa de la fase {n}. Datos de ejemplo, para mostrar cómo funciona.",
@@ -504,7 +519,7 @@ const r6=v=>Math.max(0,Math.round(v/6)*6);
 const DAYF=[1,1,1,1,1.1,1.5,1.3];
 const week=(base,f,k)=>DAYF.map((m,d)=>r6(base*f*m*(0.9+((k+d)%5)*0.05)));
 let lang="en";try{const l=localStorage.getItem("gd-lang");if(T[l])lang=l}catch(e){}
-let view="orders", S, simTimer=null, draft=null, pasteText="", gridStore="S10", mgr={s:"S10",i:"bos",q:6,note:""}, lastLog;
+let wallPage=0, view="orders", S, simTimer=null, draft=null, pasteText="", gridStore="S10", mgr={s:"S10",i:"bos",q:6,note:""}, lastLog;
 const tvMode=location.hash==="#tv", wallMode=location.hash==="#wall";
 
 /* ---------- helpers ---------- */
@@ -539,7 +554,9 @@ const dayLabel=iso=>iso===todayISO?t("dayToday"):iso===addDays(todayISO,1)?t("da
 const affToday=e=>e.day===todayISO&&(e.kind==="once"?e.date===todayISO:(e.every||dowOf(e.date)===dowOf(todayISO)));
 const todaysLog=()=>S.log.filter(affToday);
 const targetLbl=e=>e.kind==="once"?dayLabel(e.date):e.every?t("everyDay"):t("every").replace("{d}",dayFull(dowOf(e.date)));
-function kList(){return ITEMS().map(i=>{const tot=itemTotal(i.id),made=madeQ(i.id);return {i,tot,made,st:made===0?"todo":made<tot?"extra":"done"}}).filter(x=>x.tot>0||x.made>0)}
+const WEEK=()=>[0,1,2,3,4,5,6].map(k=>addDays(todayISO,k));
+const itemWeek=i=>S.stores.reduce((a,s)=>a+WEEK().reduce((b,d)=>b+eff(s.id,i,d),0),0);
+function kList(m){return ITEMS().map(i=>{const wk=m==="week",tot=wk?itemWeek(i.id):itemTotal(i.id),made=wk?+((S.producedW||{})[i.id]||0):madeQ(i.id);return {i,tot,made,st:made===0?"todo":made<tot?"extra":"done"}}).filter(x=>x.tot>0||x.made>0)}
 
 /* ---------- changes: one day, or the weekly grid from now on ---------- */
 function applyDraft(d){
@@ -729,37 +746,39 @@ V.wall=el=>{
   const dl=dates.map(d=>new Date(d+"T12:00:00").toLocaleDateString("en-US",{weekday:"short"}));
   const st=s=>S.storeDone[s.id]?"ready":(Object.values(S.packed[s.id]||{}).some(Boolean)?"packing":"");
   const stLbl={ready:"✓ Ready · Lista",packing:"Packing · Empacando","":""};
+  const per=wallMode?4:S.stores.length, pages=Math.ceil(S.stores.length/per), pg=wallPage%pages, shown=S.stores.slice(pg*per,pg*per+per);
   el.innerHTML=head(t("wallH"),t("wallS")+" "+t("wallLink"),`<button class="btn" id="fsw">${t("fs")}</button>`)+`
   <div class="wall" id="wallScreen">
-   <div class="wall-top"><div class="wall-brand">Gourmet Donuts</div><div class="wall-title">STORES · TIENDAS <span>· TODAY ${dl[td].toUpperCase()}</span></div><div class="wall-clock" id="tvClock">${now()}</div></div>
+   <div class="wall-top"><div class="wall-brand">Gourmet Donuts</div><div class="wall-title">STORES · TIENDAS <span>· TODAY ${dl[td].toUpperCase()}${pages>1?` · ${pg+1}/${pages}`:""}</span></div><div class="wall-clock" id="tvClock">${now()}</div></div>
    <div class="wall-legend"><span><i class="lg-td"></i>Today · Hoy</span><span><i class="lg-chg"></i>Changed · Cambió</span><span><i class="lg-ok"></i>Packed · Lista</span></div>
-   <div class="sheets">${S.stores.map(s=>{const x=st(s);return `<section class="sheet ${x}"><header><span><b>${esc(s.name)}</b><small>${stLbl[x]}</small></span><em>${fmt(storeTotal(s.id))}</em></header>
+   <div class="sheets">${shown.map(s=>{const x=st(s);return `<section class="sheet ${x}"><header><span><b>${esc(s.name)}</b><small>${stLbl[x]}</small></span><em>${fmt(storeTotal(s.id))}</em></header>
      <table><thead><tr><th>Donuts</th>${dl.map((d,k)=>`<th class="${k===td?"td":""}">${d.slice(0,2)}</th>`).join("")}</tr></thead>
      <tbody>${its.map(i=>`<tr><th><span class="nmw">${dn(i)}<span>${esc(i.en)}</span></span></th>${dates.map((d,k)=>{const v=eff(s.id,i.id,d);const c=k===td?chg.has(s.id+"|"+i.id):S.exc[d]?.[s.id]?.[i.id]!=null;return `<td class="${k===td?"td":""}${c?" chg":""}">${v||"·"}</td>`}).join("")}</tr>`).join("")}</tbody></table></section>`}).join("")}</div>
   </div>`;
   on("fsw",()=>{try{const p=document.getElementById("wallScreen").requestFullscreen?.();p&&p.catch(()=>{})}catch(e){}});
 };
 V.kitchen=el=>{
-  const list=kList(), ord={extra:0,todo:1,done:2};list.sort((a,b)=>ord[a.st]-ord[b.st]);
-  const made=list.filter(x=>x.st==="done").length, g=grand(), n=list.length, cols=n<=8?4:n<=20?5:6, dens=n<=10?"":n<=20?"d2":n<=24?"d3":"d4";
+  const pm=S.prodMode||"day", wk=pm==="week", list=kList(pm), ord={extra:0,todo:1,done:2};list.sort((a,b)=>ord[a.st]-ord[b.st]);
+  const made=list.filter(x=>x.st==="done").length, g=wk?list.reduce((a,x)=>a+x.tot,0):grand(), n=list.length, cols=n<=8?4:n<=20?5:6, dens=n<=10?"":n<=20?"d2":n<=24?"d3":"d4";
   const st=s=>S.storeDone[s.id]?"ready":(Object.values(S.packed[s.id]||{}).some(Boolean)?"packing":"pending");
   const ch=todaysLog().slice(0,2);
-  el.innerHTML=head(t("kitchenH"),t("kitchenS")+" "+t("tvLink"),`<button class="btn gold" id="play2">${simTimer?t("stop"):t("play")}</button><button class="btn" id="fs">${t("fs")}</button>`)+`
+  el.innerHTML=head(t("kitchenH"),t("kitchenS")+" "+t("tvLink"),`<div class="seg" role="group" aria-label="${t("pmLbl")}"><button data-pm="day" aria-pressed="${!wk}">${t("pmDay")}</button><button data-pm="week" aria-pressed="${wk}">${t("pmWeek")}</button></div><button class="btn gold" id="play2">${simTimer?t("stop"):t("play")}</button><button class="btn" id="fs">${t("fs")}</button>`)+`
   <div class="tv" id="tvScreen"><div class="tv-in">
-   <div class="tv-top"><div class="tv-brand">Gourmet Donuts</div><div class="tv-title">TO MAKE <span>· POR HACER</span></div><div class="tv-clock" id="tvClock">${now()}</div></div>
+   <div class="tv-top"><div class="tv-brand">Gourmet Donuts</div><div class="tv-title">${wk?"THIS WEEK <span>· ESTA SEMANA</span>":"TO MAKE TODAY <span>· POR HACER HOY</span>"}</div><div class="tv-clock" id="tvClock">${now()}</div></div>
    <div class="tv-grid ${dens}" style="grid-template-columns:repeat(${cols},minmax(0,1fr))">${n?list.map(x=>{const i=x.i,cls=x.st==="done"?"ok":x.st==="extra"?"ex":"";
      const qv=x.st==="extra"?"+"+fmt(x.tot-x.made):fmt(x.tot);
      const lab=x.st==="done"?(x.made>x.tot?`✓ DONE · ${x.made-x.tot} EXTRA · SOBRAN`:"✓ DONE · HECHO"):x.st==="extra"?"★ NEW · NUEVO":"TO MAKE · POR HACER";
      return `<button class="tv-card ${cls}" data-i="${i.id}" aria-pressed="${x.st==="done"}">${dn(i)}<div class="tv-nm">${esc(i.en)}<span>${esc(i.es)}</span></div><div class="tv-q">${qv}</div><div class="tv-st">${lab}</div></button>`}).join(""):`<div class="tv-empty">Waiting for orders · Esperando pedidos</div>`}</div>
    <aside class="tv-side">
-    <div class="tv-box"><div class="tv-lbl">Today · Hoy</div><div class="tv-big">${fmt(g)}</div><div class="tv-small">Made · Hecho ${made}/${n} | ${Math.ceil(g/24)} trays · bandejas</div><div class="tv-bar"><i style="width:${n?made/n*100:0}%"></i></div></div>
+    <div class="tv-box"><div class="tv-lbl">${wk?"Next 7 days · 7 días":"Today · Hoy"}</div><div class="tv-big">${fmt(g)}</div><div class="tv-small">Made · Hecho ${made}/${n} | ${Math.ceil(g/24)} trays · bandejas</div><div class="tv-bar"><i style="width:${n?made/n*100:0}%"></i></div></div>
     <div class="tv-box"><div class="tv-lbl">Changes · Cambios</div>${ch.length?ch.map(e=>{const i=item(e.i),s=store(e.s);if(!i||!s)return "";
       return `<button class="tv-chg ${e.seen?"":"new"}" data-seen="${e.id}">${signed(e.to-e.from)} ${esc(i.en)} · ${esc(s.name)}<small>${e.at} · ${e.seen?"✓ Seen · Visto":"Tap to confirm · Toca para confirmar"}</small></button>`}).join(""):`<div class="tv-small" style="margin-top:.5cqw">None yet · Ninguno</div>`}</div>
     <div class="tv-box tv-stores"><div class="tv-lbl">Stores · Tiendas ${doneCount()}/${allStores().length}</div>
      <div class="tv-sg">${allStores().map(s=>`<div class="tv-s ${st(s)}"><i></i><span>${esc(s.name)}</span></div>`).join("")}</div>
      <div class="tv-legend"><span class="ready"><i></i>Ready · Lista</span><span class="packing"><i></i>Packing · Empacando</span><span><i></i>Waiting · Espera</span></div></div>
-   </aside></div></div><p class="note">${t("note")}</p>`;
-  el.querySelectorAll(".tv-card").forEach(b=>b.onclick=()=>{const x=list.find(y=>y.i.id===b.dataset.i);if(x){S.produced[x.i.id]=x.st==="done"?0:x.tot;render()}});
+   </aside></div></div><p class="note">${wk?t("pmWeekNote"):t("pmDayNote")}</p>`;
+  el.querySelectorAll(".tv-card").forEach(b=>b.onclick=()=>{const x=list.find(y=>y.i.id===b.dataset.i);if(x){if(wk){S.producedW=S.producedW||{};S.producedW[x.i.id]=x.st==="done"?0:x.tot}else S.produced[x.i.id]=x.st==="done"?0:x.tot;render()}});
+  el.querySelectorAll("[data-pm]").forEach(b=>b.onclick=()=>{S.prodMode=b.dataset.pm;render()});
   el.querySelectorAll("[data-seen]").forEach(b=>b.onclick=()=>{const e=S.log.find(y=>y.id==b.dataset.seen);if(e){e.seen=true;render()}});
   on("fs",()=>{try{const p=document.getElementById("tvScreen").requestFullscreen?.();p&&p.catch(()=>{})}catch(e){}});
   on("play2",togglePlay);
@@ -937,6 +956,30 @@ V.demo=el=>{
   on("reset",()=>{stopPlay();try{localStorage.removeItem(KEY)}catch(e){}seed();lastLog=S.log[0]?.id;draft=null;view="demo";toast(t("resetDone"));render()});
 };
 
+
+const EQ=[
+ {ph:1,rows:[
+  ["tv",{en:"Kitchen TV · Production",pt:"TV da cozinha · Produção",es:"TV de cocina · Producción"},{en:"55–65\" TV + streaming stick + wall mount",pt:"TV 55–65\" + stick de streaming + suporte de parede",es:"TV 55–65\" + stick de streaming + soporte"},{en:"Bakers and fryers",pt:"Padeiros e fritura",es:"Panaderos y freidores"},"1","$450–800"],
+  ["tv",{en:"Packing TV · Store sheets",pt:"TV da separação · Folhas das lojas",es:"TV de empaque · Hojas de tiendas"},{en:"55–65\" TV + streaming stick + wall mount",pt:"TV 55–65\" + stick de streaming + suporte de parede",es:"TV 55–65\" + stick de streaming + soporte"},{en:"Packing team, Josy at a glance",pt:"Equipe de separação; Josy de relance",es:"Equipo de empaque; Josy de un vistazo"},"1","$450–800"],
+  ["tab",{en:"Kitchen tablet",pt:"Tablet da cozinha",es:"Tableta de cocina"},{en:"10–11\" tablet + case + stand",pt:"Tablet 10–11\" + capa + suporte",es:"Tableta 10–11\" + funda + soporte"},{en:"Kitchen lead marks batches done",pt:"Líder da cozinha marca os lotes prontos",es:"Líder de cocina marca lotes hechos"},"1","$200–350"],
+  ["tab",{en:"Packing tablet",pt:"Tablet da separação",es:"Tableta de empaque"},{en:"10–11\" tablet + counter stand",pt:"Tablet 10–11\" + suporte de bancada",es:"Tableta 10–11\" + soporte de mesa"},{en:"Packing checks each box",pt:"Separação confere cada caixa",es:"Empaque revisa cada caja"},"1–2","$200–350"],
+  ["pc",{en:"Office",pt:"Escritório",es:"Oficina"},{en:"Josy’s own phone or computer",pt:"Celular ou computador que a Josy já usa",es:"Celular o computadora de Josy"},{en:"Josy pastes manager messages",pt:"Josy cola as mensagens dos gerentes",es:"Josy pega los mensajes"},"—","$0"],
+  ["wifi",{en:"Wi-Fi in the kitchen",pt:"Wi-Fi na cozinha",es:"Wi-Fi en la cocina"},{en:"Existing router, or one mesh extender",pt:"Roteador atual ou um repetidor mesh",es:"Router actual o un repetidor mesh"},{en:"All screens stay live",pt:"Todas as telas ao vivo",es:"Todas las pantallas en vivo"},"0–1","$0–150"]]},
+ {ph:2,rows:[
+  ["ph",{en:"Store managers",pt:"Gerentes das lojas",es:"Gerentes de tienda"},{en:"Their own phones (a link per store, no app)",pt:"Celular próprio (um link por loja, sem app)",es:"Su propio celular (un enlace por tienda, sin app)"},{en:"Request changes, closing report",pt:"Pedem mudanças e fazem o fechamento",es:"Piden cambios y cierre"},"12","$0"],
+  ["ph",{en:"Owner and drivers",pt:"Dono e motoristas",es:"Dueño y choferes"},{en:"Their own phones",pt:"Celular próprio",es:"Su propio celular"},{en:"Dashboard, delivery check-in",pt:"Painel e confirmação de entrega",es:"Panel y confirmación de entrega"},"—","$0"]]},
+ {ph:3,rows:[["pc",{en:"No new equipment",pt:"Nenhum equipamento novo",es:"Ningún equipo nuevo"},{en:"Uses the data from phases 1 and 2",pt:"Usa os dados das fases 1 e 2",es:"Usa los datos de las fases 1 y 2"},{en:"Owner and Josy",pt:"Dono e Josy",es:"Dueño y Josy"},"—","$0"]]},
+ {ph:4,rows:[
+  ["pos",{en:"Point of sale",pt:"Sistema de caixa",es:"Sistema de caja"},{en:"Access to Square, Toast or Clover (no hardware)",pt:"Acesso ao Square, Toast ou Clover (sem hardware)",es:"Acceso a Square, Toast o Clover (sin hardware)"},{en:"Sales flow in on their own",pt:"Vendas entram sozinhas",es:"Las ventas entran solas"},"—","[POS plan]"],
+  ["ph",{en:"WhatsApp Business",pt:"WhatsApp Business",es:"WhatsApp Business"},{en:"Business number with API access",pt:"Número comercial com acesso à API",es:"Número comercial con API"},{en:"Messages read automatically",pt:"Mensagens lidas automaticamente",es:"Mensajes leídos automáticamente"},"1","[per message]"]]}
+];
+V.equip=el=>{
+  el.innerHTML=head(t("eqH"),t("eqS"))+`<div class="eq">${EQ.map(g=>`<section class="panel"><h2><span class="pill ${g.ph===1?"ok":""}">${t("p"+g.ph)}</span></h2>
+   <div class="scroll" style="border:0"><table class="lt"><thead><tr><th>${t("eqWhere")}</th><th>${t("eqWhat")}</th><th>${t("eqWho")}</th><th class="n">${t("eqQty")}</th><th class="n">${t("eqCost")}</th></tr></thead>
+   <tbody>${g.rows.map(r=>`<tr><td><b>${esc(nm(r[1]))}</b></td><td>${esc(nm(r[2]))}</td><td>${esc(nm(r[3]))}</td><td class="n">${r[4]}</td><td class="n">${r[5]}</td></tr>`).join("")}</tbody></table></div></section>`).join("")}</div>
+   <div class="panel" style="margin-top:14px"><h2>${t("eqTvH")}</h2><p class="sub" style="margin:0">${t("eqTvS")}</p></div>
+   <p class="note">${t("eqNote")}</p>`;
+};
 /* ---------- play the morning: makes items, packs stores, delivers ---------- */
 function step(){
   const x=kList().find(y=>y.st!=="done");
@@ -964,10 +1007,11 @@ function render(remote){
   if(top&&top.id!==lastLog&&affToday(top)&&(tvMode||wallMode||view==="kitchen"||view==="wall"))beep();
   lastLog=top?.id;
   const p=phaseOf(view)||1;
-  document.getElementById("phases").innerHTML=[1,2,3,4].map(n=>`<button class="ph" data-p="${n}" aria-pressed="${view!=="demo"&&n===p}"><b>${n}</b>${t("p"+n)}</button>`).join("");
-  document.getElementById("tabs").innerHTML=view==="demo"?"":PHASES[p].map(v=>`<button class="tab" role="tab" data-v="${v}" aria-selected="${v===view}">${t("v_"+v)}</button>`).join("");
+  const solo=view==="demo"||view==="equip";
+  document.getElementById("phases").innerHTML=[1,2,3,4].map(n=>`<button class="ph" data-p="${n}" aria-pressed="${!solo&&n===p}"><b>${n}</b>${t("p"+n)}</button>`).join("")+`<button class="ph" data-eq="1" aria-pressed="${view==="equip"}">${t("v_equip")}</button>`;
+  document.getElementById("tabs").innerHTML=solo?"":PHASES[p].map(v=>`<button class="tab" role="tab" data-v="${v}" aria-selected="${v===view}">${t("v_"+v)}</button>`).join("");
   const db=document.getElementById("demoBtn");db.textContent=t("demo");db.setAttribute("aria-pressed",view==="demo");db.onclick=()=>{view="demo";render();window.scrollTo(0,0)};
-  document.querySelectorAll(".ph").forEach(b=>b.onclick=()=>{view=PHASES[b.dataset.p][0];render();window.scrollTo(0,0)});
+  document.querySelectorAll(".ph").forEach(b=>b.onclick=()=>{view=b.dataset.eq?"equip":PHASES[b.dataset.p][0];render();window.scrollTo(0,0)});
   document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{view=b.dataset.v;render()});
   document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.l===lang));
   document.getElementById("dateLbl").textContent=new Date().toLocaleDateString(LOC[lang],{weekday:"short",month:"2-digit",day:"2-digit"});
@@ -977,6 +1021,7 @@ function render(remote){
   if(!remote)save();
 }
 document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>{lang=b.dataset.l;try{localStorage.setItem("gd-lang",lang)}catch(e){}render()});
+if(wallMode)setInterval(()=>{wallPage++;render(true)},15000);
 setInterval(()=>{const c=document.getElementById("tvClock");if(c)c.textContent=now()},15000);
 render();
 </script>
