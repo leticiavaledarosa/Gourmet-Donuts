@@ -1,16 +1,37 @@
-# Kitchen OS · Gourmet Donuts (prototype)
+# Kitchen OS · Interactive demo
 
-Clickable prototype in English / Português / Español, organized in 4 phases:
+Production ordering and control for a 12-store donut operation with one central kitchen.
 
-1. Operations – Orders (weekly grid per store + paste a manager's WhatsApp message), Kitchen TV with live change alerts, Packing by store
-2. Control – Owner dashboard, Manager links (store requests, office approves), Closing report, Deliveries
-3. Intelligence – Suggested orders, Holiday plans, Ingredients, Margins
-4. Integration – Catering, Registers (POS)
+**Live demo:** open `demo.html` from this repository's GitHub Pages link.
 
-How orders work: each store has a standing weekly grid (like the printed sheet on the kitchen wall).
-Changes come in during the day, for one day only or from now on, and show up on the kitchen TV
-(in gold, with a sound) and reopen the store's packing card. Open the page with `#tv` at the end on the kitchen TV.
+## How to use
 
-Stores and items from gourmetdonuts.com. Quantities, prices and recipes are examples. Data stays in the browser.
+1. Open the link on a computer (phones work too).
+2. Pick a language in the top bar: **EN · PT · ES**.
+3. Click **Play demo**. It runs by itself in about 4 minutes.
+4. Control the pace in the pink bar: **1× · 1.5× · 2×**, **Pause**, **Next**. Keys: Space pauses, Right Arrow skips ahead.
+5. Explore on your own with the screens in the top bar. Store PINs: **0101** to **1212** (Store 03 = **0303**).
 
-Prototype by BI Insights – Leticia Vale da Rosa.
+## What the demo covers
+
+**Phase 1 · Orders**
+- Store access by PIN and weekly order (flavors × days)
+- Last-minute change requests
+- Manager approval and release to the kitchen
+- Kitchen screen with totals per flavor for all stores
+- Packing checklist, dispatch and delivery confirmation
+
+**Phase 2 · Control**
+- Overview: produced vs planned, deliveries, on-time rate, alerts
+- End-of-day store closing with automatic sold-out times
+- Live delivery tracking
+- Margin and ranking by product and by store
+
+## Notes
+
+- All data is sample data. Nothing is saved, and reloading the page starts over.
+- Single self-contained HTML file: no installation or build step.
+
+---
+
+Powered by BI Insights
