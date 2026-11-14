@@ -1,0 +1,524 @@
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Gourmet Donuts</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,700&family=Pacifico&display=swap">
+<style>
+/* Clean, photo-led donut shop in six pages (hash routes): white page, one strong pink, chocolate type,
+   pastel blocks for menu categories. All editable content lives in the DATA block of the script. */
+:root{
+  --white:#ffffff; --cream:#FFF6E9; --choc:#3B1F14; --choc-2:#2A150D; --pink:#E83E8C; --pink-dk:#C92D74; --pink-soft:#FDE3EE;
+  --gold:#D4A056; --muted:#6E5A50; --line:#EFE3D3;
+  --p-pink:#FDE3EE; --p-gold:#FBEBCF; --p-blue:#E2EEFB; --p-lilac:#EDE4FA; --p-mint:#DFF3EA;
+  --head:"Montserrat",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --script:"Pacifico","Brush Script MT",cursive;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--white);color:var(--choc);font-family:var(--head);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+p{margin:0}
+h1,h2,h3{margin:0;font-family:var(--head);font-weight:900;letter-spacing:-.02em;line-height:1.08;text-wrap:balance}
+:focus-visible{outline:3px solid var(--pink);outline-offset:3px}
+.gut{padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1140px;margin:0 auto}
+.btn{display:inline-flex;align-items:center;gap:8px;font:700 15px var(--head);padding:13px 24px;border-radius:8px;border:2px solid transparent;transition:background .15s,color .15s,border-color .15s;cursor:pointer}
+.btn.pink{background:var(--pink);color:#fff}.btn.pink:hover{background:var(--pink-dk)}
+.btn.line{border-color:var(--choc);color:var(--choc);background:transparent}.btn.line:hover{background:var(--choc);color:#fff}
+.btn.white{background:#fff;color:var(--pink-dk)}.btn.white:hover{background:var(--choc);color:#fff}
+.kicker{display:block;font-weight:700;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--pink-dk);margin-bottom:12px}
+.lead{color:var(--muted);font-size:17px;margin-top:14px;max-width:60ch}
+mark.fill{background:#FFF1B8;color:var(--choc);border-radius:4px;padding:0 4px;font-weight:600}
+.chip{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:4px 9px;border-radius:999px;background:var(--pink);color:#fff;vertical-align:middle}
+.chip.ex{background:transparent;color:var(--muted);border:1.5px dashed #c9b6a6}
+
+/* demo notice */
+.demo{background:#FFF1B8;color:var(--choc);font-size:13.5px;font-weight:600;text-align:center;padding-block:8px;border-bottom:1px solid #F0DC8A}
+.demo b{font-weight:800}
+/* header */
+header.head{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:rgba(255,255,255,.97);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:31;background:#fff}
+header .wrap{display:flex;align-items:center;gap:22px;padding-block:10px}
+.brand img{height:52px;width:auto}
+nav.main{margin-left:auto;display:flex;gap:4px;font-weight:600;font-size:15px}
+nav.main a{padding:8px 12px;border-radius:8px}
+nav.main a:hover{color:var(--pink-dk)}
+nav.main a[aria-current="page"]{background:var(--pink-soft);color:var(--pink-dk)}
+.lang{display:flex;gap:2px}
+.lang button{font:700 13px var(--head);background:none;border:1.5px solid transparent;border-radius:999px;padding:5px 9px;color:var(--muted);cursor:pointer}
+.lang button[aria-pressed="true"]{border-color:var(--choc);color:var(--choc)}
+#burger{display:none;background:none;border:2px solid var(--choc);border-radius:8px;padding:7px 12px;font:700 14px var(--head);color:var(--choc);cursor:pointer}
+#mnav{display:none;border-bottom:1px solid var(--line);background:#fff}
+#mnav a{display:block;padding:12px 0;font-weight:600;border-bottom:1px solid var(--line)}
+#mnav a:last-child{border-bottom:0}
+#mnav a[aria-current="page"]{color:var(--pink-dk)}
+@media (max-width:980px){nav.main{display:none}#burger{display:inline-block}.lang{margin-left:auto}body.open #mnav{display:block}.brand img{height:44px}}
+
+/* page header band (inner pages) */
+.phead{background:var(--cream);padding-block:clamp(40px,6vw,64px)}
+.phead h1{font-size:clamp(36px,5.4vw,58px)}
+
+/* home hero */
+.hero{position:relative;min-height:clamp(360px,50vw,520px);display:flex;align-items:center;overflow:hidden;background:var(--choc)}
+.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(42,21,13,.84) 0%,rgba(42,21,13,.5) 52%,rgba(42,21,13,.05) 100%)}
+.hero .wrap{position:relative;z-index:1;width:100%;padding-block:52px}
+.hero .txt{max-width:560px;color:#fff}
+.hero h1{font-size:clamp(40px,6vw,72px);color:#fff}
+.hero h1 span{display:block;font-family:var(--script);font-weight:400;letter-spacing:0;color:#ffb3d1;font-size:.6em;line-height:1.35;margin-top:6px}
+.hero p{margin-top:16px;font-size:18px;color:rgba(255,255,255,.88);max-width:44ch}
+.hero .ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
+.hero .btn.line{border-color:#fff;color:#fff}.hero .btn.line:hover{background:#fff;color:var(--choc)}
+
+section{padding-block:clamp(52px,7vw,88px)}
+.alt{background:var(--cream)}
+.sec-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 24px;margin-bottom:clamp(24px,3.5vw,38px)}
+.sec-head>div{min-width:0}
+.sec-head h2{font-size:clamp(30px,4.2vw,46px)}
+.sec-head.center{display:block;text-align:center;max-width:680px;margin-inline:auto}
+.more-link{font-weight:700;color:var(--pink-dk);white-space:nowrap}
+
+/* news cards (what's new) */
+.news{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.ncard{background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 2px 0 rgba(59,31,20,.04),0 14px 34px rgba(59,31,20,.08);display:flex;flex-direction:column}
+.ncard .ph{position:relative;aspect-ratio:4/3;background:var(--cream)}
+.ncard .ph img{width:100%;height:100%;object-fit:cover}
+.ncard .ph .chip{position:absolute;top:14px;left:14px}
+.ncard .tx{padding:18px 20px 22px;display:flex;flex-direction:column;gap:6px;flex:1}
+.ncard h3{font-size:21px;font-weight:800;letter-spacing:-.01em}
+.ncard p{color:var(--muted);font-size:15px}
+.ncard .when{margin-top:auto;padding-top:8px;font-size:13px;font-weight:700;color:var(--pink-dk)}
+@media (max-width:900px){.news{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.news{grid-template-columns:1fr}}
+
+/* split + round photo */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,6vw,80px);align-items:center}
+.split>div{min-width:0}
+.split h2{font-size:clamp(30px,4.2vw,46px)}
+.split p{color:var(--muted);margin-top:14px;font-size:17px}
+.split p b{color:var(--choc)}
+.split .ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
+.round{position:relative;width:min(420px,100%);aspect-ratio:1;margin:0 auto}
+.round::before{content:"";position:absolute;inset:0;border-radius:50%;border:4px dotted var(--pink);opacity:.45}
+.round::after{content:"";position:absolute;inset:5%;border-radius:50%;background:var(--pink-soft)}
+.round img{position:absolute;z-index:1;inset:8%;width:84%;height:84%;object-fit:cover;border-radius:50%;border:8px solid #fff;box-shadow:0 18px 44px rgba(59,31,20,.16)}
+.split.rev .media{order:-1}
+@media (max-width:820px){.split{grid-template-columns:1fr}.split.rev .media{order:0}.round{width:min(330px,86%)}}
+
+/* quick links on home */
+.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.qk{border-radius:20px;padding:22px;display:flex;flex-direction:column;gap:6px;min-height:150px;transition:transform .15s}
+.qk:hover{transform:translateY(-3px)}
+.qk b{font-family:var(--script);font-weight:400;font-size:28px;line-height:1.15}
+.qk span{color:var(--muted);font-size:14.5px}
+.qk em{margin-top:auto;font-style:normal;font-weight:700;font-size:14px;color:var(--choc)}
+@media (max-width:860px){.quick{grid-template-columns:1fr 1fr}}
+@media (max-width:460px){.quick{grid-template-columns:1fr}}
+
+/* stats + steps */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:30px}
+.stat{background:#fff;border-radius:18px;padding:18px 20px;box-shadow:0 10px 26px rgba(59,31,20,.06);border:1px solid var(--line)}
+.stat b{display:block;font-size:38px;font-weight:900;letter-spacing:-.03em;line-height:1.05;color:var(--pink-dk)}
+.stat span{color:var(--muted);font-size:14px}
+@media (max-width:560px){.stats{grid-template-columns:1fr}}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;counter-reset:s}
+.stepc{background:#fff;border-radius:20px;padding:24px;box-shadow:0 10px 26px rgba(59,31,20,.06)}
+.stepc::before{counter-increment:s;content:counter(s);display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:var(--pink);color:#fff;font-weight:900;margin-bottom:12px}
+.stepc h3{font-size:19px;font-weight:800}
+.stepc p{color:var(--muted);font-size:15px;margin-top:6px}
+@media (max-width:820px){.steps{grid-template-columns:1fr}}
+
+/* menu */
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px}
+.filters button{font:600 14px var(--head);background:#fff;color:var(--choc);border:1.5px solid var(--line);border-radius:999px;padding:9px 18px;cursor:pointer}
+.filters button:hover{border-color:var(--choc)}
+.filters button[aria-pressed="true"]{background:var(--choc);border-color:var(--choc);color:#fff}
+.panels{display:grid;gap:22px}
+.panel{border-radius:24px;padding:clamp(20px,3vw,32px)}
+.panel h3{font-family:var(--script);font-weight:400;font-size:clamp(28px,3.4vw,38px);letter-spacing:0;line-height:1.15;margin-bottom:6px}
+.panel .sub{color:var(--muted);font-size:14.5px;margin-bottom:18px}
+.bg-pink{background:var(--p-pink)}.bg-pink h3{color:var(--pink-dk)}
+.bg-gold{background:var(--p-gold)}.bg-gold h3{color:#A86A1E}
+.bg-blue{background:var(--p-blue)}.bg-blue h3{color:#2F5F98}
+.bg-lilac{background:var(--p-lilac)}.bg-lilac h3{color:#6B48A8}
+.bg-mint{background:var(--p-mint)}.bg-mint h3{color:#22785A}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:20px 14px}
+.pgrid figure{margin:0;text-align:center}
+.pgrid .im{width:100%;max-width:140px;aspect-ratio:1;border-radius:50%;margin:0 auto 10px;border:5px solid #fff;box-shadow:0 8px 20px rgba(59,31,20,.14);overflow:hidden;background:#fff;display:grid;place-items:center}
+.pgrid .im img{width:100%;height:100%;object-fit:cover}
+.pgrid .im i{font-style:normal;font-weight:900;font-size:26px;color:var(--pink);letter-spacing:.02em}
+.pgrid figcaption{font-weight:800;font-size:15px;line-height:1.25}
+.pgrid small{display:block;font-weight:500;font-size:12.5px;color:var(--muted);margin-top:2px}
+.deals{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+.deal{background:#fff;border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:6px;box-shadow:0 8px 22px rgba(59,31,20,.07)}
+.deal .top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.deal h4{margin:0;font-size:18px;font-weight:800;letter-spacing:-.01em}
+.deal .pr{font-size:24px;font-weight:900;color:var(--pink-dk);white-space:nowrap;letter-spacing:-.02em}
+.deal p{color:var(--muted);font-size:14.5px}
+.deal .when{font-size:13px;font-weight:700;color:var(--choc);margin-top:auto;padding-top:6px}
+.drinks{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.drinks div{background:#fff;border-radius:16px;padding:16px 18px;color:var(--muted);font-size:15px}
+.drinks b{display:block;color:var(--choc);font-weight:800;font-size:13px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:4px}
+@media (max-width:700px){.drinks{grid-template-columns:1fr}}
+
+/* shops */
+.shopgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:24px;align-items:start}
+.slist{display:grid;gap:10px;max-height:820px;overflow:auto;padding:4px 6px 4px 2px}
+.sitem{display:flex;gap:14px;align-items:center;text-align:left;width:100%;background:#fff;border:1.5px solid var(--line);border-radius:16px;padding:10px;cursor:pointer;font:inherit;color:inherit}
+.sitem:hover{border-color:var(--pink)}
+.sitem[aria-pressed="true"]{border-color:var(--pink);background:var(--pink-soft)}
+.sitem .th{width:64px;height:64px;border-radius:12px;flex:none;overflow:hidden;background:var(--cream);display:grid;place-items:center}
+.sitem .th img{width:100%;height:100%;object-fit:cover}
+.sitem .th img.lg{width:46px;height:auto;object-fit:contain}
+.sitem b{display:block;font-size:16px;font-weight:800}
+.sitem span span{display:block;color:var(--muted);font-size:13.5px;line-height:1.4}
+.sdetail{position:sticky;top:90px;background:#fff;border-radius:22px;overflow:hidden;box-shadow:0 14px 40px rgba(59,31,20,.1)}
+.sdetail .photo{aspect-ratio:16/8;background:var(--cream);position:relative}
+.sdetail .photo>img{width:100%;height:100%;object-fit:cover}
+.noimg{position:absolute;inset:0;display:grid;place-items:center;text-align:center;background:radial-gradient(circle,rgba(232,62,140,.18) 0 4px,transparent 5px) 0 0/26px 26px,var(--cream);color:var(--muted);font-size:14px;font-weight:600;padding:20px}
+.noimg img{width:100px;height:auto;margin:0 auto 8px}
+.sdetail .info{padding:20px 22px 22px;display:grid;grid-template-columns:1fr 1fr;gap:16px 18px}
+.sdetail h3{grid-column:1/-1;font-size:26px;font-weight:900}
+.sdetail .lbl{font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--pink-dk);margin-bottom:4px}
+.sdetail table{border-collapse:collapse;font-size:14.5px;width:100%}
+.sdetail td{padding:2px 0}.sdetail td:last-child{text-align:right;font-variant-numeric:tabular-nums}
+.sdetail .acts{grid-column:1/-1;display:flex;gap:10px;flex-wrap:wrap}
+.map{position:relative;aspect-ratio:16/10;background:var(--p-blue)}
+.map iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.map .fallback{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:#2F5F98;font-weight:700;padding:20px;background:repeating-linear-gradient(0deg,transparent 0 38px,rgba(47,95,152,.08) 38px 40px),repeating-linear-gradient(90deg,transparent 0 38px,rgba(47,95,152,.08) 38px 40px),var(--p-blue)}
+@media (max-width:900px){.shopgrid{grid-template-columns:1fr}.sdetail{position:static;order:-1}.slist{max-height:none}}
+@media (max-width:520px){.sdetail .info{grid-template-columns:1fr}}
+
+/* catering */
+.band{background:var(--pink);color:#fff;text-align:center;border-radius:28px;padding:clamp(34px,5vw,56px) clamp(20px,4vw,48px)}
+.band h2{font-size:clamp(30px,4.4vw,46px);color:#fff}
+.band p{margin:12px auto 0;max-width:52ch;color:rgba(255,255,255,.92);font-size:17px}
+.sizes{display:flex;justify-content:center;gap:clamp(18px,5vw,56px);margin-top:28px;flex-wrap:wrap}
+.sizes div{font-weight:600;font-size:14px;letter-spacing:.06em;text-transform:uppercase}
+.sizes b{display:block;font-size:44px;font-weight:900;letter-spacing:-.02em;line-height:1;text-transform:none}
+.band .ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:26px}
+.band .btn.line{border-color:#fff;color:#fff}.band .btn.line:hover{background:#fff;color:var(--pink-dk)}
+
+/* contact */
+.cgrid{display:grid;grid-template-columns:1.2fr .8fr;gap:28px;align-items:start}
+form.card,.cinfo{background:#fff;border-radius:22px;padding:clamp(20px,3vw,30px);box-shadow:0 12px 34px rgba(59,31,20,.08);border:1px solid var(--line)}
+form.card{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+form .full{grid-column:1/-1}
+label{display:grid;gap:6px;font-weight:700;font-size:14px;min-width:0}
+input,select,textarea{font:500 15px var(--head);color:var(--choc);background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:11px 12px;width:100%}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--pink)}
+textarea{min-height:130px;resize:vertical}
+.ok{grid-column:1/-1;background:var(--p-mint);color:#22785A;border-radius:12px;padding:12px 14px;font-weight:700}
+.cinfo{display:grid;gap:18px}
+.cinfo .lbl{font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--pink-dk)}
+.cinfo p{font-weight:600}
+@media (max-width:820px){.cgrid{grid-template-columns:1fr}form.card{grid-template-columns:1fr}}
+
+/* footer */
+footer{background:var(--choc-2);color:rgba(255,246,233,.8)}
+footer .wrap{padding-block:46px 22px}
+footer .cols{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:30px}
+footer .slogan{font-family:var(--script);color:#ffb3d1;font-size:28px;line-height:1.3;margin-top:10px}
+footer h4{margin:0 0 12px;color:#fff;font-size:14px;letter-spacing:.14em;text-transform:uppercase}
+footer ul{list-style:none;margin:0;padding:0;display:grid;gap:8px;font-size:14.5px}
+footer a:hover{color:#fff}
+footer .bot{margin-top:34px;padding-top:16px;border-top:1px solid rgba(255,246,233,.12);display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;font-size:13px;color:rgba(255,246,233,.5)}
+@media (max-width:760px){footer .cols{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.qk{transition:none}}
+</style>
+
+<div class="demo gut" id="demo" role="note"></div>
+<header class="head gut">
+  <div class="wrap">
+    <a class="brand" href="#home" aria-label="Gourmet Donuts, home"><img src="img/logo.png" alt="Gourmet Donuts"></a>
+    <nav class="main" id="nav" aria-label="Main"></nav>
+    <div class="lang" id="lang" role="group" aria-label="Language"><button data-l="0">EN</button><button data-l="1">PT</button><button data-l="2">ES</button></div>
+    <button id="burger" aria-expanded="false" aria-controls="mnav">Menu</button>
+  </div>
+</header>
+<div id="mnav" class="gut"><div class="wrap" id="mnavIn"></div></div>
+<main id="app"></main>
+<footer class="gut"><div class="wrap" id="foot"></div></footer>
+
+<script>
+/* =====================================================================
+   EDITE AQUI · conteúdo do site
+   - Cada texto pode ter en / pt / es. Se faltar pt ou es, aparece o en.
+   - exemplo:true mostra um selo "exemplo" (apague quando o item for real).
+   - foto: caminho de uma imagem dentro da pasta img/.
+   ===================================================================== */
+const DATA={
+ // Novidades: aparecem no topo da página inicial
+ news:[
+  {tag:{en:'New',pt:'Novo',es:'Nuevo'},foto:'img/m/butternut.jpg',exemplo:true,
+   name:{en:'Butternut Crunch',pt:'Butternut Crunch',es:'Butternut Crunch'},
+   text:{en:'Cake donut rolled in a sweet, crunchy butternut coating.',pt:'Donut de massa de bolo coberto com uma farofa doce e crocante de butternut.',es:'Dona de pastel cubierta con un crujiente dulce de butternut.'},
+   when:{en:'Available now',pt:'Já disponível',es:'Ya disponible'}},
+  {tag:{en:'Seasonal',pt:'Sazonal',es:'De temporada'},foto:'img/m/cinnamon.jpg',exemplo:true,
+   name:{en:'Cinnamon Roll',pt:'Cinnamon Roll',es:'Cinnamon Roll'},
+   text:{en:'Baked fresh and glazed warm. A winter favorite.',pt:'Assado na hora e glaceado ainda quente. O favorito do inverno.',es:'Horneado y glaseado en caliente. El favorito del invierno.'},
+   when:{en:'Winter menu',pt:'Cardápio de inverno',es:'Menú de invierno'}},
+  {tag:{en:'Deal',pt:'Oferta',es:'Oferta'},foto:'img/f/holes.jpg',exemplo:true,
+   name:{en:'Donut holes for the office',pt:'Donut holes para o escritório',es:'Donut holes para la oficina'},
+   text:{en:'Box of 50 donut holes plus a coffee box for the team.',pt:'Caixa com 50 donut holes e uma caixa de café para a equipe.',es:'Caja de 50 donut holes y una caja de café para el equipo.'},
+   when:{en:'Every Friday',pt:'Toda sexta-feira',es:'Cada viernes'}}
+ ],
+ // Sabores do cardápio: [nome, foto (ou ''), descrição]. Sem foto aparecem as iniciais.
+ donuts:[
+  ['Rainbow Sprinkles','img/m/sprinkles.jpg',{en:'Raised, sprinkles',pt:'Fermentado, granulado',es:'Levadura, chispas'}],
+  ['Boston Cream','img/m/boston.jpg',{en:'Bavarian cream, chocolate',pt:'Creme bávaro, chocolate',es:'Crema bávara, chocolate'}],
+  ['Jelly','img/m/jelly.jpg',{en:'Filled, powdered sugar',pt:'Recheado, açúcar de confeiteiro',es:'Rellena, azúcar glas'}],
+  ['Honey Dip','img/m/honeydip.jpg',{en:'Raised, honey glaze',pt:'Fermentado, glacê de mel',es:'Levadura, glaseado de miel'}],
+  ['Double Chocolate','img/m/chocolate.jpg',{en:'Chocolate cake',pt:'Massa de chocolate',es:'Masa de chocolate'}],
+  ['Butternut','img/m/butternut.jpg',{en:'Cake, butternut crunch',pt:'Massa de bolo, crocante butternut',es:'Masa de pastel, crocante butternut'}],
+  ['Blueberry','img/m/blueberry.jpg',{en:'Cake, glazed',pt:'Massa de bolo, glaceado',es:'Masa de pastel, glaseada'}],
+  ['Eclair','img/m/eclair.jpg',{en:'Cream filled, chocolate',pt:'Recheio de creme, chocolate',es:'Rellena de crema, chocolate'}],
+  ['Apple N\' Spice','',{en:'Apple & spice',pt:'Maçã e especiarias',es:'Manzana y especias'}],
+  ['Apricot','',{en:'Filled',pt:'Recheado',es:'Rellena'}],
+  ['Bavarian Cream','',{en:'Filled',pt:'Recheado',es:'Rellena'}],
+  ['Chocolate Coconut','',{en:'Chocolate, coconut',pt:'Chocolate, coco',es:'Chocolate, coco'}],
+  ['Chocolate Frosted','',{en:'Raised, chocolate',pt:'Fermentado, chocolate',es:'Levadura, chocolate'}],
+  ['Chocolate Honey Dip','',{en:'Chocolate cake, glaze',pt:'Chocolate, glacê',es:'Chocolate, glaseado'}],
+  ['Cinnamon','',{en:'Cinnamon sugar',pt:'Açúcar e canela',es:'Azúcar y canela'}],
+  ['Coconut','',{en:'Cake, coconut',pt:'Coco',es:'Coco'}],
+  ['Lemon','',{en:'Filled',pt:'Recheado',es:'Rellena'}],
+  ['Old Fashion','',{en:'Plain cake',pt:'Massa tradicional',es:'Masa tradicional'}],
+  ['Powdered','',{en:'Powdered sugar',pt:'Açúcar de confeiteiro',es:'Azúcar glas'}],
+  ['Sugar Raised','',{en:'Raised, sugar',pt:'Fermentado, açúcar',es:'Levadura, azúcar'}],
+  ['Vanilla Cream','',{en:'Filled, powdered',pt:'Recheado, açúcar',es:'Rellena, azúcar'}],
+  ['Peanut Butter Cup','',{en:'Specialty',pt:'Especial',es:'Especial'}]
+ ],
+ bakery:[
+  ['Donut Holes','img/f/holes.jpg',{en:'Glazed, chocolate, powdered, jelly',pt:'Glaceado, chocolate, açúcar, geleia',es:'Glaseada, chocolate, azúcar, mermelada'}],
+  ['Cinnamon Roll','img/m/cinnamon.jpg',{en:'Baked, glazed',pt:'Assado, glaceado',es:'Horneado, glaseado'}],
+  ['Glazed Twist','img/m/twist.jpg',{en:'Raised dough',pt:'Massa fermentada',es:'Masa de levadura'}],
+  ['Butter Croissant','img/m/croissant.jpg',{en:'Flaky, golden',pt:'Folhado, dourado',es:'Hojaldrado, dorado'}],
+  ['Danish','img/m/danish.jpg',{en:'Fruit & cream cheese',pt:'Fruta e cream cheese',es:'Fruta y queso crema'}],
+  ['Crullers','',{en:'Glazed, plain, sugar, chocolate',pt:'Glaceado, tradicional, açúcar, chocolate',es:'Glaseado, tradicional, azúcar, chocolate'}],
+  ['Muffins','',{en:'Blueberry, banana nut, corn and more',pt:'Blueberry, banana, milho e outros',es:'Arándano, plátano, maíz y más'}]
+ ],
+ sandwiches:[
+  ['Croissant Sandwich','img/m/s_croissant.jpg',{en:'Lettuce & tomato',pt:'Alface e tomate',es:'Lechuga y tomate'}],
+  ['Bagel, Egg & Cheese','img/m/s_bagel.jpg',{en:'Everything bagel',pt:'Bagel everything',es:'Bagel everything'}],
+  ['Bacon, Egg & Cheese','img/m/s_bacon.jpg',{en:'English muffin',pt:'English muffin',es:'English muffin'}],
+  ['Ham & Cheese','img/m/s_ham.jpg',{en:'English muffin',pt:'English muffin',es:'English muffin'}],
+  ['Bagels','',{en:'10 kinds, with cream cheese',pt:'10 tipos, com cream cheese',es:'10 tipos, con queso crema'}]
+ ],
+ // Sazonais, combos e ofertas: troque quando quiser. price: '$4.99' (ou deixe '$ —')
+ seasonal:[
+  {name:{en:'Pumpkin Spice',pt:'Pumpkin Spice',es:'Pumpkin Spice'},text:{en:'Fall flavor, back for a limited time.',pt:'Sabor de outono, por tempo limitado.',es:'Sabor de otoño, por tiempo limitado.'},when:{en:'Sep – Nov',pt:'Set – Nov',es:'Sep – Nov'},exemplo:true},
+  {name:{en:'Peppermint Chocolate',pt:'Chocolate com menta',es:'Chocolate con menta'},text:{en:'Holiday donut with a chocolate glaze.',pt:'Donut de fim de ano com cobertura de chocolate.',es:'Dona navideña con glaseado de chocolate.'},when:{en:'December',pt:'Dezembro',es:'Diciembre'},exemplo:true}
+ ],
+ combos:[
+  {name:{en:'Coffee & Donut',pt:'Café e donut',es:'Café y dona'},price:'$ —',text:{en:'Any medium coffee with any classic donut.',pt:'Qualquer café médio com um donut clássico.',es:'Cualquier café mediano con una dona clásica.'},exemplo:true},
+  {name:{en:'Breakfast Combo',pt:'Combo café da manhã',es:'Combo desayuno'},price:'$ —',text:{en:'Breakfast sandwich and a medium coffee.',pt:'Sanduíche de café da manhã e café médio.',es:'Sándwich de desayuno y café mediano.'},exemplo:true},
+  {name:{en:'Family Dozen',pt:'Dúzia da família',es:'Docena familiar'},price:'$ —',text:{en:'12 donuts of your choice plus 25 donut holes.',pt:'12 donuts à escolha e 25 donut holes.',es:'12 donas a elegir y 25 donut holes.'},exemplo:true}
+ ],
+ offers:[
+  {name:{en:'Donut of the Day',pt:'Donut do dia',es:'Dona del día'},price:'$ —',text:{en:'One flavor on special every day of the week.',pt:'Um sabor em promoção a cada dia da semana.',es:'Un sabor en oferta cada día de la semana.'},when:{en:'Every day',pt:'Todo dia',es:'Cada día'},exemplo:true},
+  {name:{en:'Afternoon Iced Coffee',pt:'Café gelado da tarde',es:'Café helado de la tarde'},price:'$ —',text:{en:'Iced coffee deal in the afternoon.',pt:'Café gelado em promoção à tarde.',es:'Café helado en oferta por la tarde.'},when:{en:'2 – 4 PM',pt:'14h – 16h',es:'2 – 4 PM'},exemplo:true}
+ ],
+ // Lojas: foto (opcional), telefone e horário.
+ // horário: hours:[['Mon – Fri','5 AM – 7 PM'],['Sat – Sun','6 AM – 6 PM']]
+ shops:[
+  {name:'Leominster',addr:'636 Main Street, Leominster, MA',phone:'978.466.8880',foto:'',hours:null},
+  {name:'Leominster North',addr:'689 N Main St, Leominster, MA',phone:'978.537.0503',foto:'',hours:null},
+  {name:'Worcester',addr:'466 Lincoln St, Worcester, MA 01605',phone:'',foto:'',hours:null},
+  {name:'Rindge',addr:'462 Rte. 202, Rindge, NH 03461',phone:'',foto:'',hours:null},
+  {name:'Fitchburg',addr:'43 Airport Rd, Fitchburg, MA',phone:'978.345.9091',foto:'',hours:null},
+  {name:'Park Hill Plaza',addr:'569 Electric Ave, Fitchburg, MA 01420',phone:'978.699.3888',foto:'',hours:null},
+  {name:'Littleton',addr:'500 King Street, Littleton, MA',phone:'978.486.8883',foto:'',hours:null},
+  {name:'Townsend',addr:'210 Main St, Townsend, MA',phone:'978.486.8883',foto:'',hours:null},
+  {name:'Winchendon',addr:'110 Spring St, Winchendon, MA',phone:'978.297.9700',foto:'',hours:null},
+  {name:'West Boylston',addr:'231 W Boylston St, West Boylston, MA',phone:'774.261.8137',foto:'',hours:null},
+  {name:'Hudson',addr:'181 Main Street, Hudson, MA 01749',phone:'978.562.5818',foto:'',hours:null}
+ ],
+ contact:{phone:'978.466.8880',email:'',address:'636 Main Street, Leominster, MA',facebook:'https://www.facebook.com/gourmetdonuts/'}
+};
+/* ======================= fim do bloco editável ======================= */
+
+const T={
+ home:['Home','Início','Inicio'],about:['About','Sobre','Nosotros'],menu:['Menu','Cardápio','Menú'],shops:['Shops','Lojas','Tiendas'],catering:['Catering','Encomendas','Catering'],contact:['Contact','Contato','Contacto'],
+ heroH:['Fresh donuts, every morning.','Donuts fresquinhos, toda manhã.','Donas frescas, cada mañana.'],
+ heroP:['Hand-dipped donuts, hot coffee and breakfast sandwiches in eleven neighborhood shops across Massachusetts and New Hampshire.','Donuts banhados à mão, café quentinho e sanduíches de café da manhã em onze lojas de bairro em Massachusetts e New Hampshire.','Donas bañadas a mano, café caliente y sándwiches de desayuno en once tiendas de barrio en Massachusetts y New Hampshire.'],
+ seeMenu:['See the menu','Ver o cardápio','Ver el menú'],newK:['Fresh this season','Novidades','Novedades'],newH:["What's new at the counter","O que tem de novo no balcão","Lo nuevo en el mostrador"],
+ allMenu:['Full menu →','Cardápio completo →','Menú completo →'],ex:['example','exemplo','ejemplo'],
+ q1:['Our story, our kitchen and franchising.','Nossa história, a cozinha e as franquias.','Nuestra historia, la cocina y las franquicias.'],
+ q2:['Every flavor, seasonal treats, combos and deals.','Todos os sabores, sazonais, combos e ofertas.','Todos los sabores, de temporada, combos y ofertas.'],
+ q3:['Address, hours and map for all eleven shops.','Endereço, horário e mapa das onze lojas.','Dirección, horario y mapa de las once tiendas.'],
+ q4:['Boxes and coffee for offices and events.','Caixas e café para escritórios e eventos.','Cajas y café para oficinas y eventos.'],open:['Open →','Abrir →','Abrir →'],
+ madeH:['Made the way a donut should be.','Feitos do jeito que um donut deve ser.','Hechas como debe ser una dona.'],ourD:['Our donuts','Nossos donuts','Nuestras donas'],
+ madeP:['<b>Every morning</b> our kitchen mixes, fries and dips the day\'s donuts by hand: raised and cake, filled and frosted, glazed and sprinkled.','<b>Toda manhã</b> nossa cozinha prepara, frita e banha os donuts do dia à mão: fermentados e de massa de bolo, recheados e com cobertura, glaceados e com granulado.','<b>Cada mañana</b> nuestra cocina prepara, fríe y baña a mano las donas del día: de levadura y de pastel, rellenas y con cobertura, glaseadas y con chispas.'],
+ aboutK:['About us','Sobre nós','Sobre nosotros'],aboutH:['Good mornings start here.','Toda boa manhã começa aqui.','Las buenas mañanas empiezan aquí.'],
+ storyH:['Before the sun comes up','Antes do sol nascer','Antes de que salga el sol'],
+ storyP1:['It all started with a simple idea: a warm donut and a good cup of coffee can turn any morning around. While the town is still asleep, our kitchen is already busy mixing dough, heating the fryers and dipping the first donuts of the day.','Tudo começou com uma ideia simples: um donut quentinho e um bom café mudam qualquer manhã. Enquanto a cidade ainda dorme, a nossa cozinha já está a todo vapor, preparando a massa, aquecendo as fritadeiras e banhando os primeiros donuts do dia.','Todo empezó con una idea sencilla: una dona calientita y un buen café cambian cualquier mañana. Mientras el pueblo aún duerme, nuestra cocina ya está preparando la masa, calentando las freidoras y bañando las primeras donas del día.'],
+ storyP2:['The recipes are the same ones our customers grew up with, made by a team that knows the regulars by name and their order by heart. That is what keeps people coming back to our shops in Massachusetts and New Hampshire: fresh donuts, friendly faces and a Gourmet Day, every day.','As receitas são as mesmas com que os nossos clientes cresceram, feitas por uma equipe que conhece os fregueses pelo nome e o pedido de cor. É isso que faz as pessoas voltarem às nossas lojas em Massachusetts e New Hampshire: donuts fresquinhos, gente simpática e um Gourmet Day, todo dia.','Las recetas son las mismas con las que crecieron nuestros clientes, hechas por un equipo que conoce a los clientes de siempre por su nombre y su pedido de memoria. Eso es lo que hace que la gente vuelva a nuestras tiendas en Massachusetts y New Hampshire: donas frescas, caras amables y un Gourmet Day, todos los días.'],
+ st1:['shops','lojas','tiendas'],st2:['donut flavors','sabores de donut','sabores de dona'],st3:['states: MA & NH','estados: MA e NH','estados: MA y NH'],
+ howH:['How our kitchen works','Como funciona a nossa cozinha','Cómo funciona nuestra cocina'],
+ h1t:['Shops order the night before','As lojas pedem na véspera','Las tiendas piden la noche anterior'],h1p:['Each shop sends its order to our central kitchen, adjusted to the weather and the day of the week.','Cada loja envia o pedido para a cozinha central, ajustado ao clima e ao dia da semana.','Cada tienda envía su pedido a la cocina central, ajustado al clima y al día de la semana.'],
+ h2t:['Baked and finished by hand','Feitos e finalizados à mão','Hechas y terminadas a mano'],h2p:['Bakers make the dough, finishers fill, frost and pack every box by shop.','Os padeiros fazem a massa e a equipe de finalização recheia, cobre e embala cada caixa por loja.','Los panaderos hacen la masa y el equipo de acabado rellena, cubre y empaca cada caja por tienda.'],
+ h3t:['Delivered before sunrise','Entregues antes do amanhecer','Entregadas antes del amanecer'],h3p:['Our trucks drop fresh donuts at every shop early in the morning.','Nossos caminhões deixam os donuts fresquinhos em cada loja logo cedo.','Nuestros camiones dejan las donas frescas en cada tienda muy temprano.'],
+ frK:['Franchising','Franquias','Franquicias'],frH:['Own a Gourmet Donuts','Tenha uma Gourmet Donuts','Ten tu propio Gourmet Donuts'],
+ frP:['<mark class="fill">[How franchising works: investment, support, training, territories. To be provided by Gourmet Donuts.]</mark>','<mark class="fill">[Como funcionam as franquias: investimento, suporte, treinamento, regiões. Informação a ser enviada pela Gourmet Donuts.]</mark>','<mark class="fill">[Cómo funcionan las franquicias: inversión, apoyo, capacitación, territorios. Información a enviar por Gourmet Donuts.]</mark>'],
+ frB:['Talk to us','Fale com a gente','Habla con nosotros'],
+ menuK:['Today at the counter','Hoje no balcão','Hoy en el mostrador'],menuH:['Our menu','Nosso cardápio','Nuestro menú'],
+ fAll:['All','Tudo','Todo'],fDon:['Donuts','Donuts','Donas'],fSea:['Seasonal','Sazonais','De temporada'],fCom:['Combos','Combos','Combos'],fOff:['Deals','Ofertas','Ofertas'],fBak:['Bakery','Padaria','Panadería'],fSan:['Sandwiches','Sanduíches','Sándwiches'],fDri:['Drinks','Bebidas','Bebidas'],
+ donutsSub:['Over thirty flavors, raised and cake, filled and frosted.','Mais de trinta sabores, fermentados e de massa de bolo, recheados e com cobertura.','Más de treinta sabores, de levadura y de pastel, rellenas y con cobertura.'],
+ seaSub:['Limited-time flavors. They come and go with the seasons.','Sabores por tempo limitado. Vão e voltam com as estações.','Sabores por tiempo limitado. Van y vienen con las estaciones.'],
+ comSub:['Better together.','Melhor junto.','Mejor juntos.'],offSub:['Ask at your shop.','Pergunte na sua loja.','Pregunta en tu tienda.'],
+ bakSub:['Donut holes, rolls, pastries and muffins.','Donut holes, rolos, doces e muffins.','Donut holes, rollos, pasteles y muffins.'],sanSub:['On a bagel, croissant or English muffin.','No bagel, croissant ou English muffin.','En bagel, croissant o English muffin.'],
+ dri:[['<b>Hot</b>Hot coffee · Espresso drinks · Hot chocolate','<b>Iced</b>Iced coffee · Iced tea · ½ tea & ½ lemonade','<b>Smoothies</b>Ask your shop for today\'s flavors'],['<b>Quentes</b>Café · Bebidas com espresso · Chocolate quente','<b>Geladas</b>Café gelado · Chá gelado · ½ chá e ½ limonada','<b>Smoothies</b>Pergunte na loja os sabores do dia'],['<b>Calientes</b>Café · Bebidas con espresso · Chocolate caliente','<b>Frías</b>Café helado · Té helado · ½ té y ½ limonada','<b>Smoothies</b>Pregunta en tu tienda los sabores del día']],
+ shopsK:['Come say hi','Venha nos visitar','Ven a visitarnos'],shopsH:['Eleven shops near you','Onze lojas perto de você','Once tiendas cerca de ti'],
+ shopsP:['Pick a shop to see the address, hours and map.','Escolha uma loja para ver endereço, horário e mapa.','Elige una tienda para ver dirección, horario y mapa.'],
+ addr:['Address','Endereço','Dirección'],phone:['Phone','Telefone','Teléfono'],hours:['Hours','Horário','Horario'],
+ hoursTbd:['<mark class="fill">[to confirm]</mark>','<mark class="fill">[a confirmar]</mark>','<mark class="fill">[por confirmar]</mark>'],
+ dir:['Directions','Como chegar','Cómo llegar'],call:['Call','Ligar','Llamar'],photoSoon:['Shop photo coming soon','Foto da loja em breve','Foto de la tienda pronto'],mapFb:['Open the map →','Abrir o mapa →','Abrir el mapa →'],
+ catK:['Offices · parties · events','Escritórios · festas · eventos','Oficinas · fiestas · eventos'],catH:["Feeding a crowd? We've got you.",'Vai receber muita gente? A gente resolve.','¿Muchos invitados? Nosotros te ayudamos.'],
+ catP:['Donut boxes, donut holes and coffee for the office meeting, the school event or the family breakfast.','Caixas de donuts, donut holes e café para a reunião do escritório, o evento da escola ou o café da manhã em família.','Cajas de donas, donut holes y café para la reunión de la oficina, el evento escolar o el desayuno familiar.'],
+ sz1:['Half dozen','Meia dúzia','Media docena'],sz2:['A dozen','Uma dúzia','Una docena'],sz3:['Donut holes','Donut holes','Donut holes'],
+ orderH:['How to order','Como encomendar','Cómo pedir'],
+ o1t:['Choose your box','Escolha a caixa','Elige tu caja'],o1p:['Half dozen, dozen, donut holes or a mix, plus coffee boxes.','Meia dúzia, dúzia, donut holes ou um mix, e caixas de café.','Media docena, docena, donut holes o mezcla, y cajas de café.'],
+ o2t:['Tell us the day before','Avise um dia antes','Avísanos un día antes'],o2p:['Send a message or call your nearest shop with the date, time and quantity.','Mande uma mensagem ou ligue para a loja mais perto com data, horário e quantidade.','Envía un mensaje o llama a tu tienda más cercana con fecha, hora y cantidad.'],
+ o3t:['Pick up fresh','Retire fresquinho','Recoge fresco'],o3p:['Your order is packed and ready at the shop in the morning.','O pedido fica embalado e pronto na loja pela manhã.','Tu pedido queda empacado y listo en la tienda por la mañana.'],
+ orderB:['Request catering','Pedir encomenda','Pedir catering'],seeShops:['See the shops','Ver as lojas','Ver las tiendas'],
+ conK:["We'd love to hear from you",'Queremos ouvir você','Nos encantaría saber de ti'],conH:['Contact us','Fale com a gente','Contáctanos'],
+ fName:['Name','Nome','Nombre'],fEmail:['Email','E-mail','Correo'],fPhone:['Phone','Telefone','Teléfono'],fTopic:['Subject','Assunto','Asunto'],fMsg:['Message','Mensagem','Mensaje'],fShop:['Shop','Loja','Tienda'],any:['Any shop','Qualquer loja','Cualquier tienda'],
+ tGen:['General question','Dúvida geral','Pregunta general'],tCat:['Catering order','Encomenda','Pedido de catering'],tFr:['Franchising','Franquias','Franquicias'],tJob:['Work with us','Trabalhe conosco','Trabaja con nosotros'],
+ send:['Send message','Enviar mensagem','Enviar mensaje'],sent:['Thanks! Your message is ready. (Demo: this form still needs to be connected to an email inbox.)','Obrigado! Sua mensagem está pronta. (Demonstração: o formulário ainda precisa ser ligado a um e-mail.)','¡Gracias! Tu mensaje está listo. (Demo: el formulario aún debe conectarse a un correo.)'],
+ mainShop:['Main shop','Loja principal','Tienda principal'],follow:['Follow us','Siga a gente','Síguenos'],emailTbd:['<mark class="fill">[email to confirm]</mark>','<mark class="fill">[e-mail a confirmar]</mark>','<mark class="fill">[correo por confirmar]</mark>'],
+ foot2:['Massachusetts & New Hampshire','Massachusetts e New Hampshire','Massachusetts y New Hampshire'],
+ demo:['<b>Sample site.</b> All content, photos, prices and texts are examples for presentation.','<b>Site modelo.</b> Todo o conteúdo, fotos, preços e textos são exemplos para apresentação.','<b>Sitio de muestra.</b> Todo el contenido, fotos, precios y textos son ejemplos para presentación.'],visit:['Visit','Visite','Visita']
+};
+const PAGES=['home','about','menu','shops','catering','contact'];
+let L=0,page='home',filt='all',shopI=0,topic='gen';
+try{L=+(localStorage.getItem('gd-site-lang')||0)||0}catch(e){}
+const t=k=>(T[k]||[k])[L];
+const tx=o=>o==null?'':typeof o==='string'?o:(o[['en','pt','es'][L]]||o.en||'');
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const initials=n=>n.replace(/[^A-Za-z ]/g,'').split(' ').filter(Boolean).map(w=>w[0]).join('').slice(0,2);
+const exChip=o=>o.exemplo?` <span class="chip ex">${t('ex')}</span>`:'';
+const mapsUrl=a=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent('Gourmet Donuts '+a);
+
+function prodGrid(list){return `<div class="pgrid">${list.map(([n,f,d])=>`<figure><div class="im">${f?`<img src="${f}" alt="" loading="lazy">`:`<i>${initials(n)}</i>`}</div><figcaption>${esc(n)}<small>${esc(tx(d))}</small></figcaption></figure>`).join('')}</div>`}
+function dealGrid(list,withPrice){return `<div class="deals">${list.map(o=>`<div class="deal"><div class="top"><h4>${esc(tx(o.name))}${exChip(o)}</h4>${withPrice&&o.price?`<span class="pr">${esc(o.price)}</span>`:''}</div><p>${esc(tx(o.text))}</p>${o.when?`<span class="when">${esc(tx(o.when))}</span>`:''}</div>`).join('')}</div>`}
+
+function vHome(){return `
+<section class="hero gut" style="padding-block:0"><img src="img/f/holes.jpg" alt=""><div class="wrap"><div class="txt">
+ <h1>${t('heroH')}<span>Have a Gourmet Day!</span></h1><p>${t('heroP')}</p>
+ <div class="ctas"><a class="btn pink" href="#menu">${t('seeMenu')}</a><a class="btn line" href="#shops">${t('shops')}</a></div></div></div></section>
+<section class="gut"><div class="wrap">
+ <div class="sec-head"><div><span class="kicker">${t('newK')}</span><h2>${t('newH')}</h2></div><a class="more-link" href="#menu">${t('allMenu')}</a></div>
+ <div class="news">${DATA.news.map(n=>`<article class="ncard"><div class="ph"><img src="${n.foto}" alt="" loading="lazy"><span class="chip">${esc(tx(n.tag))}</span></div><div class="tx"><h3>${esc(tx(n.name))}${exChip(n)}</h3><p>${esc(tx(n.text))}</p><span class="when">${esc(tx(n.when))}</span></div></article>`).join('')}</div>
+</div></section>
+<section class="alt gut"><div class="wrap split">
+ <div><span class="kicker">${t('ourD')}</span><h2>${t('madeH')}</h2><p>${t('madeP')}</p><div class="ctas"><a class="btn pink" href="#menu">${t('seeMenu')}</a><a class="btn line" href="#about">${t('about')}</a></div></div>
+ <div class="media"><div class="round"><img src="img/f/donuts.jpg" alt="Assorted Gourmet Donuts"></div></div>
+</div></section>
+<section class="gut"><div class="wrap"><div class="quick">
+ <a class="qk bg-pink" href="#about"><b style="color:var(--pink-dk)">${t('about')}</b><span>${t('q1')}</span><em>${t('open')}</em></a>
+ <a class="qk bg-gold" href="#menu"><b style="color:#A86A1E">${t('menu')}</b><span>${t('q2')}</span><em>${t('open')}</em></a>
+ <a class="qk bg-blue" href="#shops"><b style="color:#2F5F98">${t('shops')}</b><span>${t('q3')}</span><em>${t('open')}</em></a>
+ <a class="qk bg-mint" href="#catering"><b style="color:#22785A">${t('catering')}</b><span>${t('q4')}</span><em>${t('open')}</em></a>
+</div></div></section>`}
+
+function vAbout(){return `
+<div class="phead gut"><div class="wrap"><span class="kicker">${t('aboutK')}</span><h1>${t('aboutH')}</h1></div></div>
+<section class="gut"><div class="wrap split">
+ <div><h2>${t('storyH')} <span class="chip ex">${t('ex')}</span></h2><p>${t('storyP1')}</p><p>${t('storyP2')}</p>
+ <div class="stats"><div class="stat"><b>11</b><span>${t('st1')}</span></div><div class="stat"><b>30+</b><span>${t('st2')}</span></div><div class="stat"><b>2</b><span>${t('st3')}</span></div></div></div>
+ <div class="media"><div class="round"><img src="img/f/cup.jpg" alt="Gourmet Donuts coffee cup with donut holes" style="object-position:center 30%"></div></div>
+</div></section>
+<section class="alt gut"><div class="wrap split rev">
+ <div><span class="kicker">${t('frK')}</span><h2>${t('frH')}</h2><p>${t('frP')}</p><div class="ctas"><a class="btn pink" href="#contact" data-topic="fr">${t('frB')}</a></div></div>
+ <div class="media"><div class="round"><img src="img/f/pastries.jpg" alt="Cinnamon roll, glazed twist and eclair"></div></div>
+</div></section>`}
+
+function vMenu(){
+ const F=[['all','fAll'],['donuts','fDon'],['seasonal','fSea'],['combos','fCom'],['offers','fOff'],['bakery','fBak'],['sandwiches','fSan'],['drinks','fDri']];
+ const show=k=>filt==='all'||filt===k;
+ let h=`<div class="phead gut"><div class="wrap"><span class="kicker">${t('menuK')}</span><h1>${t('menuH')}</h1></div></div>
+<section class="gut" style="padding-top:clamp(28px,4vw,40px)"><div class="wrap">
+ <div class="filters" role="group">${F.map(([k,l])=>`<button data-f="${k}" aria-pressed="${filt===k}">${t(l)}</button>`).join('')}</div><div class="panels">`;
+ if(show('seasonal'))h+=`<div class="panel bg-lilac"><h3>${t('fSea').toLowerCase()}</h3><p class="sub">${t('seaSub')}</p>${dealGrid(DATA.seasonal,false)}</div>`;
+ if(show('combos'))h+=`<div class="panel bg-gold"><h3>${t('fCom').toLowerCase()}</h3><p class="sub">${t('comSub')}</p>${dealGrid(DATA.combos,true)}</div>`;
+ if(show('offers'))h+=`<div class="panel bg-pink"><h3>${t('fOff').toLowerCase()}</h3><p class="sub">${t('offSub')}</p>${dealGrid(DATA.offers,true)}</div>`;
+ if(show('donuts'))h+=`<div class="panel bg-pink"><h3>${t('fDon').toLowerCase()}</h3><p class="sub">${t('donutsSub')}</p>${prodGrid(DATA.donuts)}</div>`;
+ if(show('bakery'))h+=`<div class="panel bg-gold"><h3>${t('fBak').toLowerCase()}</h3><p class="sub">${t('bakSub')}</p>${prodGrid(DATA.bakery)}</div>`;
+ if(show('sandwiches'))h+=`<div class="panel bg-blue"><h3>${t('fSan').toLowerCase()}</h3><p class="sub">${t('sanSub')}</p>${prodGrid(DATA.sandwiches)}</div>`;
+ if(show('drinks'))h+=`<div class="panel bg-mint"><h3>${t('fDri').toLowerCase()}</h3><div class="drinks">${T.dri[L].map(d=>`<div>${d}</div>`).join('')}</div></div>`;
+ return h+`</div></div></section>`}
+
+function shopDetail(){const s=DATA.shops[shopI];
+ return `<div class="photo">${s.foto?`<img src="${s.foto}" alt="${esc(s.name)} shop">`:`<div class="noimg"><div><img src="img/logo.png" alt="">${t('photoSoon')}</div></div>`}</div>
+ <div class="info"><h3>${esc(s.name)}</h3>
+  <div><div class="lbl">${t('addr')}</div>${esc(s.addr)}<div class="lbl" style="margin-top:12px">${t('phone')}</div>${s.phone?esc(s.phone):'—'}</div>
+  <div><div class="lbl">${t('hours')}</div>${s.hours?`<table>${s.hours.map(r=>`<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td></tr>`).join('')}</table>`:t('hoursTbd')}</div>
+  <div class="acts"><a class="btn pink" href="${mapsUrl(s.addr)}" target="_blank" rel="noopener">${t('dir')}</a>${s.phone?`<a class="btn line" href="tel:${s.phone.replace(/\D/g,'')}">${t('call')} ${esc(s.phone)}</a>`:''}</div>
+ </div>
+ <div class="map"><div class="fallback"><a href="${mapsUrl(s.addr)}" target="_blank" rel="noopener">${t('mapFb')}</a></div><iframe title="Map: ${esc(s.name)}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q=${encodeURIComponent('Gourmet Donuts '+s.addr)}&z=15&output=embed"></iframe></div>`}
+function vShops(){return `
+<div class="phead gut"><div class="wrap"><span class="kicker">${t('shopsK')}</span><h1>${t('shopsH')}</h1><p class="lead">${t('shopsP')}</p></div></div>
+<section class="gut" style="padding-top:clamp(28px,4vw,40px)"><div class="wrap shopgrid">
+ <div class="slist" role="group">${DATA.shops.map((s,i)=>`<button class="sitem" data-shop="${i}" aria-pressed="${i===shopI}"><span class="th">${s.foto?`<img src="${s.foto}" alt="">`:`<img class="lg" src="img/logo.png" alt="">`}</span><span><b>${esc(s.name)}</b><span>${esc(s.addr)}</span>${s.phone?`<span>${esc(s.phone)}</span>`:''}</span></button>`).join('')}</div>
+ <div class="sdetail" id="sdetail">${shopDetail()}</div>
+</div></section>`}
+
+function vCatering(){return `
+<div class="phead gut"><div class="wrap"><span class="kicker">${t('catK')}</span><h1>${t('catering')}</h1></div></div>
+<section class="gut"><div class="wrap">
+ <div class="band"><h2>${t('catH')}</h2><p>${t('catP')}</p>
+  <div class="sizes"><div><b>6</b>${t('sz1')}</div><div><b>12</b>${t('sz2')}</div><div><b>50</b>${t('sz3')}</div></div>
+  <div class="ctas"><a class="btn white" href="#contact" data-topic="cat">${t('orderB')}</a><a class="btn line" href="#shops">${t('seeShops')}</a></div></div>
+</div></section>
+<section class="alt gut"><div class="wrap">
+ <div class="sec-head center"><h2>${t('orderH')}</h2></div>
+ <div class="steps"><div class="stepc"><h3>${t('o1t')}</h3><p>${t('o1p')}</p></div><div class="stepc"><h3>${t('o2t')}</h3><p>${t('o2p')}</p></div><div class="stepc"><h3>${t('o3t')}</h3><p>${t('o3p')}</p></div></div>
+</div></section>`}
+
+function vContact(){const c=DATA.contact;return `
+<div class="phead gut"><div class="wrap"><span class="kicker">${t('conK')}</span><h1>${t('conH')}</h1></div></div>
+<section class="gut" style="padding-top:clamp(28px,4vw,40px)"><div class="wrap cgrid">
+ <form class="card" id="cform" novalidate>
+  <label for="f-name">${t('fName')}<input id="f-name" required autocomplete="name"></label>
+  <label for="f-email">${t('fEmail')}<input id="f-email" type="email" required autocomplete="email"></label>
+  <label for="f-phone">${t('fPhone')}<input id="f-phone" type="tel" autocomplete="tel"></label>
+  <label for="f-topic">${t('fTopic')}<select id="f-topic">${[['gen','tGen'],['cat','tCat'],['fr','tFr'],['job','tJob']].map(([v,k])=>`<option value="${v}"${topic===v?' selected':''}>${t(k)}</option>`).join('')}</select></label>
+  <label class="full" for="f-shop">${t('fShop')}<select id="f-shop"><option>${t('any')}</option>${DATA.shops.map(s=>`<option>${esc(s.name)}</option>`).join('')}</select></label>
+  <label class="full" for="f-msg">${t('fMsg')}<textarea id="f-msg" required></textarea></label>
+  <div class="full"><button class="btn pink" type="submit">${t('send')}</button></div>
+  <div class="ok" id="cok" hidden>${t('sent')}</div>
+ </form>
+ <div class="cinfo">
+  <div><div class="lbl">${t('mainShop')}</div><p>${esc(c.address)}</p></div>
+  <div><div class="lbl">${t('phone')}</div><p>${esc(c.phone)}</p></div>
+  <div><div class="lbl">${t('fEmail')}</div><p>${c.email?esc(c.email):t('emailTbd')}</p></div>
+  <div><div class="lbl">${t('follow')}</div><p><a href="${c.facebook}" target="_blank" rel="noopener" style="color:var(--pink-dk)">Facebook →</a></p></div>
+ </div>
+</div></section>`}
+
+const VIEWS={home:vHome,about:vAbout,menu:vMenu,shops:vShops,catering:vCatering,contact:vContact};
+function chrome(){
+ const links=PAGES.map(p=>`<a href="#${p}"${p===page?' aria-current="page"':''}>${t(p)}</a>`).join('');
+ document.getElementById('nav').innerHTML=links;document.getElementById('mnavIn').innerHTML=links;
+ document.querySelectorAll('#lang button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.l===L));
+ document.getElementById('burger').textContent=['Menu','Menu','Menú'][L];
+ document.getElementById('foot').innerHTML=`<div class="cols"><div><img src="img/logo.png" alt="Gourmet Donuts" style="height:62px;filter:drop-shadow(0 0 1px #fff)"><p class="slogan">Have a Gourmet Day!</p></div>
+  <div><h4>${t('visit')}</h4><ul>${PAGES.slice(1).map(p=>`<li><a href="#${p}">${t(p)}</a></li>`).join('')}</ul></div>
+  <div><h4>${t('contact')}</h4><ul><li>${esc(DATA.contact.address)}</li><li>${esc(DATA.contact.phone)}</li><li><a href="${DATA.contact.facebook}" target="_blank" rel="noopener">Facebook</a></li></ul></div></div>
+  <div class="bot"><span>© 2026 Gourmet Donuts · ${t('ex')}</span><span>${t('foot2')}</span></div>`;
+ document.documentElement.lang=['en','pt','es'][L];
+ document.getElementById('demo').innerHTML=t('demo');
+}
+function render(scroll){chrome();document.getElementById('app').innerHTML=VIEWS[page]();if(scroll)window.scrollTo(0,0)}
+function route(){const h=(location.hash||'').slice(1);page=PAGES.includes(h)?h:'home';document.body.classList.remove('open');document.getElementById('burger').setAttribute('aria-expanded','false');render(true)}
+window.addEventListener('hashchange',route);
+document.addEventListener('click',e=>{
+ const tp=e.target.closest('[data-topic]');if(tp)topic=tp.dataset.topic;
+ const f=e.target.closest('[data-f]');if(f){filt=f.dataset.f;render(false);return}
+ const s=e.target.closest('[data-shop]');if(s){shopI=+s.dataset.shop;document.querySelectorAll('[data-shop]').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.shop===shopI));document.getElementById('sdetail').innerHTML=shopDetail();if(window.innerWidth<900)document.getElementById('sdetail').scrollIntoView({behavior:'smooth',block:'start'});return}
+ const lb=e.target.closest('#lang button');if(lb){L=+lb.dataset.l;try{localStorage.setItem('gd-site-lang',L)}catch(x){}render(false);return}
+ if(e.target.closest('#burger')){const o=document.body.classList.toggle('open');document.getElementById('burger').setAttribute('aria-expanded',o)}
+});
+document.addEventListener('submit',e=>{if(e.target.id!=='cform')return;e.preventDefault();const f=e.target;if(!f.checkValidity()){f.reportValidity();return}document.getElementById('cok').hidden=false;f.reset()});
+route();
+</script>

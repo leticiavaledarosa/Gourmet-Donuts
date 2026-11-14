@@ -1,36 +1,18 @@
-# Kitchen OS · Interactive demo
+# Gourmet Donuts · Kitchen system and new website (demo)
 
-Production ordering and control for a 12-store donut operation with one central kitchen.
+**Kitchen system:** the GitHub Pages link of this repository (`index.html`).
+**New website (model):** the same link followed by `/site/`.
 
-**Live demo:** open `demo.html` from this repository's GitHub Pages link.
-
-## How to use
-
-1. Open the link on a computer (phones work too).
-2. Pick a language in the top bar: **EN · PT · ES**.
-3. Click **Play demo**. It runs by itself in about 4 minutes.
-4. Control the pace in the pink bar: **1× · 1.5× · 2×**, **Pause**, **Next**. Keys: Space pauses, Right Arrow skips ahead.
-5. Explore on your own with the screens in the top bar. Store PINs: **0101** to **1212** (Store 03 = **0303**).
-
-## What the demo covers
-
-**Phase 1 · Orders**
-- Store access by PIN and weekly order (flavors × days)
-- Last-minute change requests
-- Manager approval and release to the kitchen
-- Kitchen screen with totals per flavor for all stores
-- Packing checklist, dispatch and delivery confirmation
-
-**Phase 2 · Control**
-- Overview: produced vs planned, deliveries, on-time rate, alerts
-- End-of-day store closing with automatic sold-out times
-- Live delivery tracking
-- Margin and ranking by product and by store
+## Kitchen system
+- Sign in by area: Store, Baker, Finishers, Office, plus the Kitchen TV panel.
+- Stores: tomorrow's order, the standard order (reviewed every 15 days), same-day changes up to the cutoff, snow alert.
+- Baker: dough only. Finishers: fill, top and pack by store.
+- Office: logistics, purchases, invoices, weather and settings (cutoff, PINs, batches, prices).
+- EN · PT · ES. Demo PINs: Office 0000, Store 1 = 1001 (shown on the sign-in screen).
 
 ## Notes
-
-- All data is sample data. Nothing is saved, and reloading the page starts over.
-- Single self-contained HTML file: no installation or build step.
+- All numbers are sample data, saved only in this browser.
+- Weather: Open-Meteo (Massachusetts), with sample data when offline.
 
 ---
 
