@@ -249,6 +249,16 @@ footer .bot{margin-top:34px;padding-top:16px;border-top:1px solid rgba(255,246,2
 .chips label:has(input:checked){border-color:var(--pink);background:var(--pink-soft)}
 .flab{font-weight:700;font-size:14px;margin-bottom:6px}
 .yn{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;font-weight:700;font-size:14px;border-top:1px solid var(--line);padding-top:12px}
+/* bakery & drinks cards */
+.ccards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+.ccard{background:#fff;border-radius:18px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 8px 22px rgba(59,31,20,.07)}
+.ccard img{width:100%;aspect-ratio:4/3;object-fit:cover}
+.cct{padding:14px 18px 18px;display:flex;flex-direction:column;gap:4px}
+.cck{font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--pink-dk)}
+.ccard h4{margin:0;font-size:20px;font-weight:800;letter-spacing:-.01em}
+.ccard ul{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.ccard li{font-size:13px;font-weight:600;background:var(--cream);border-radius:999px;padding:4px 10px}
+.ccard li.more{background:none;color:var(--pink-dk)}
 /* coffee bar */
 .coffee{background:var(--choc-2);color:#FFF6E9}
 .coffee h2{color:#fff;font-size:clamp(32px,4.4vw,50px)}
@@ -323,7 +333,28 @@ const DATA={
   ['Powdered','',{en:'Powdered sugar',pt:'Açúcar de confeiteiro',es:'Azúcar glas'}],
   ['Sugar Raised','',{en:'Raised, sugar',pt:'Fermentado, açúcar',es:'Levadura, azúcar'}],
   ['Vanilla Cream','',{en:'Filled, powdered',pt:'Recheado, açúcar',es:'Rellena, azúcar'}],
-  ['Peanut Butter Cup','',{en:'Specialty',pt:'Especial',es:'Especial'}]
+  ['Peanut Butter Cup','',{en:'Specialty',pt:'Especial',es:'Especial'}],
+  ['Butter Cream','',{en:'Filled',pt:'Recheado',es:'Rellena'}],
+  ['Chocolate Cake w/ Sprinkles','',{en:'Chocolate cake, sprinkles',pt:'Massa de chocolate, granulado',es:'Masa de chocolate, chispas'}],
+  ['Chocolate Cream Filled','',{en:'Filled, chocolate',pt:'Recheado, chocolate',es:'Rellena, chocolate'}],
+  ['Chocolate Sprinkles','',{en:'Chocolate, sprinkles',pt:'Chocolate, granulado',es:'Chocolate, chispas'}],
+  ['Bismarck','',{en:'Specialty, filled',pt:'Especial, recheado',es:'Especial, rellena'}]
+ ],
+ // Padaria e bebidas em blocos: foto + lista de itens. Troque os itens quando quiser.
+ bakeryCats:[
+  {name:'Donut Holes',foto:'img/c/holes-tray.jpg',sub:{en:'Bite-size favorites',pt:'Pequenos e viciantes',es:'Pequeños favoritos'},items:['Blueberry','Chocolate Glazed','Glazed','Old Fashion','Powdered Sugar','Jelly']},
+  {name:'Sticks & Crullers',foto:'img/c/sticks-crullers.jpg',sub:{en:'Classic bakery case',pt:'Clássicos da vitrine',es:'Clásicos de la vitrina'},items:['Glazed','Marble','Plain','Sugar','Jelly Stick','Jelly Sugar','Lemon Stick','Chocolate Glazed Cruller']},
+  {name:'Bagels & Cream Cheese',foto:'img/c/bagels.jpg',sub:{en:'Morning essentials',pt:'Essenciais da manhã',es:'Esenciales de la mañana'},items:['Asiago','Blueberry','Cinnamon Raisin','Everything','French Toast','Honey Wheat','Onion','Plain','Sesame','Spinach','Cream Cheese: Plain','Strawberry','Garden Vegetable','Chive & Onion']},
+  {name:'Muffins',foto:'img/c/muffins.jpg',sub:{en:'Bakery classics',pt:'Clássicos da padaria',es:'Clásicos de panadería'},items:['Banana Nut','Banana Nut Chocolate Chip','Berry','Blueberry','Chocolate Mousse','Cinnamon Coffee Cake','Coffee Cake','Corn','Cranberry','Pistachio']},
+  {name:'Danish & Croissants',foto:'img/c/danish-croissant.jpg',sub:{en:'Flaky & rich',pt:'Folhados',es:'Hojaldrados'},items:['Strawberry Cream Cheese Danish','Cream Cheese Danish','Butter Croissant']},
+  {name:'Bowties & Rolls',foto:'img/c/bowties-rolls.jpg',sub:{en:'Sweet bakery favorites',pt:'Doces da padaria',es:'Dulces de panadería'},items:['Glazed Bowtie','Coffee Roll','Chocolate Covered Coffee Roll','Baked Cinnamon Rolls']}
+ ],
+ drinkCats:[
+  {name:'Hot Coffee',foto:'img/c/hot-coffee.jpg',sub:{en:'Specialty flavors',pt:'Sabores especiais',es:'Sabores especiales'},items:['Birthday Cake','Caramel Nut','Chocolate Cappuccino','Cinnamon Sticky Bun','Coconut Hazelnut','French Vanilla','Hazelnut','Irish Cream','Kahlua Cream','Liquid Snic','Maple Cinnamon French Toast','Milky Way Galaxy','Pumpkin Spice','Snicker Doodle','Twixie']},
+  {name:'Coffee Bar',foto:'img/c/coffee-bar.jpg',sub:{en:'Hot chocolate, latte & more',pt:'Chocolate quente, latte e mais',es:'Chocolate caliente, latte y más'},items:['Hot Chocolate','White Hot Chocolate','Peanut Butter Hot Chocolate','Latte','Caramel Latte','Mocha Latte','Caramel Cappuccino','Fresspo','Mocha Fresspo','Strawberry Fresspo','French Vanilla Fresspo','Espresso Shots']},
+  {name:'Iced Coffee',foto:'img/c/iced-coffee.jpg',sub:{en:'A huge flavor lineup',pt:'Uma lista enorme de sabores',es:'Una lista enorme de sabores'},items:['Hot Fudge Sundae','Irish Cream','Macaroon','Mocha Mint','Mocha Raspberry','Mudslide','Peanut Butter','Pina Colada','Pistachio','Pumpkin Pie','S\'mores','Strawberry Shortcake','Tiramisu','Tropical Coconut','Butterfinger','Brownie Sundae','Cookie Dough','Cookies & Cream','Banana Split','Blueberry Cobbler','Chocolate Covered Strawberry','Hawaiian Macadamia Nut','Witches Brew','Werther\'s Original']},
+  {name:'Iced Tea',foto:'img/c/iced-tea.jpg',sub:{en:'Cold & refreshing',pt:'Gelado e refrescante',es:'Frío y refrescante'},items:['Raspberry','Strawberry','Peach','½ Tea & ½ Lemonade','Original, sweet or unsweet']},
+  {name:'Smoothies',foto:'img/c/smoothies.jpg',sub:{en:'Fruit-forward favorites',pt:'Feitos com fruta',es:'Hechos con fruta'},items:['Pina Colada','Strawberry','Banana','Strawberry Banana','Mango','Wild Berry']}
  ],
  bakery:[
   ['Donut Holes','img/f/holes.jpg',{en:'Glazed, chocolate, powdered, jelly',pt:'Glaceado, chocolate, açúcar, geleia',es:'Glaseada, chocolate, azúcar, mermelada'}],
@@ -339,7 +370,10 @@ const DATA={
   ['Bagel, Egg & Cheese','img/m/s_bagel.jpg',{en:'Everything bagel',pt:'Bagel everything',es:'Bagel everything'}],
   ['Bacon, Egg & Cheese','img/m/s_bacon.jpg',{en:'English muffin',pt:'English muffin',es:'English muffin'}],
   ['Ham & Cheese','img/m/s_ham.jpg',{en:'English muffin',pt:'English muffin',es:'English muffin'}],
-  ['Bagels','',{en:'10 kinds, with cream cheese',pt:'10 tipos, com cream cheese',es:'10 tipos, con queso crema'}]
+  ['Egg & Cheese','',{en:'Bagel, croissant or English muffin',pt:'Bagel, croissant ou English muffin',es:'Bagel, croissant o English muffin'}],
+  ['Egg, Meat & Cheese','',{en:'Sausage, bacon or ham',pt:'Linguiça, bacon ou presunto',es:'Salchicha, tocino o jamón'}],
+  ['Create Your Own','',{en:'Pick your bread and fillings',pt:'Escolha o pão e o recheio',es:'Elige el pan y el relleno'}],
+  ['Bagels','img/c/bagels.jpg',{en:'10 kinds, with cream cheese',pt:'10 tipos, com cream cheese',es:'10 tipos, con queso crema'}]
  ],
  // Sazonais, combos e ofertas: troque quando quiser. price: '$4.99' (ou deixe '$ —')
  seasonal:[
@@ -372,7 +406,7 @@ const DATA={
   {name:'Westborough',addr:'65 East Mountain St, Westborough, MA 01581',phone:'',foto:'',hours:null}
  ],
  // Café: sabores que aparecem na seção de café da página inicial
- coffee:['French Vanilla','Hazelnut','Caramel','Mocha','Toasted Almond','Coconut','Butter Pecan','Cinnamon','Blueberry','Raspberry','Pumpkin Spice','Peppermint Mocha'],
+ coffee:['French Vanilla','Hazelnut','Caramel Nut','Irish Cream','Coconut Hazelnut','Cinnamon Sticky Bun','Birthday Cake','Milky Way Galaxy','Snicker Doodle','Kahlua Cream','Maple Cinnamon French Toast','Pumpkin Spice'],
  contact:{phone:'978.466.8880',email:'',address:'636 Main Street, Leominster, MA',facebook:'https://www.facebook.com/gourmetdonuts/'}
 };
 /* ======================= fim do bloco editável ======================= */
@@ -402,11 +436,12 @@ const T={
  frP:['Want to bring Gourmet Donuts to your town? Tell us about yourself and the area you have in mind, and our team will get back to you.','Quer levar a Gourmet Donuts para a sua cidade? Conte um pouco sobre você e a região que tem em mente, e a nossa equipe retorna o contato.','¿Quieres llevar Gourmet Donuts a tu ciudad? Cuéntanos sobre ti y la zona que tienes en mente, y nuestro equipo te responderá.'],
  frB:['Talk to us','Fale com a gente','Habla con nosotros'],
  menuK:['Today at the counter','Hoje no balcão','Hoy en el mostrador'],menuH:['Our menu','Nosso cardápio','Nuestro menú'],
+ andMore:['+ {0} more flavors','+ {0} sabores','+ {0} sabores más'],driSub:['Hot, iced and blended, all day.','Quentes, gelados e batidos, o dia todo.','Calientes, helados y batidos, todo el día.'],
  fAll:['All','Tudo','Todo'],fDon:['Donuts','Donuts','Donas'],fSea:['Seasonal','Sazonais','De temporada'],fCom:['Combos','Combos','Combos'],fOff:['Deals','Ofertas','Ofertas'],fBak:['Bakery','Padaria','Panadería'],fSan:['Sandwiches','Sanduíches','Sándwiches'],fDri:['Drinks','Bebidas','Bebidas'],
  donutsSub:['Over thirty flavors, raised and cake, filled and frosted.','Mais de trinta sabores, fermentados e de massa de bolo, recheados e com cobertura.','Más de treinta sabores, de levadura y de pastel, rellenas y con cobertura.'],
  seaSub:['Limited-time flavors. They come and go with the seasons.','Sabores por tempo limitado. Vão e voltam com as estações.','Sabores por tiempo limitado. Van y vienen con las estaciones.'],
  comSub:['Better together.','Melhor junto.','Mejor juntos.'],offSub:['Ask at your shop.','Pergunte na sua loja.','Pregunta en tu tienda.'],
- bakSub:['Donut holes, rolls, pastries and muffins.','Donut holes, rolos, doces e muffins.','Donut holes, rollos, pasteles y muffins.'],sanSub:['On a bagel, croissant or English muffin.','No bagel, croissant ou English muffin.','En bagel, croissant o English muffin.'],
+ bakSub:['Donut holes, sticks, bagels, muffins and pastries, baked fresh every morning.','Donut holes, sticks, bagels, muffins e folhados, assados toda manhã.','Donut holes, palitos, bagels, muffins y hojaldres, horneados cada mañana.'],sanSub:['On a bagel, croissant or English muffin.','No bagel, croissant ou English muffin.','En bagel, croissant o English muffin.'],
  dri:[['<b>Hot</b>Hot coffee · Espresso drinks · Hot chocolate','<b>Iced</b>Iced coffee · Iced tea · ½ tea & ½ lemonade','<b>Smoothies</b>Ask your shop for today\'s flavors'],['<b>Quentes</b>Café · Bebidas com espresso · Chocolate quente','<b>Geladas</b>Café gelado · Chá gelado · ½ chá e ½ limonada','<b>Smoothies</b>Pergunte na loja os sabores do dia'],['<b>Calientes</b>Café · Bebidas con espresso · Chocolate caliente','<b>Frías</b>Café helado · Té helado · ½ té y ½ limonada','<b>Smoothies</b>Pregunta en tu tienda los sabores del día']],
  shopsK:['Come say hi','Venha nos visitar','Ven a visitarnos'],shopsH:['A shop near you','Uma loja perto de você','Una tienda cerca de ti'],
  shopsP:['Pick a shop to see the address, hours and map.','Escolha uma loja para ver endereço, horário e mapa.','Elige una tienda para ver dirección, horario y mapa.'],
@@ -470,6 +505,7 @@ let pickShop='',jobRole='counter',sessionGo='';
 const mapsUrl=a=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent('Gourmet Donuts '+a);
 
 function prodGrid(list){return `<div class="pgrid">${list.map(([n,f,d])=>`<figure><div class="im">${f?`<img src="${f}" alt="" loading="lazy">`:`<i>${initials(n)}</i>`}</div><figcaption>${esc(n)}<small>${esc(tx(d))}</small></figcaption></figure>`).join('')}</div>`}
+function catCards(list){return `<div class="ccards">${list.map(c=>{const n=c.items.length,more=n>16;return `<article class="ccard"><img src="${c.foto}" alt="${esc(c.name)}" loading="lazy"><div class="cct"><span class="cck">${esc(tx(c.sub))}</span><h4>${esc(c.name)}</h4><ul>${c.items.slice(0,more?14:n).map(i=>`<li>${esc(i)}</li>`).join('')}${more?`<li class="more">${t('andMore',n-14)}</li>`:''}</ul></div></article>`}).join('')}</div>`}
 function dealGrid(list,withPrice){return `<div class="deals">${list.map(o=>`<div class="deal"><div class="top"><h4>${esc(tx(o.name))}${exChip(o)}</h4>${withPrice&&o.price?`<span class="pr">${esc(o.price)}</span>`:''}</div><p>${esc(tx(o.text))}</p>${o.when?`<span class="when">${esc(tx(o.when))}</span>`:''}</div>`).join('')}</div>`}
 
 function vHome(){return `
@@ -519,9 +555,9 @@ function vMenu(){
  if(show('combos'))h+=`<div class="panel bg-gold"><h3>${t('fCom').toLowerCase()}</h3><p class="sub">${t('comSub')}</p>${dealGrid(DATA.combos,true)}</div>`;
  if(show('offers'))h+=`<div class="panel bg-pink"><h3>${t('fOff').toLowerCase()}</h3><p class="sub">${t('offSub')}</p>${dealGrid(DATA.offers,true)}</div>`;
  if(show('donuts'))h+=`<div class="panel bg-pink"><h3>${t('fDon').toLowerCase()}</h3><p class="sub">${t('donutsSub')}</p>${prodGrid(DATA.donuts)}</div>`;
- if(show('bakery'))h+=`<div class="panel bg-gold"><h3>${t('fBak').toLowerCase()}</h3><p class="sub">${t('bakSub')}</p>${prodGrid(DATA.bakery)}</div>`;
+ if(show('bakery'))h+=`<div class="panel bg-gold"><h3>${t('fBak').toLowerCase()}</h3><p class="sub">${t('bakSub')}</p>${catCards(DATA.bakeryCats)}</div>`;
  if(show('sandwiches'))h+=`<div class="panel bg-blue"><h3>${t('fSan').toLowerCase()}</h3><p class="sub">${t('sanSub')}</p>${prodGrid(DATA.sandwiches)}</div>`;
- if(show('drinks'))h+=`<div class="panel bg-mint"><h3>${t('fDri').toLowerCase()}</h3><div class="drinks">${T.dri[L].map(d=>`<div>${d}</div>`).join('')}</div></div>`;
+ if(show('drinks'))h+=`<div class="panel bg-mint"><h3>${t('fDri').toLowerCase()}</h3><p class="sub">${t('driSub')}</p>${catCards(DATA.drinkCats)}</div>`;
  return h+`</div></div></section>`}
 
 function shopDetail(){const s=DATA.shops[shopI];
